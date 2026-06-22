@@ -8,6 +8,7 @@ It supports:
 - Desktop Ward Manager dashboard.
 - Firestore sync for notes and transfer requests.
 - Local demo mode if Firebase config is still blank.
+- PWA/TWA support files for Android installation.
 
 This is not the final production build. It is for demonstrating the workflow.
 
@@ -43,12 +44,36 @@ demoShifts/ward-3-night-demo/transferRequests
 
 Upload all files in this folder to a GitHub repository.
 
+Include these folders also:
+
+- `icons/`
+- `.well-known/`
+- `twa/`
+
 In GitHub:
 
 1. Go to **Settings > Pages**.
 2. Choose the branch and folder containing `index.html`.
 3. Save.
 4. Open the Pages URL.
+
+## Android TWA
+
+After GitHub Pages is working, see:
+
+```text
+twa/README-TWA.md
+```
+
+The app is prepared with:
+
+- `manifest.webmanifest`
+- `service-worker.js`
+- `offline.html`
+- PNG app icons
+- `.well-known/assetlinks.json` placeholder
+
+Before building the final Android TWA, replace the SHA-256 placeholder in `.well-known/assetlinks.json`.
 
 ## Testing The Demo
 

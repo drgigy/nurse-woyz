@@ -1,0 +1,11 @@
+App name: Nurse Woyz
+Launcher name: Nurse Woyz
+Application ID / package name: com.nursewoyz.demo
+Theme color: #003b71
+Navigation color: #003b71
+Background color: #f5f8fc
+Display mode: standalone
+Orientation: portrait
+Start URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/
+Manifest URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/manifest.webmanifest
+Asset Links URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/.well-known/assetlinks.json

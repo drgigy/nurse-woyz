@@ -4,6 +4,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Nurse Woyz Demo</title>
+<meta name="theme-color" content="#003b71">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nurse Woyz">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #fff; min-height: 100vh; overflow-x: hidden; }
@@ -1741,6 +1748,13 @@ function initApp() {
 }
 
 initApp();
+
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch(() => console.log('Service worker registration skipped.'));
+  });
+}
 </script>
 
 
