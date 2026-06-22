@@ -166,6 +166,11 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+.note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
+.note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #005ea8; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
+.note-edit-btn.cancel-edit { color: #61738a; }
+.note-edit-box { width: 100%; min-height: 110px; border: 1px solid #c9d8ea; border-radius: 10px; padding: 10px 11px; color: #162033; background: #fff; font: inherit; font-size: 13px; line-height: 1.45; resize: vertical; margin-top: 8px; }
 .notes-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
 .copy-bed-btn { background: #fff; border: 1.5px solid #c8d4e4; border-radius: 10px; padding: 9px 12px; color: #005ea8; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
@@ -817,6 +822,7 @@ let firebaseReady = false;
 let notesUnsubscribe = null;
 let transfersUnsubscribe = null;
 let localSaveIds = new Set();
+let editingNoteId = null;
 
 function isMobileWardDevice() {
   return window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
@@ -843,6 +849,14 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function escapeJsArg(value) {
+  return String(value ?? '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '');
 }
 
 // ══════════════════════════════════════════
@@ -1234,7 +1248,7 @@ async function saveNote() {
   if (!text) { showToast('Nothing to save'); return; }
   const time = currentDictationTime || getCurrentTime();
   const type = currentNoteType;
-  const note = { bed: currentBed, time, raw: rawTranscript, text, type };
+  const note = { id: 'local-note-' + Date.now(), bed: currentBed, time, raw: rawTranscript, text, type };
   if (firebaseReady) {
     try {
       await saveNoteToFirebase(note);
@@ -1262,14 +1276,68 @@ function renderNotesList() {
     list.innerHTML = '<div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>';
     return;
   }
-  list.innerHTML = bedNotes.map(n => `
+  list.innerHTML = bedNotes.map((n, index) => {
+    const noteId = n.id || ('local-note-' + index);
+    const isEditing = editingNoteId === noteId;
+    return `
     <div class="note-card">
       <div class="nc-time">${escapeHtml(n.time)}</div>
       <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
-      <div class="nc-text">✦ ${escapeHtml(n.text)}</div>
+      ${isEditing ? `
+        <textarea class="note-edit-box" id="editNoteText_${index}">${escapeHtml(n.text)}</textarea>
+        <div class="note-edit-actions">
+          <button class="note-edit-btn save-edit" onclick="saveEditedNote('${escapeJsArg(noteId)}', ${index})">Save Edit</button>
+          <button class="note-edit-btn cancel-edit" onclick="cancelEditNote()">Cancel</button>
+        </div>
+      ` : `
+        <div class="nc-text">✦ ${escapeHtml(n.text)}</div>
+        <div class="note-edit-actions">
+          <button class="note-edit-btn" onclick="startEditNote('${escapeJsArg(noteId)}')">Edit</button>
+        </div>
+      `}
     </div>
-  `).join('');
+  `;
+  }).join('');
   list.scrollTop = list.scrollHeight;
+}
+
+function startEditNote(noteId) {
+  editingNoteId = noteId;
+  renderNotesList();
+}
+
+function cancelEditNote() {
+  editingNoteId = null;
+  renderNotesList();
+}
+
+async function saveEditedNote(noteId, index) {
+  const textarea = document.getElementById('editNoteText_' + index);
+  const newText = (textarea?.value || '').trim();
+  if (!newText) {
+    showToast('Note text cannot be empty', true);
+    return;
+  }
+  const bedNotes = notes[currentBed] || [];
+  const note = bedNotes.find(n => (n.id || '') === noteId) || bedNotes[index];
+  if (!note) {
+    showToast('Could not find note to edit', true);
+    return;
+  }
+
+  try {
+    if (firebaseReady && note.id && !String(note.id).startsWith('local-note-')) {
+      await updateNoteInFirebase(note.id, newText);
+    }
+    note.text = newText;
+    note.editedAt = getCurrentTime();
+    editingNoteId = null;
+    renderNotesList();
+    refreshDashboard();
+    showToast('Note updated ✓');
+  } catch (err) {
+    showToast('Could not save edit', true);
+  }
 }
 
 function copyCurrentBedNotes() {
@@ -1611,7 +1679,8 @@ function listenToNotes() {
         raw: data.raw || '',
         text: data.text || '',
         type: data.type || 'note',
-        nurse: data.nurse || 'Nurse Priya'
+        nurse: data.nurse || 'Nurse Priya',
+        editedAt: data.editedAt || ''
       });
     });
     notes = syncedNotes;
@@ -1656,6 +1725,15 @@ async function saveNoteToFirebase(note) {
     shift: 'Night Shift',
     createdAtMs: Date.now(),
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+async function updateNoteInFirebase(noteId, text) {
+  await notesCollection.doc(noteId).update({
+    text,
+    editedAt: getCurrentTime(),
+    editedAtMs: Date.now(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
 
