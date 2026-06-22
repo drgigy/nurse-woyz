@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isDemoSignedIn() {
+      return request.auth != null;
+    }
+
+    match /demoShifts/{shiftId} {
+      allow read, write: if isDemoSignedIn();
+
+      match /notes/{noteId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+
+      match /transferRequests/{requestId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+    }
+  }
+}
