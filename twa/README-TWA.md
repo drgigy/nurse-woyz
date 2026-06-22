@@ -45,7 +45,7 @@ firestore.rules
 After GitHub Pages is enabled, your URL may look like:
 
 ```text
-https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/
+https://nurse.woyz.in/ward.html
 ```
 
 ## Step 2: Test PWA First
@@ -73,7 +73,7 @@ npm install -g @bubblewrap/cli
 Run:
 
 ```bash
-bubblewrap init --manifest https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/manifest.webmanifest
+bubblewrap init --manifest https://nurse.woyz.in/manifest.webmanifest
 ```
 
 When asked:
@@ -81,7 +81,7 @@ When asked:
 - Application ID: `com.nursewoyz.demo`
 - App name: `Nurse Woyz`
 - Launcher name: `Nurse Woyz`
-- Start URL: your GitHub Pages URL
+- Start URL: https://nurse.woyz.in/ward.html
 - Theme color: `#003b71`
 - Display mode: `standalone`
 - Orientation: `portrait`
@@ -130,7 +130,7 @@ If verification fails:
 - Re-check that `.well-known/assetlinks.json` is available publicly at:
 
 ```text
-https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/.well-known/assetlinks.json
+https://nurse.woyz.in/.well-known/assetlinks.json
 ```
 
 ## Demo Limitation

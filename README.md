@@ -4,8 +4,10 @@ This folder is a static demo website for Nurse Woyz.
 
 It supports:
 
-- Mobile Ward Device flow only.
-- Desktop Ward Manager dashboard.
+- Separate Ward Device page.
+- Separate Desktop Admin dashboard page.
+- Separate OT Command page.
+- Separate Cath Lab Command page.
 - Firestore sync for notes and transfer requests.
 - Local demo mode if Firebase config is still blank.
 - PWA/TWA support files for Android installation.
@@ -15,7 +17,7 @@ This is not the final production build. It is for demonstrating the workflow.
 ## Demo Logins
 
 - Ward Device PIN: `2222`.
-- Ward Manager: `manager` / `1234`.
+- Admin: `manager` / `1234`.
 - OT / Cath command: choose either demo staff card.
 
 ## Firebase Demo Setup
@@ -43,6 +45,16 @@ demoShifts/ward-3-night-demo/transferRequests
 ## GitHub Pages
 
 Upload all files in this folder to a GitHub repository.
+
+Main links after deployment:
+
+```text
+https://nurse.woyz.in/
+https://nurse.woyz.in/ward.html
+https://nurse.woyz.in/manager.html
+https://nurse.woyz.in/ot.html
+https://nurse.woyz.in/cathlab.html
+```
 
 Include these folders also:
 
@@ -77,13 +89,13 @@ Before building the final Android TWA, replace the SHA-256 placeholder in `.well
 
 ## Testing The Demo
 
-1. Open the website on a desktop browser.
+1. Open `manager.html` on a desktop browser.
 2. Login as manager using `manager / 1234`.
-3. Open the website on a mobile browser.
+3. Open `ward.html` on a mobile browser.
 4. Use the Ward Device flow with PIN `2222`.
-5. On another desktop browser, open OT / Cath command.
+5. Open `ot.html` or `cathlab.html` on another browser.
 6. Send a transfer request.
-7. Confirm the nurse screen and manager dashboard update through Firestore.
+7. Confirm the nurse screen and admin dashboard update through Firestore.
 
 ## Important Safety Notes
 

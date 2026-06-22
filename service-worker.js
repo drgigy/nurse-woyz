@@ -2,6 +2,10 @@ const CACHE_NAME = 'nurse-woyz-demo-v1';
 const APP_SHELL = [
   './',
   './index.html',
+  './ward.html',
+  './manager.html',
+  './ot.html',
+  './cathlab.html',
   './firebase-config.js',
   './manifest.webmanifest',
   './offline.html',

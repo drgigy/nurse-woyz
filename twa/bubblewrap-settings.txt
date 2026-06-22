@@ -6,6 +6,6 @@ Navigation color: #003b71
 Background color: #f5f8fc
 Display mode: standalone
 Orientation: portrait
-Start URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/
-Manifest URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/manifest.webmanifest
-Asset Links URL: https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME/.well-known/assetlinks.json
+Start URL: https://nurse.woyz.in/ward.html
+Manifest URL: https://nurse.woyz.in/manifest.webmanifest
+Asset Links URL: https://nurse.woyz.in/.well-known/assetlinks.json
