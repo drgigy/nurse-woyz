@@ -9,11 +9,28 @@ service cloud.firestore {
     match /demoShifts/{shiftId} {
       allow read, write: if isDemoSignedIn();
 
+      // Nursing notes dictated from ward devices.
       match /notes/{noteId} {
         allow read, create, update, delete: if isDemoSignedIn();
       }
 
+      // OT and Cath Lab notification requests.
       match /transferRequests/{requestId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+
+      // Admin dashboard staff list.
+      match /nurses/{nurseId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+
+      // Admin dashboard room/bed list and nurse assignments.
+      match /rooms/{roomId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+
+      // Keep the demo flexible if we add another subcollection later.
+      match /{document=**} {
         allow read, create, update, delete: if isDemoSignedIn();
       }
     }
