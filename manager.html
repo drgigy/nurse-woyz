@@ -209,6 +209,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-user { color: #c8dcef; font-size: 12px; display: flex; align-items: center; gap: 8px; }
 .d-avatar { width: 28px; height: 28px; border-radius: 50%; background: #1a4d80; display: flex; align-items: center; justify-content: center; color: #7fa8d4; font-size: 11px; font-weight: 700; }
 .d-logout { background: transparent; border: 1px solid #1a4d80; border-radius: 5px; padding: 5px 12px; color: #7fa8d4; font-size: 11px; cursor: pointer; font-family: inherit; }
+.d-admin-btn { background: #fff; border: 1px solid #fff; border-radius: 6px; padding: 7px 13px; color: #003b71; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .d-main { display: flex; flex: 1; overflow: hidden; min-height: calc(100vh - 100px); }
 .d-sidebar { width: 230px; background: #fff; border-right: 1px solid #dce3ec; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px 14px; }
 .d-sb-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
@@ -254,30 +255,49 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-bb-info strong { color: #1a2233; }
 .d-bb-actions { display: flex; gap: 8px; }
 .d-btn-danger { background: #fff; border: 1px solid #e0c4c4; border-radius: 5px; padding: 9px 14px; color: #c0392b; font-size: 12px; cursor: pointer; font-family: inherit; }
-.admin-setup { margin: 14px 22px 0; background: #fff; border: 1px solid #dce3ec; border-radius: 12px; padding: 16px; box-shadow: 0 8px 24px rgba(20,40,70,0.05); }
-.admin-setup-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
-.admin-setup-title { color: #003366; font-size: 18px; font-weight: 800; }
-.admin-setup-sub { color: #718198; font-size: 12px; margin-top: 3px; line-height: 1.45; }
-.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.admin-card { border: 1px solid #e1e8f2; border-radius: 12px; padding: 13px; background: #fbfdff; }
-.admin-card-title { color: #1a2233; font-weight: 800; font-size: 13px; margin-bottom: 9px; }
+.admin-drawer-backdrop { position: fixed; inset: 0; z-index: 1400; background: rgba(13,35,61,0.42); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+.admin-drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+.admin-drawer { position: absolute; inset: 0 auto 0 0; width: min(920px, 94vw); background: #f5f8fc; color: #162033; box-shadow: 18px 0 50px rgba(16,42,72,0.2); transform: translateX(-102%); transition: transform 0.25s ease; display: flex; flex-direction: column; }
+.admin-drawer-backdrop.show .admin-drawer { transform: translateX(0); }
+.admin-drawer-head { background: #fff; border-bottom: 1px solid #dce3ec; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+.admin-drawer-title { color: #003b71; font-size: 22px; font-weight: 850; }
+.admin-drawer-sub { color: #718198; font-size: 12px; margin-top: 3px; }
+.admin-drawer-close { width: 38px; height: 38px; border-radius: 10px; border: 1px solid #c8d4e4; background: #fff; color: #40536c; cursor: pointer; font-size: 18px; }
+.admin-drawer-body { display: grid; grid-template-columns: 260px 1fr; min-height: 0; flex: 1; overflow: hidden; }
+.admin-nurse-pane { background: #fff; border-right: 1px solid #dce3ec; padding: 16px; overflow-y: auto; }
+.admin-bed-pane { padding: 18px; overflow-y: auto; }
+.admin-pane-title { color: #003b71; font-size: 13px; font-weight: 850; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
 .admin-form { display: flex; gap: 8px; margin-bottom: 10px; }
-.admin-form input, .admin-card select { border: 1px solid #c9d8ea; border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 12px; color: #162033; background: #fff; min-width: 0; }
+.admin-form input { border: 1px solid #c9d8ea; border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 12px; color: #162033; background: #fff; min-width: 0; }
 .admin-form input { flex: 1; }
 .admin-form button, .admin-mini-btn { border: 1px solid #003366; background: #003366; color: #fff; border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .admin-mini-btn.secondary { background: #fff; color: #4a5a6e; border-color: #c8d4e4; }
 .admin-mini-btn.danger { background: #fff; color: #c0392b; border-color: #e0c4c4; }
-.admin-list { display: flex; flex-direction: column; gap: 7px; max-height: 230px; overflow-y: auto; }
+.admin-list { display: flex; flex-direction: column; gap: 7px; }
 .admin-list-empty { color: #91a0b5; font-size: 12px; padding: 10px; text-align: center; border: 1px dashed #d2dbe8; border-radius: 9px; background: #fff; }
-.admin-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border: 1px solid #e4ebf4; border-radius: 9px; padding: 9px 10px; }
-.admin-row-main { min-width: 0; }
+.admin-nurse-row { display: flex; align-items: center; gap: 7px; border: 1px solid #e1e8f2; border-radius: 10px; padding: 7px; background: #fff; }
+.admin-nurse-row.selected { border-color: #69a9dc; background: #eef7ff; }
+.admin-nurse-select { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; cursor: pointer; padding: 5px; }
 .admin-row-title { color: #1a2233; font-size: 13px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-row-sub { color: #8a9ab4; font-size: 10px; margin-top: 2px; }
-.admin-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.assign-panel { margin-top: 12px; border: 1px solid #b8d0f0; border-radius: 12px; background: #f3f8ff; padding: 13px; display: none; }
-.assign-panel.show { display: block; }
-.assign-title { color: #003366; font-size: 14px; font-weight: 850; margin-bottom: 8px; }
-.assign-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.nurse-settings-btn { width: 32px; height: 32px; border: 1px solid #c8d4e4; border-radius: 8px; background: #fff; color: #52657d; cursor: pointer; }
+.admin-bed-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.admin-bed-guidance { color: #61738a; font-size: 12px; line-height: 1.45; margin-top: 4px; }
+.admin-bed-grid { display: grid; grid-template-columns: repeat(5, minmax(92px,1fr)); gap: 10px; }
+.admin-bed-tile { border: 1px solid #d3deeb; border-radius: 12px; background: #fff; padding: 12px 8px; text-align: center; cursor: pointer; color: #25364d; min-height: 92px; }
+.admin-bed-tile:hover { border-color: #78aed8; }
+.admin-bed-tile.selected { background: #e8f5ef; border-color: #62b489; color: #0d6b43; }
+.admin-bed-tile.occupied { background: #f5f7fa; color: #8a9ab4; cursor: not-allowed; }
+.admin-bed-icon { font-size: 24px; line-height: 1; margin-bottom: 7px; }
+.admin-bed-number { font-size: 14px; font-weight: 850; }
+.admin-bed-owner { font-size: 9px; margin-top: 4px; line-height: 1.3; }
+.admin-bed-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.pin-editor { position: fixed; inset: 0; z-index: 1500; background: rgba(13,35,61,0.5); display: none; align-items: center; justify-content: center; padding: 18px; }
+.pin-editor.show { display: flex; }
+.pin-editor-card { width: min(360px,100%); background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 60px rgba(16,42,72,0.25); }
+.pin-editor-title { color: #003b71; font-size: 19px; font-weight: 850; }
+.pin-editor-sub { color: #718198; font-size: 12px; margin: 5px 0 14px; }
+.pin-editor input { width: 100%; border: 1px solid #c9d8ea; border-radius: 10px; padding: 13px; font: inherit; font-size: 20px; letter-spacing: 8px; text-align: center; }
 
 /* TRANSFER COMMAND DEMO */
 #screen-command { background: #f0f2f5; color: #162033; padding-bottom: 58px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -440,9 +460,10 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .d-main { flex-direction: column; overflow: auto; }
   .d-sidebar, .d-right { width: 100%; border-left: 0; border-right: 0; }
   .d-stats { flex-direction: column; padding: 12px; }
-  .admin-setup { margin: 12px; }
-  .admin-grid { grid-template-columns: 1fr; }
-  .admin-setup-head, .admin-form { flex-direction: column; }
+  .admin-drawer-body { grid-template-columns: 1fr; overflow-y: auto; }
+  .admin-nurse-pane { border-right: 0; border-bottom: 1px solid #dce3ec; overflow: visible; }
+  .admin-bed-pane { overflow: visible; }
+  .admin-bed-grid { grid-template-columns: repeat(2, minmax(100px,1fr)); }
   .d-ch, .d-bottom { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px; }
   .d-bb-actions { flex-direction: column; width: 100%; }
   .d-bb-actions button { width: 100%; }
@@ -475,6 +496,57 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <input class="settings-input" id="geminiKeyInput" type="password" placeholder="Paste Gemini API key">
     <div class="settings-help">Saved in this browser for local testing. Each dictated audio note is sent to Gemini and translated from Malayalam to English.</div>
     <button class="settings-save" onclick="saveGeminiKey()">Save Key</button>
+  </div>
+</div>
+
+<div class="admin-drawer-backdrop" id="adminDrawerBackdrop" onclick="adminDrawerBackdrop(event)">
+  <aside class="admin-drawer" role="dialog" aria-modal="true" aria-label="Ward administration">
+    <div class="admin-drawer-head">
+      <div>
+        <div class="admin-drawer-title">Ward Administration</div>
+        <div class="admin-drawer-sub">Add nurses, set their four-digit PIN, and assign beds.</div>
+      </div>
+      <button class="admin-drawer-close" onclick="closeAdminDrawer()" aria-label="Close">✕</button>
+    </div>
+    <div class="admin-drawer-body">
+      <section class="admin-nurse-pane">
+        <div class="admin-pane-title">Nurses</div>
+        <div class="admin-form">
+          <input id="newNurseName" type="text" placeholder="Nurse name">
+          <button onclick="addNurse()">Add</button>
+        </div>
+        <div class="admin-list" id="adminNurseList"></div>
+      </section>
+      <section class="admin-bed-pane">
+        <div class="admin-bed-head">
+          <div>
+            <div class="admin-pane-title" id="adminBedTitle">Select a nurse</div>
+            <div class="admin-bed-guidance" id="adminBedGuidance">Choose a nurse on the left to view and assign available beds.</div>
+          </div>
+          <div class="admin-form" style="margin:0;">
+            <input id="newRoomName" type="text" inputmode="numeric" placeholder="Bed number">
+            <button onclick="addRoom()">+ Bed</button>
+          </div>
+        </div>
+        <div class="admin-bed-grid" id="adminRoomList"></div>
+        <div class="admin-bed-actions">
+          <button class="admin-mini-btn secondary" onclick="seedDemoWardSetup()">Reset beds 101–120</button>
+          <button class="admin-mini-btn" id="saveBedAssignmentsBtn" onclick="saveNurseBedAssignments()" disabled>Save Assignments</button>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<div class="pin-editor" id="pinEditor">
+  <div class="pin-editor-card">
+    <div class="pin-editor-title" id="pinEditorTitle">Nurse PIN</div>
+    <div class="pin-editor-sub">Enter a unique four-digit PIN for ward-device login.</div>
+    <input id="nursePinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+    <div class="admin-bed-actions">
+      <button class="admin-mini-btn secondary" onclick="closePinEditor()">Cancel</button>
+      <button class="admin-mini-btn" onclick="saveNursePin()">Save PIN</button>
+    </div>
   </div>
 </div>
 
@@ -649,6 +721,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
       <div class="d-shift-badge"><div class="d-live"></div> LIVE</div>
       <div class="d-user"><div class="d-avatar">WM</div> Admin</div>
+      <button class="d-admin-btn" onclick="openAdminDrawer()">Admin</button>
       <button class="d-logout" onclick="doLogout()">🔒 Logout</button>
     </div>
   </div>
@@ -705,42 +778,6 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
         <div class="d-stat"><div class="dst-val" id="dStatBeds">0/6</div><div class="dst-lbl">Beds Documented</div></div>
         <div class="d-stat"><div class="dst-val" id="dStatTotal">0</div><div class="dst-lbl">Total Notes</div></div>
         <div class="d-stat"><div class="dst-val" id="dStatLast" style="color:#1a7a4a;font-size:16px;">—</div><div class="dst-lbl">Last Activity</div></div>
-      </div>
-      <div class="admin-setup">
-        <div class="admin-setup-head">
-          <div>
-            <div class="admin-setup-title">Staff & Rooms</div>
-            <div class="admin-setup-sub">Add nurses, create ward rooms, then click Assign on a room to allot it to a nurse.</div>
-          </div>
-          <button class="admin-mini-btn secondary" onclick="seedDemoWardSetup()">Load Demo Setup</button>
-        </div>
-        <div class="admin-grid">
-          <div class="admin-card">
-            <div class="admin-card-title">Nurses</div>
-            <div class="admin-form">
-              <input id="newNurseName" type="text" placeholder="Nurse name">
-              <button onclick="addNurse()">Add Nurse</button>
-            </div>
-            <div class="admin-list" id="adminNurseList"></div>
-          </div>
-          <div class="admin-card">
-            <div class="admin-card-title">Rooms</div>
-            <div class="admin-form">
-              <input id="newRoomName" type="text" placeholder="Room or bed name">
-              <button onclick="addRoom()">Add Room</button>
-            </div>
-            <div class="admin-list" id="adminRoomList"></div>
-            <div class="assign-panel" id="roomAssignPanel">
-              <div class="assign-title" id="assignRoomTitle">Assign room</div>
-              <select id="assignNurseSelect" style="width:100%;"></select>
-              <div class="assign-actions">
-                <button class="admin-mini-btn" onclick="assignSelectedNurse()">Save Assignment</button>
-                <button class="admin-mini-btn danger" onclick="clearRoomAssignment()">Clear Nurse</button>
-                <button class="admin-mini-btn secondary" onclick="closeAssignPanel()">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="d-tl-wrap">
         <div class="d-tl-lbl" id="dashTlLabel">SHIFT TIMELINE</div>
@@ -906,7 +943,11 @@ let localSaveIds = new Set();
 let editingNoteId = null;
 let nurses = [];
 let rooms = [];
-let activeAssignRoomId = null;
+let selectedAdminNurseId = null;
+let pendingAssignedRoomIds = new Set();
+let pinEditorNurseId = null;
+let defaultBedsChecked = false;
+let defaultPinChecked = false;
 
 function isMobileWardDevice() {
   return window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
@@ -944,17 +985,20 @@ function escapeJsArg(value) {
 }
 
 function defaultWardRooms() {
-  return BEDS.map(bed => ({
-    id: bed.id,
-    name: 'Bed ' + bed.id,
-    active: bed.status !== 'vac',
-    assignedNurseId: bed.status === 'vac' ? '' : 'nurse-priya',
-    assignedNurseName: bed.status === 'vac' ? '' : 'Nurse Priya'
-  }));
+  return Array.from({ length: 20 }, (_, index) => {
+    const id = String(101 + index);
+    return {
+      id,
+      name: 'Bed ' + id,
+      active: true,
+      assignedNurseId: index < 8 ? 'nurse-priya' : '',
+      assignedNurseName: index < 8 ? 'Nurse Priya' : ''
+    };
+  });
 }
 
 function defaultWardNurses() {
-  return [{ id: 'nurse-priya', name: 'Nurse Priya', active: true }];
+  return [{ id: 'nurse-priya', name: 'Nurse Priya', pin: '2222', active: true }];
 }
 
 function seedLocalWardSetup() {
@@ -1532,7 +1576,6 @@ function copyToEMR() {
 function renderAdminSetup() {
   renderAdminNurseList();
   renderAdminRoomList();
-  renderAssignPanel();
 }
 
 function renderAdminNurseList() {
@@ -1545,14 +1588,12 @@ function renderAdminNurseList() {
   list.innerHTML = nurses.map(nurse => {
     const assignedCount = rooms.filter(room => room.assignedNurseId === nurse.id).length;
     return `
-      <div class="admin-row">
-        <div class="admin-row-main">
+      <div class="admin-nurse-row ${selectedAdminNurseId === nurse.id ? 'selected' : ''}">
+        <button class="admin-nurse-select" onclick="selectAdminNurse('${escapeJsArg(nurse.id)}')">
           <div class="admin-row-title">${escapeHtml(nurse.name)}</div>
-          <div class="admin-row-sub">${assignedCount} room${assignedCount !== 1 ? 's' : ''} assigned</div>
-        </div>
-        <div class="admin-row-actions">
-          <button class="admin-mini-btn danger" onclick="removeNurse('${escapeJsArg(nurse.id)}')">Remove</button>
-        </div>
+          <div class="admin-row-sub">${assignedCount} bed${assignedCount !== 1 ? 's' : ''} · PIN ${nurse.pin ? 'set' : 'not set'}</div>
+        </button>
+        <button class="nurse-settings-btn" onclick="openPinEditor('${escapeJsArg(nurse.id)}')" title="PIN settings">⚙</button>
       </div>
     `;
   }).join('');
@@ -1560,39 +1601,36 @@ function renderAdminNurseList() {
 
 function renderAdminRoomList() {
   const list = document.getElementById('adminRoomList');
+  const title = document.getElementById('adminBedTitle');
+  const guidance = document.getElementById('adminBedGuidance');
+  const saveButton = document.getElementById('saveBedAssignmentsBtn');
   if (!list) return;
   if (!rooms.length) {
-    list.innerHTML = '<div class="admin-list-empty">No rooms added yet.</div>';
+    list.innerHTML = '<div class="admin-list-empty">No beds added yet.</div>';
     return;
   }
-  list.innerHTML = rooms.map(room => `
-    <div class="admin-row">
-      <div class="admin-row-main">
-        <div class="admin-row-title">${escapeHtml(room.name)}</div>
-        <div class="admin-row-sub">${room.assignedNurseName ? 'Assigned to ' + escapeHtml(room.assignedNurseName) : 'Empty room'}</div>
-      </div>
-      <div class="admin-row-actions">
-        <button class="admin-mini-btn secondary" onclick="openAssignRoom('${escapeJsArg(room.id)}')">Assign</button>
-        <button class="admin-mini-btn danger" onclick="removeRoom('${escapeJsArg(room.id)}')">Remove</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderAssignPanel() {
-  const panel = document.getElementById('roomAssignPanel');
-  const title = document.getElementById('assignRoomTitle');
-  const select = document.getElementById('assignNurseSelect');
-  if (!panel || !title || !select) return;
-  const room = rooms.find(r => r.id === activeAssignRoomId);
-  panel.classList.toggle('show', Boolean(room));
-  if (!room) return;
-  title.textContent = 'Assign ' + room.name;
-  select.innerHTML = nurses.length
-    ? nurses.map(nurse => `<option value="${escapeHtml(nurse.id)}">${escapeHtml(nurse.name)}</option>`).join('')
-    : '<option value="">Add a nurse first</option>';
-  select.disabled = !nurses.length;
-  select.value = room.assignedNurseId || (nurses[0]?.id || '');
+  const nurse = nurses.find(item => item.id === selectedAdminNurseId);
+  if (title) title.textContent = nurse ? 'Beds for ' + nurse.name : 'Select a nurse';
+  if (guidance) guidance.textContent = nurse
+    ? 'Tap available beds to assign or remove them. Beds belonging to another nurse are locked.'
+    : 'Choose a nurse on the left to view and assign available beds.';
+  if (saveButton) saveButton.disabled = !nurse;
+  list.innerHTML = rooms
+    .slice()
+    .sort((a, b) => String(a.name).localeCompare(String(b.name), undefined, { numeric: true }))
+    .map(room => {
+      const selected = nurse && pendingAssignedRoomIds.has(room.id);
+      const occupiedByOther = nurse && room.assignedNurseId && room.assignedNurseId !== nurse.id;
+      const stateClass = occupiedByOther ? 'occupied' : (selected ? 'selected' : '');
+      const owner = occupiedByOther ? room.assignedNurseName : (selected ? 'Selected' : 'Available');
+      return `
+        <button class="admin-bed-tile ${stateClass}" onclick="toggleAdminBed('${escapeJsArg(room.id)}')" ${!nurse || occupiedByOther ? 'disabled' : ''}>
+          <div class="admin-bed-icon">🛏</div>
+          <div class="admin-bed-number">${escapeHtml(room.name)}</div>
+          <div class="admin-bed-owner">${escapeHtml(owner)}</div>
+        </button>
+      `;
+    }).join('');
 }
 
 function addNurse() {
@@ -1611,7 +1649,7 @@ function addNurse() {
     }).catch(() => showToast('Could not save nurse to Firebase', true));
     return;
   }
-  nurses.push({ id: 'local-nurse-' + Date.now(), name, active: true });
+  nurses.push({ id: 'local-nurse-' + Date.now(), name, pin: '', active: true });
   input.value = '';
   renderAdminSetup();
   refreshDashboard();
@@ -1621,10 +1659,16 @@ function addNurse() {
 
 function addRoom() {
   const input = document.getElementById('newRoomName');
-  const name = input.value.trim();
-  if (!name) { showToast('Enter room name', true); return; }
+  const value = input.value.trim();
+  if (!value) { showToast('Enter bed number', true); return; }
+  const name = /^bed\s/i.test(value) ? value : 'Bed ' + value;
+  const roomId = value.replace(/^bed\s*/i, '').trim().replace(/[^a-zA-Z0-9_-]/g, '-');
+  if (rooms.some(room => room.id === roomId || room.name.toLowerCase() === name.toLowerCase())) {
+    showToast('That bed already exists', true);
+    return;
+  }
   if (firebaseReady && roomsCollection) {
-    roomsCollection.add({
+    roomsCollection.doc(roomId).set({
       name,
       active: true,
       assignedNurseId: '',
@@ -1637,7 +1681,7 @@ function addRoom() {
     }).catch(() => showToast('Could not save room to Firebase', true));
     return;
   }
-  rooms.push({ id: 'local-room-' + Date.now(), name, active: true, assignedNurseId: '', assignedNurseName: '' });
+  rooms.push({ id: roomId, name, active: true, assignedNurseId: '', assignedNurseName: '' });
   input.value = '';
   renderAdminSetup();
   refreshDashboard();
@@ -1660,7 +1704,10 @@ function removeNurse(nurseId) {
   }
   rooms = rooms.map(room => room.assignedNurseId === nurseId ? { ...room, assignedNurseId: '', assignedNurseName: '' } : room);
   nurses = nurses.filter(n => n.id !== nurseId);
-  if (activeAssignRoomId) renderAssignPanel();
+  if (selectedAdminNurseId === nurseId) {
+    selectedAdminNurseId = null;
+    pendingAssignedRoomIds.clear();
+  }
   renderAdminSetup();
   refreshDashboard();
   renderCommand();
@@ -1676,58 +1723,120 @@ function removeRoom(roomId) {
   }
   rooms = rooms.filter(room => room.id !== roomId);
   if (activeDashBed === roomId) activeDashBed = null;
-  if (activeAssignRoomId === roomId) activeAssignRoomId = null;
+  pendingAssignedRoomIds.delete(roomId);
   renderAdminSetup();
   refreshDashboard();
   renderCommand();
   showToast('Room removed locally');
 }
 
-function openAssignRoom(roomId) {
-  activeAssignRoomId = roomId;
-  renderAssignPanel();
+function openAdminDrawer() {
+  seedLocalWardSetup();
+  document.getElementById('adminDrawerBackdrop').classList.add('show');
+  if (!selectedAdminNurseId && nurses.length) selectAdminNurse(nurses[0].id);
+  else renderAdminSetup();
 }
 
-function closeAssignPanel() {
-  activeAssignRoomId = null;
-  renderAssignPanel();
+function closeAdminDrawer() {
+  document.getElementById('adminDrawerBackdrop').classList.remove('show');
 }
 
-function assignSelectedNurse() {
-  const room = rooms.find(r => r.id === activeAssignRoomId);
-  const select = document.getElementById('assignNurseSelect');
-  if (!room || !select || !select.value) { showToast('Add a nurse first', true); return; }
-  const nurse = nurses.find(n => n.id === select.value);
+function adminDrawerBackdrop(event) {
+  if (event.target.id === 'adminDrawerBackdrop') closeAdminDrawer();
+}
+
+function selectAdminNurse(nurseId) {
+  selectedAdminNurseId = nurseId;
+  pendingAssignedRoomIds = new Set(
+    rooms.filter(room => room.assignedNurseId === nurseId).map(room => room.id)
+  );
+  renderAdminSetup();
+}
+
+function toggleAdminBed(roomId) {
+  const room = rooms.find(item => item.id === roomId);
+  if (!room || !selectedAdminNurseId) return;
+  if (room.assignedNurseId && room.assignedNurseId !== selectedAdminNurseId) return;
+  if (pendingAssignedRoomIds.has(roomId)) pendingAssignedRoomIds.delete(roomId);
+  else pendingAssignedRoomIds.add(roomId);
+  renderAdminRoomList();
+}
+
+async function saveNurseBedAssignments() {
+  const nurse = nurses.find(item => item.id === selectedAdminNurseId);
   if (!nurse) return;
-  const assignment = { assignedNurseId: nurse.id, assignedNurseName: nurse.name, active: true, updatedAtMs: Date.now() };
+  const changedRooms = rooms.filter(room =>
+    room.assignedNurseId === nurse.id || pendingAssignedRoomIds.has(room.id)
+  );
+  const updates = changedRooms.map(room => {
+    const selected = pendingAssignedRoomIds.has(room.id);
+    return {
+      room,
+      data: {
+        assignedNurseId: selected ? nurse.id : '',
+        assignedNurseName: selected ? nurse.name : '',
+        active: true,
+        updatedAtMs: Date.now()
+      }
+    };
+  });
   if (firebaseReady && roomsCollection) {
-    roomsCollection.doc(room.id).update(assignment)
-      .then(() => showToast(room.name + ' assigned to ' + nurse.name))
-      .catch(() => showToast('Could not save assignment', true));
+    try {
+      const batch = db.batch();
+      updates.forEach(({ room, data }) => batch.set(roomsCollection.doc(room.id), data, { merge: true }));
+      await batch.commit();
+      showToast('Bed assignments saved for ' + nurse.name);
+    } catch (error) {
+      showToast('Could not save bed assignments', true);
+    }
     return;
   }
-  Object.assign(room, assignment);
+  updates.forEach(({ room, data }) => Object.assign(room, data));
   renderAdminSetup();
   refreshDashboard();
   renderCommand();
-  showToast(room.name + ' assigned to ' + nurse.name);
+  showToast('Bed assignments saved locally');
 }
 
-function clearRoomAssignment() {
-  const room = rooms.find(r => r.id === activeAssignRoomId);
-  if (!room) return;
-  const cleared = { assignedNurseId: '', assignedNurseName: '', updatedAtMs: Date.now() };
-  if (firebaseReady && roomsCollection) {
-    roomsCollection.doc(room.id).update(cleared)
-      .then(() => showToast('Assignment cleared'))
-      .catch(() => showToast('Could not clear assignment', true));
+function openPinEditor(nurseId) {
+  const nurse = nurses.find(item => item.id === nurseId);
+  if (!nurse) return;
+  pinEditorNurseId = nurseId;
+  document.getElementById('pinEditorTitle').textContent = 'PIN for ' + nurse.name;
+  document.getElementById('nursePinInput').value = nurse.pin || '';
+  document.getElementById('pinEditor').classList.add('show');
+  setTimeout(() => document.getElementById('nursePinInput').focus(), 50);
+}
+
+function closePinEditor() {
+  pinEditorNurseId = null;
+  document.getElementById('pinEditor').classList.remove('show');
+}
+
+function saveNursePin() {
+  const nurse = nurses.find(item => item.id === pinEditorNurseId);
+  const pin = document.getElementById('nursePinInput').value.trim();
+  if (!nurse || !/^\d{4}$/.test(pin)) {
+    showToast('PIN must contain exactly four digits', true);
     return;
   }
-  Object.assign(room, cleared);
+  if (nurses.some(item => item.id !== nurse.id && item.pin === pin)) {
+    showToast('That PIN is already assigned to another nurse', true);
+    return;
+  }
+  if (firebaseReady && nursesCollection) {
+    nursesCollection.doc(nurse.id).update({ pin, updatedAtMs: Date.now() })
+      .then(() => {
+        closePinEditor();
+        showToast('PIN saved for ' + nurse.name);
+      })
+      .catch(() => showToast('Could not save PIN', true));
+    return;
+  }
+  nurse.pin = pin;
+  closePinEditor();
   renderAdminSetup();
-  refreshDashboard();
-  renderCommand();
-  showToast('Assignment cleared');
+  showToast('PIN saved locally');
 }
 
 function seedDemoWardSetup() {
@@ -1742,7 +1851,8 @@ function seedDemoWardSetup() {
   }
   nurses = defaultWardNurses();
   rooms = defaultWardRooms();
-  activeAssignRoomId = null;
+  selectedAdminNurseId = 'nurse-priya';
+  pendingAssignedRoomIds = new Set(rooms.filter(room => room.assignedNurseId === 'nurse-priya').map(room => room.id));
   renderAdminSetup();
   refreshDashboard();
   renderCommand();
@@ -2105,6 +2215,11 @@ function listenToNurses() {
   nursesUnsubscribe = nursesCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
     nurses = [];
     snapshot.forEach(doc => nurses.push({ id: doc.id, ...doc.data() }));
+    const priya = nurses.find(nurse => nurse.id === 'nurse-priya');
+    if (!defaultPinChecked && priya && !priya.pin) {
+      defaultPinChecked = true;
+      nursesCollection.doc('nurse-priya').update({ pin: '2222', updatedAtMs: Date.now() });
+    }
     renderAdminSetup();
     refreshDashboard();
     renderCommand();
@@ -2119,6 +2234,16 @@ function listenToRooms() {
   roomsUnsubscribe = roomsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
     rooms = [];
     snapshot.forEach(doc => rooms.push({ id: doc.id, ...doc.data() }));
+    if (!defaultBedsChecked) {
+      defaultBedsChecked = true;
+      const existingIds = new Set(rooms.map(room => room.id));
+      const missingRooms = defaultWardRooms().filter(room => !existingIds.has(room.id));
+      if (missingRooms.length) {
+        const batch = db.batch();
+        missingRooms.forEach(room => batch.set(roomsCollection.doc(room.id), room));
+        batch.commit().catch(() => showToast('Could not create all default beds', true));
+      }
+    }
     if (activeDashBed && !getDashboardRooms().some(room => room.id === activeDashBed)) activeDashBed = null;
     renderAdminSetup();
     refreshDashboard();

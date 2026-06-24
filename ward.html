@@ -481,7 +481,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 28px;">
     <div class="logo-icon">🩺</div>
     <div class="logo-title">Nurse Woyz</div>
-    <div class="staff-display">Staff ID · NRS-4521 — Nurse Priya</div>
+    <div class="staff-display">Enter your nurse PIN to open your assigned beds</div>
     <div class="pin-label">Enter your 4-digit PIN</div>
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
@@ -494,14 +494,14 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="num-btn empty"></div><div class="num-btn" onclick="pinTap(&#39;0&#39;)">0</div><div class="num-btn del" onclick="pinDel()">⌫</div>
     </div>
     <button class="enter-btn" onclick="doLogin()">→ Start Shift</button>
-    <div class="demo-note">Ward device demo PIN: 2222</div>
+    <div class="demo-note">Default demo nurse: Priya · PIN 2222</div>
   </div>
 </div>
 
 <!-- ══ BEDS ══ -->
 <div class="screen" id="screen-beds" style="padding-bottom:60px;">
   <div class="topbar">
-    <div><div class="nurse-greet">Good evening</div><div class="nurse-name">Nurse Priya</div></div>
+    <div><div class="nurse-greet">Good evening</div><div class="nurse-name" data-current-nurse>Nurse</div></div>
     <div class="topbar-right">
       <div class="shift-pill">🟢 ON SHIFT</div>
       <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
@@ -559,7 +559,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <button class="back-chip" onclick="goBackToBeds()">← Beds</button>
     <div>
       <div class="bed-heading" id="micBedTitle">Bed 102</div>
-      <div class="bed-subtext">Ward 3 · Nurse Priya · Night Shift</div>
+      <div class="bed-subtext">Ward 3 · <span data-current-nurse>Nurse</span> · Night Shift</div>
     </div>
   </div>
   <div id="bedTransferPanel"></div>
@@ -599,7 +599,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <!-- ══ SUMMARY ══ -->
 <div class="screen" id="screen-summary" style="padding-bottom:60px;">
   <div class="sum-title">Shift Notes</div>
-  <div class="sum-meta">Nurse Priya · Ward 3 · Night Shift</div>
+  <div class="sum-meta"><span data-current-nurse>Nurse</span> · Ward 3 · Night Shift</div>
   <div class="sum-actions">
     <div class="sum-copy" onclick="copyToEMR()">📋 Copy to EMR</div>
     <div class="sum-logout" onclick="doLogout()">🔒 End &amp; Logout</div>
@@ -832,11 +832,42 @@ let db = null;
 let auth = null;
 let notesCollection = null;
 let transfersCollection = null;
+let nursesCollection = null;
+let roomsCollection = null;
 let firebaseReady = false;
 let notesUnsubscribe = null;
 let transfersUnsubscribe = null;
+let nursesUnsubscribe = null;
+let roomsUnsubscribe = null;
 let localSaveIds = new Set();
 let editingNoteId = null;
+let nurses = [{ id: 'nurse-priya', name: 'Nurse Priya', pin: '2222', active: true }];
+let rooms = Array.from({ length: 20 }, (_, index) => {
+  const id = String(101 + index);
+  return {
+    id,
+    name: 'Bed ' + id,
+    active: true,
+    assignedNurseId: index < 8 ? 'nurse-priya' : '',
+    assignedNurseName: index < 8 ? 'Nurse Priya' : ''
+  };
+});
+let activeNurse = null;
+
+function currentNurseName() {
+  return activeNurse?.name || 'Nurse';
+}
+
+function assignedRooms() {
+  if (!activeNurse) return [];
+  return rooms.filter(room => room.active !== false && room.assignedNurseId === activeNurse.id);
+}
+
+function updateNurseIdentity() {
+  document.querySelectorAll('[data-current-nurse]').forEach(element => {
+    element.textContent = currentNurseName();
+  });
+}
 
 function isMobileWardDevice() {
   return window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
@@ -941,20 +972,27 @@ function updateDots() {
   for (let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled', i < pinEntry.length);
 }
 function doLogin() {
-  if (pinEntry !== '2222') {
+  const nurse = nurses.find(item => item.active !== false && item.pin === pinEntry);
+  if (!nurse) {
     pinEntry = '';
     updateDots();
-    showToast('Enter ward device PIN 2222', true);
+    showToast('PIN not recognised. Ask the ward manager to check your PIN.', true);
     return;
   }
+  activeNurse = nurse;
   pinEntry = ''; updateDots();
+  updateNurseIdentity();
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
-  showToast('Welcome, Nurse Priya 👋');
+  const bedCount = assignedRooms().length;
+  showToast('Welcome, ' + nurse.name + ' · ' + bedCount + ' bed' + (bedCount === 1 ? '' : 's'));
 }
 function doLogout() {
   pinEntry = ''; updateDots();
+  activeNurse = null;
+  currentBed = null;
+  updateNurseIdentity();
   if (deviceMode === 'desktop') {
     managerLoggedIn = false;
     localStorage.removeItem('nurse_woyz_manager_logged_in');
@@ -972,26 +1010,36 @@ function doLogout() {
 function renderBedGrid() {
   const grid = document.getElementById('bedGrid');
   grid.innerHTML = '';
-  BEDS.forEach(bed => {
-    const count = (notes[bed.id]||[]).length;
-    const reqCount = transferRequests.filter(r => r.bedId === bed.id && !isRequestClosed(r.status)).length;
-    const cls = (count > 0 || reqCount > 0) ? 'has-notes' : bed.status;
+  const nurseRooms = assignedRooms();
+  if (!nurseRooms.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;background:#fff;border:1px solid #d7e1ef;border-radius:14px;padding:22px;text-align:center;color:#61738a;">No beds are currently assigned to you. Please contact the ward manager.</div>';
+    return;
+  }
+  nurseRooms.forEach(room => {
+    const count = (notes[room.id]||[]).length;
+    const reqCount = transferRequests.filter(r => r.bedId === room.id && !isRequestClosed(r.status)).length;
+    const cls = (count > 0 || reqCount > 0) ? 'has-notes' : 'occ';
     const div = document.createElement('div');
     div.className = 'bed-btn ' + cls;
     div.innerHTML = `
       <div class="b-dot"></div>
       ${count > 0 ? `<div class="b-count">${count}✓</div>` : ''}
-      <div class="b-num">${bed.id}</div>
-      <div class="b-st">${reqCount > 0 ? reqCount+' request'+(reqCount>1?'s':'') : count > 0 ? count+' note'+(count>1?'s':'') : bed.status==='occ'?'Occupied':'Vacant'}</div>
+      <div class="b-num">${escapeHtml(room.name.replace(/^Bed\s*/i, ''))}</div>
+      <div class="b-st">${reqCount > 0 ? reqCount+' request'+(reqCount>1?'s':'') : count > 0 ? count+' note'+(count>1?'s':'') : 'Assigned'}</div>
     `;
-    if (bed.status !== 'vac') div.onclick = () => openBed(bed.id);
+    div.onclick = () => openBed(room.id);
     grid.appendChild(div);
   });
 }
 
 function openBed(bedId) {
+  if (!assignedRooms().some(room => room.id === bedId)) {
+    showToast('This bed is not assigned to your station', true);
+    return;
+  }
   currentBed = bedId;
-  document.getElementById('micBedTitle').textContent = 'Bed ' + bedId;
+  const room = rooms.find(item => item.id === bedId);
+  document.getElementById('micBedTitle').textContent = room?.name || 'Bed ' + bedId;
   resetMicState();
   renderNotesList();
   renderBedTransferPanel();
@@ -1280,7 +1328,7 @@ async function saveNote() {
   englishNote = text;
   const time = currentDictationTime || getCurrentTime();
   const type = currentNoteType;
-  const note = { id: 'local-note-' + Date.now(), bed: currentBed, time, raw: rawTranscript, text, type };
+  const note = { id: 'local-note-' + Date.now(), bed: currentBed, time, raw: rawTranscript, text, type, nurse: currentNurseName() };
   if (firebaseReady) {
     try {
       await saveNoteToFirebase(note);
@@ -1391,7 +1439,10 @@ function copyCurrentBedNotes() {
 // ══════════════════════════════════════════
 function showSummary() {
   const all = [];
-  Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n => all.push({bed,...n})));
+  const assignedIds = new Set(assignedRooms().map(room => room.id));
+  Object.entries(notes).forEach(([bed,ns]) => {
+    if (assignedIds.has(bed)) ns.forEach(n => all.push({bed,...n}));
+  });
   all.sort((a,b) => a.time.localeCompare(b.time));
   const tl = document.getElementById('sumTimeline');
   tl.innerHTML = all.length ? all.map(n => `
@@ -1407,10 +1458,13 @@ function showSummary() {
 
 function copyToEMR() {
   const all = [];
-  Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n => all.push({bed,...n})));
+  const assignedIds = new Set(assignedRooms().map(room => room.id));
+  Object.entries(notes).forEach(([bed,ns]) => {
+    if (assignedIds.has(bed)) ns.forEach(n => all.push({bed,...n}));
+  });
   all.sort((a,b) => a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes to copy'); return; }
-  const text = 'SHIFT NOTES\nNurse Priya · Ward 3 · Night Shift\n\n' +
+  const text = 'SHIFT NOTES\n' + currentNurseName() + ' · Ward 3 · Night Shift\n\n' +
     all.map(n => `${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard ✓')).catch(() => showToast('Ready to paste'));
 }
@@ -1668,7 +1722,8 @@ function renderCommandRequests() {
 function renderNurseNotifications() {
   const list = document.getElementById('nurseNotificationList');
   if (!list) return;
-  const openRequests = transferRequests.filter(r => !isRequestClosed(r.status));
+  const assignedIds = new Set(assignedRooms().map(room => room.id));
+  const openRequests = transferRequests.filter(r => assignedIds.has(r.bedId) && !isRequestClosed(r.status));
   list.innerHTML = openRequests.length
     ? openRequests.map(r => `
       <div class="nurse-alert ${r.priority === 'urgent' ? 'urgent' : ''}" onclick="openBed('${escapeHtml(r.bedId)}')">
@@ -1709,10 +1764,14 @@ async function initFirebaseSync() {
     db = firebase.firestore();
     notesCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('notes');
     transfersCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('transferRequests');
+    nursesCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('nurses');
+    roomsCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('rooms');
     firebaseReady = true;
     updateSyncStatus();
     listenToNotes();
     listenToTransfers();
+    listenToNurses();
+    listenToRooms();
   } catch (err) {
     firebaseReady = false;
     updateSyncStatus();
@@ -1758,6 +1817,41 @@ function listenToTransfers() {
   });
 }
 
+function listenToNurses() {
+  if (nursesUnsubscribe) nursesUnsubscribe();
+  nursesUnsubscribe = nursesCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+    const syncedNurses = [];
+    snapshot.forEach(doc => {
+      const nurse = { id: doc.id, ...doc.data() };
+      if (nurse.id === 'nurse-priya' && !nurse.pin) nurse.pin = '2222';
+      syncedNurses.push(nurse);
+    });
+    if (syncedNurses.length) nurses = syncedNurses;
+    if (activeNurse) {
+      activeNurse = nurses.find(item => item.id === activeNurse.id) || null;
+      updateNurseIdentity();
+      if (!activeNurse) showScreen('login');
+    }
+  });
+}
+
+function listenToRooms() {
+  if (roomsUnsubscribe) roomsUnsubscribe();
+  roomsUnsubscribe = roomsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+    const syncedRooms = [];
+    snapshot.forEach(doc => syncedRooms.push({ id: doc.id, ...doc.data() }));
+    if (syncedRooms.length) rooms = syncedRooms;
+    if (activeNurse) {
+      if (currentBed && !assignedRooms().some(room => room.id === currentBed)) {
+        currentBed = null;
+        showScreen('beds');
+      }
+      renderBedGrid();
+      renderNurseNotifications();
+    }
+  });
+}
+
 function renderSyncedViews() {
   renderBedGrid();
   renderNurseNotifications();
@@ -1775,7 +1869,7 @@ async function saveNoteToFirebase(note) {
     raw: note.raw,
     text: note.text,
     type: note.type,
-    nurse: 'Nurse Priya',
+    nurse: currentNurseName(),
     ward: 'Ward 3',
     shift: 'Night Shift',
     createdAtMs: Date.now(),
@@ -1821,7 +1915,7 @@ function copyBedToEMR() {
   if (!activeDashBed) { showToast('Select a bed first'); return; }
   const bedNotes = notes[activeDashBed] || [];
   if (!bedNotes.length) { showToast('No notes for this bed'); return; }
-  const text = `BED ${activeDashBed} — Nurse Priya — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = `BED ${activeDashBed} — ${currentNurseName()} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Bed ' + activeDashBed + ' copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -1830,7 +1924,7 @@ function copyAllToEMR() {
   Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n=>all.push({bed,...n})));
   all.sort((a,b)=>a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes yet this shift'); return; }
-  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · Nurse Priya\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · ' + currentNurseName() + '\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Full summary copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -1877,6 +1971,7 @@ function initApp() {
   managerLoggedIn = PAGE_KIND === 'manager'
     ? localStorage.getItem('nurse_woyz_manager_logged_in') === 'yes'
     : (deviceMode === 'desktop' && localStorage.getItem('nurse_woyz_manager_logged_in') === 'yes');
+  updateNurseIdentity();
   renderBedGrid();
   renderNurseNotifications();
   renderCommand();
