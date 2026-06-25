@@ -3,11 +3,11 @@
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Nurse Woyz Ward Device</title>
+<title>Nurse WOYZ Ward Device</title>
 <meta name="theme-color" content="#003b71">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Nurse Woyz">
+<meta name="apple-mobile-web-app-title" content="Nurse WOYZ">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
@@ -55,7 +55,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 
 /* BEDS */
 #screen-beds { background: #0f1117; padding: 20px 18px; }
-.topbar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .nurse-greet { font-size: 12px; color: #666; }
 .nurse-name { font-size: 18px; font-weight: 700; }
 .topbar-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
@@ -86,6 +86,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .back-chip { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 9px; padding: 7px 14px; color: #777; font-size: 12px; cursor: pointer; font-family: inherit; }
 .bed-heading { font-size: 24px; font-weight: 700; }
 .bed-subtext { font-size: 11px; color: #666; margin-top: 2px; }
+.patient-bed-details { font-size: 11px; color: #52657d; margin-top: 4px; line-height: 1.5; }
 .mic-area { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px 0; }
 .mic-btn {
   width: 220px;
@@ -480,8 +481,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <div class="screen active" id="screen-login" style="padding-bottom:60px;">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 28px;">
     <div class="logo-icon">🩺</div>
-    <div class="logo-title">Nurse Woyz</div>
-    <div class="staff-display">Enter your nurse PIN to open your assigned beds</div>
+    <div class="logo-title">Nurse WOYZ</div>
     <div class="pin-label">Enter your 4-digit PIN</div>
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
@@ -494,21 +494,17 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="num-btn empty"></div><div class="num-btn" onclick="pinTap(&#39;0&#39;)">0</div><div class="num-btn del" onclick="pinDel()">⌫</div>
     </div>
     <button class="enter-btn" onclick="doLogin()">→ Start Shift</button>
-    <div class="demo-note">Default demo nurse: Priya · PIN 2222</div>
   </div>
 </div>
 
 <!-- ══ BEDS ══ -->
 <div class="screen" id="screen-beds" style="padding-bottom:60px;">
   <div class="topbar">
-    <div><div class="nurse-greet">Good evening</div><div class="nurse-name" data-current-nurse>Nurse</div></div>
+    <div class="nurse-name" data-current-nurse>Nurse</div>
     <div class="topbar-right">
-      <div class="shift-pill">🟢 ON SHIFT</div>
-      <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
       <button class="exit-btn" onclick="doLogout()">🔒 Exit Shift</button>
     </div>
   </div>
-  <div class="section-lbl">Your beds tonight</div>
   <div class="nurse-alerts" id="nurseNotificationList"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
   <div class="bed-grid" id="bedGrid"><div class="bed-btn occ">
       <div class="b-dot"></div>
@@ -559,7 +555,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <button class="back-chip" onclick="goBackToBeds()">← Beds</button>
     <div>
       <div class="bed-heading" id="micBedTitle">Bed 102</div>
-      <div class="bed-subtext">Ward 3 · <span data-current-nurse>Nurse</span> · Night Shift</div>
+      <div class="patient-bed-details" id="micPatientDetails"></div>
     </div>
   </div>
   <div id="bedTransferPanel"></div>
@@ -570,7 +566,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="mic-tap-sub" id="micTapSub">Speak in Malayalam</div>
       <div class="mic-tap-hint">Tap again to stop</div>
     </div>
-    <div class="mic-status" id="micStatus">Ready to record</div>
+    <div class="mic-status" id="micStatus"></div>
     <div class="mic-controls">
       <button class="ctrl-btn" id="btnPause" onclick="togglePauseMic()" disabled="">⏸ Pause</button>
       <button class="ctrl-btn handover" id="btnHandover" onclick="startHandoverDictation()">📝 Dictate Handover</button>
@@ -580,9 +576,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 
   <div class="transcript-section">
     <div class="tbox">
-      <div class="tbox-label en">Clinical Note</div>
-      <textarea class="preview-edit-box" id="englishTranscript" disabled>Note will appear here after you speak…</textarea>
-      <div class="preview-help" id="previewHelp">After transcription, edit the note here before tapping Record &amp; Save.</div>
+      <textarea class="preview-edit-box" id="englishTranscript" disabled></textarea>
       <div id="rawTranscript" style="display:none;"></div>
     </div>
   </div>
@@ -614,7 +608,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div style="display:flex;align-items:center;gap:16px;">
       <div class="d-logo">
         <div class="d-logo-icon">🩺</div>
-        <div><div class="d-logo-text">Nurse Woyz</div><div class="d-logo-sub">Ward Dashboard</div></div>
+        <div><div class="d-logo-text">Nurse WOYZ</div><div class="d-logo-sub">Ward Dashboard</div></div>
       </div>
       <div class="d-nav-ctx">Rajagiri Hospital › <strong>Ward 3 — Medical</strong> › Night Shift</div>
     </div>
@@ -985,8 +979,6 @@ function doLogin() {
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
-  const bedCount = assignedRooms().length;
-  showToast('Welcome, ' + nurse.name + ' · ' + bedCount + ' bed' + (bedCount === 1 ? '' : 's'));
 }
 function doLogout() {
   pinEntry = ''; updateDots();
@@ -1040,10 +1032,22 @@ function openBed(bedId) {
   currentBed = bedId;
   const room = rooms.find(item => item.id === bedId);
   document.getElementById('micBedTitle').textContent = room?.name || 'Bed ' + bedId;
+  renderCurrentBedPatientDetails();
   resetMicState();
   renderNotesList();
   renderBedTransferPanel();
   showScreen('mic');
+}
+
+function renderCurrentBedPatientDetails() {
+  const details = document.getElementById('micPatientDetails');
+  if (!details || !currentBed) return;
+  const room = rooms.find(item => item.id === currentBed) || {};
+  const name = String(room.patientName || '—').trim() || '—';
+  const age = String(room.patientAge || '—').trim() || '—';
+  const sex = String(room.patientSex || '—').trim() || '—';
+  const uhid = String(room.patientUhid || '—').trim() || '—';
+  details.textContent = `${name} · ${age} years · ${sex} · UHID: ${uhid}`;
 }
 
 function goBackToBeds() {
@@ -1067,7 +1071,7 @@ function resetMicState() {
   autoSaveAfterTranscription = false;
   setMicUI('idle');
   // raw hidden
-  setPreviewText('Structured English clinical note will appear here…', { placeholder: true });
+  setPreviewText('');
   document.getElementById('btnPause').disabled = true;
   document.getElementById('btnHandover').disabled = false;
   document.getElementById('btnSave').disabled = true;
@@ -1081,7 +1085,7 @@ function setMicUI(state) {
   const status = document.getElementById('micStatus');
   btn.classList.toggle('recording', state === 'recording');
   btn.classList.toggle('paused', state === 'paused');
-  if (state === 'idle') { status.textContent = 'Ready to record'; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = '⏸ Pause'; }
+  if (state === 'idle') { status.textContent = ''; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = '⏸ Pause'; }
   if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? '🔴 Recording handover…' : '🔴 Listening…'; status.className = 'mic-status recording'; label.textContent = 'RECORDING'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = '⏸ Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover…' : 'Listening…'); }
   if (state === 'paused') { status.textContent = '⏸ Paused — tap Resume to continue'; status.className = 'mic-status'; label.textContent = 'STOP'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = '▶ Resume'; }
   if (state === 'processing') { status.textContent = '✦ Structuring note…'; status.className = 'mic-status processing'; label.textContent = 'PROCESSING'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
@@ -1102,7 +1106,7 @@ async function startRecording() {
   currentAudioBlob = null;
   currentDictationTime = '';
   isPaused = false;
-  setPreviewText('Note will appear here after you speak…', { placeholder: true });
+  setPreviewText('');
   document.getElementById('btnSave').disabled = true;
   document.getElementById('btnHandover').disabled = true;
 
@@ -1848,6 +1852,7 @@ function listenToRooms() {
       }
       renderBedGrid();
       renderNurseNotifications();
+      if (currentBed) renderCurrentBedPatientDetails();
     }
   });
 }
