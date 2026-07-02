@@ -1402,7 +1402,8 @@ function renderNotesList() {
     list.innerHTML = '<div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>';
     return;
   }
-  list.innerHTML = bedNotes.map((n, index) => {
+  const newestFirst = bedNotes.map((n, index) => ({ n, index })).reverse();
+  list.innerHTML = newestFirst.map(({ n, index }) => {
     const noteId = n.id || ('local-note-' + index);
     const isEditing = editingNoteId === noteId;
     return `
@@ -1424,7 +1425,7 @@ function renderNotesList() {
     </div>
   `;
   }).join('');
-  list.scrollTop = list.scrollHeight;
+  list.scrollTop = 0;
 }
 
 function startEditNote(noteId) {
