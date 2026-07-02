@@ -1,14 +1,14 @@
 {
-  "name": "Nurse Woyz",
-  "short_name": "Nurse Woyz",
-  "description": "Nurse Woyz ward device demo for nursing notes and transfer notifications.",
+  "name": "Nurse WOYZ",
+  "short_name": "Nurse WOYZ",
+  "description": "Nurse WOYZ ward device demo for nursing notes and transfer notifications.",
   "id": "/ward",
   "start_url": "./ward.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f5f8fc",
-  "theme_color": "#003b71",
+  "theme_color": "#a6192e",
   "categories": ["medical", "productivity"],
   "icons": [
     {

@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Nurse WOYZ Ward Device</title>
-<meta name="theme-color" content="#003b71">
+<meta name="theme-color" content="#a6192e">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Nurse WOYZ">
@@ -87,17 +87,19 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .bed-heading { font-size: 24px; font-weight: 700; }
 .bed-subtext { font-size: 11px; color: #666; margin-top: 2px; }
 .patient-bed-details { font-size: 11px; color: #52657d; margin-top: 4px; line-height: 1.5; }
-.mic-area { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px 0; }
+.mic-area { display: flex; flex-direction: column; gap: 8px; padding: 8px 0 4px; }
+.dictation-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; width: 100%; }
 .mic-btn {
-  width: 220px;
+  width: 100%;
+  min-height: 46px;
   background: linear-gradient(135deg,#e63946,#c1121f);
-  border-radius: 20px;
-  padding: 22px 16px 18px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px;
+  border: 0;
+  border-radius: 11px;
+  padding: 10px 12px;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer; user-select: none;
   transition: transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 8px 28px rgba(230,57,70,0.35);
+  box-shadow: 0 5px 16px rgba(166,25,46,0.24);
 }
 .mic-btn:active { transform: scale(0.96); }
 .mic-btn.recording {
@@ -109,16 +111,8 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
   0%,100%{ box-shadow: 0 8px 32px rgba(230,57,70,0.45); }
   50%{ box-shadow: 0 8px 48px rgba(230,57,70,0.7); }
 }
-.mic-tap-label {
-  font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: #fff;
-}
-.mic-tap-sub {
-  font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 500;
-}
-.mic-tap-hint {
-  font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 4px;
-  border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; width: 100%; text-align: center;
-}
+.mic-tap-label { font-size: 14px; font-weight: 800; letter-spacing: 0.2px; color: #fff; }
+.mic-tap-sub, .mic-tap-hint, .mic-wave { display: none !important; }
 .mic-wave {
   display: flex; align-items: flex-end; gap: 3px; height: 24px; margin: 4px 0;
 }
@@ -138,18 +132,23 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
   50%{ transform: scaleY(1); opacity: 1; }
 }
 .mic-wave.hidden { visibility: hidden; }
-.mic-status { font-size: 13px; color: #888; text-align: center; min-height: 20px; }
+.mic-status { font-size: 12px; color: #888; text-align: center; min-height: 0; }
+.mic-status:empty { display: none; }
 .mic-status.recording { color: #e63946; font-weight: 600; }
 .mic-status.processing { color: #f59e0b; font-weight: 600; }
 .mic-status.done { color: #4ade80; font-weight: 600; }
-.mic-controls { display: flex; gap: 10px; }
+.mic-controls { display: contents; }
 .ctrl-btn { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 12px 20px; color: #ccc; font-size: 12px; cursor: pointer; font-family: inherit; }
+.dictation-actions .ctrl-btn { width: 100%; min-height: 46px; padding: 10px 12px; font-size: 14px; font-weight: 800; }
 .ctrl-btn.save { background: #1e3a2f; border-color: #2d5a41; color: #4ade80; font-weight: 600; }
 .ctrl-btn.handover { background: #10233f; border-color: #23466f; color: #93c5fd; font-weight: 600; }
 .ctrl-btn:disabled { opacity: 0.35; cursor: default; }
 
 /* Two transcript boxes */
-.transcript-section { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+.draft-panel { display: none; margin: 8px 0 2px; }
+.draft-panel.show { display: block; }
+.draft-panel .ctrl-btn.save { width: 100%; }
+.transcript-section { display: flex; flex-direction: column; gap: 8px; margin: 0 0 8px; }
 .tbox { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 13px; padding: 13px 15px; }
 .tbox-label { font-size: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 .tbox-label.ml { color: #888; }
@@ -164,7 +163,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .spinner { width: 14px; height: 14px; border: 2px solid #f59e0b33; border-top-color: #f59e0b; border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.notes-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+.notes-list { display: flex; flex-direction: column; gap: 8px; max-height: none; overflow-y: visible; }
 .note-card { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 11px 14px; }
 .nc-time { font-size: 10px; color: #e63946; margin-bottom: 4px; }
 .nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #005ea8; background: #e8f2fb; border: 1px solid #bfd8ee; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
@@ -176,8 +175,10 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
 .note-edit-btn.cancel-edit { color: #61738a; }
 .note-edit-box { width: 100%; min-height: 110px; border: 1px solid #c9d8ea; border-radius: 10px; padding: 10px 11px; color: #162033; background: #fff; font: inherit; font-size: 13px; line-height: 1.45; resize: vertical; margin-top: 8px; }
-.notes-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.notes-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0 10px; }
 .copy-bed-btn { background: #fff; border: 1.5px solid #c8d4e4; border-radius: 10px; padding: 9px 12px; color: #005ea8; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.copy-bed-bottom { width: 100%; margin: 12px 0 4px; padding: 12px; }
+.handover-toolbar-btn { border-radius: 10px; padding: 9px 12px; font-size: 11px; cursor: pointer; font-family: inherit; font-weight: 800; }
 
 /* SUMMARY */
 #screen-summary { background: #0f1117; padding: 20px 18px; }
@@ -317,11 +318,11 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .mode-btn.active { background: #e63946; border-color: #e63946; color: #fff; }
 .mode-btn.dash-active { background: #003366; border-color: #003366; color: #fff; }
 
-/* EPIC-STYLE LIGHT THEME OVERRIDES */
+/* STROKE CODE-STYLE LIGHT THEME OVERRIDES */
 body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -apple-system, BlinkMacSystemFont, sans-serif; }
 #screen-login, #screen-beds, #screen-mic, #screen-summary { background: linear-gradient(180deg,#ffffff 0%,#f5f8fc 100%); color: #162033; }
-.logo-icon { background: linear-gradient(135deg,#005ea8,#0086c9); box-shadow: 0 10px 26px rgba(0,94,168,0.22); }
-.logo-title, .nurse-name, .bed-heading, .sum-title { color: #003b71; }
+.logo-icon { background: linear-gradient(135deg,#c92a3d,#981b2d); box-shadow: 0 10px 26px rgba(166,25,46,0.22); }
+.logo-title, .nurse-name, .bed-heading, .sum-title { color: #8f1729; }
 .logo-sub, .nurse-greet, .bed-subtext, .demo-note, .sum-meta, .sum-note { color: #6b7c93; }
 .staff-display, .num-btn, .back-chip, .tbox, .note-card, .st-item, .end-shift-btn, .ctrl-btn {
   background: #ffffff;
@@ -331,25 +332,25 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 }
 .num-btn:active, .bed-btn:active, .mic-btn:active { transform: scale(0.98); }
 .pin-dot { background: #d7e1ef; }
-.pin-dot.filled { background: #006eb6; }
+.pin-dot.filled { background: #b42336; }
 .enter-btn, .mic-btn, .d-btn-primary {
-  background: linear-gradient(135deg,#005ea8,#0086c9);
-  box-shadow: 0 10px 24px rgba(0,94,168,0.22);
+  background: linear-gradient(135deg,#c92a3d,#981b2d);
+  box-shadow: 0 8px 20px rgba(166,25,46,0.22);
 }
 .mic-btn.recording {
-  background: linear-gradient(135deg,#006eb6,#004b8d);
-  box-shadow: 0 12px 34px rgba(0,94,168,0.34);
+  background: linear-gradient(135deg,#a6192e,#74101f);
+  box-shadow: 0 8px 24px rgba(166,25,46,0.34);
 }
 .mic-btn.paused {
   background: linear-gradient(135deg,#f59e0b,#d97706);
   box-shadow: 0 12px 34px rgba(217,119,6,0.24);
 }
 @keyframes micPulse {
-  0%,100%{ box-shadow: 0 10px 28px rgba(0,94,168,0.24); }
-  50%{ box-shadow: 0 14px 42px rgba(0,94,168,0.36); }
+  0%,100%{ box-shadow: 0 5px 16px rgba(166,25,46,0.24); }
+  50%{ box-shadow: 0 7px 24px rgba(166,25,46,0.42); }
 }
 .mic-status { color: #61738a; }
-.mic-status.recording { color: #006eb6; }
+.mic-status.recording { color: #a6192e; }
 .mic-status.processing { color: #b7791f; }
 .mic-status.done { color: #147a4a; }
 .ctrl-btn.save, .sum-copy {
@@ -358,9 +359,9 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   color: #147a4a;
 }
 .ctrl-btn.handover {
-  background: #eef6ff;
-  border-color: #b8d7f0;
-  color: #005ea8;
+  background: #fff1f3;
+  border-color: #efb6bf;
+  color: #981b2d;
 }
 .ctrl-btn:disabled { opacity: 0.45; }
 .shift-pill { background: #e8f5ef; color: #147a4a; border-color: #b7e1ca; }
@@ -372,30 +373,34 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   color: #162033;
   box-shadow: 0 2px 8px rgba(20,40,70,0.05);
 }
-.bed-btn.occ { border-color: #9dc8ee; background: #f5fbff; }
-.bed-btn.occ .b-st { color: #006eb6; }
-.bed-btn.occ .b-dot { background: #006eb6; }
-.bed-btn.has-notes { border-color: #88d2aa; background: #f2fbf6; }
-.bed-btn.has-notes .b-st, .bed-btn.has-notes .b-count { color: #147a4a; }
+.bed-btn.occ { border-color: #e5a6b0; background: #fff5f6; }
+.bed-btn.occ .b-st { color: #a6192e; }
+.bed-btn.occ .b-dot { background: #b42336; }
+.bed-btn.has-notes { border: 2px solid #147a4a; background: #ccebd9; box-shadow: 0 4px 14px rgba(20,122,74,0.2); }
+.bed-btn.has-notes .b-st, .bed-btn.has-notes .b-count { color: #075a35; font-weight: 800; }
+.bed-btn.has-notes .b-dot { background: #087443; width: 8px; height: 8px; }
 .bed-btn.vac { background: #f1f4f8; color: #8493a7; }
 .bed-btn.vac .b-st { color: #8493a7; }
-.tbox-label.en, .nc-time, .sti-bed { color: #006eb6; }
+.tbox-label.en, .nc-time, .sti-bed { color: #a6192e; }
 .tbox-text, .nc-text, .sti-text { color: #24364d; }
 .tbox-text.placeholder { color: #8a9ab4; }
 .processing-indicator { color: #b7791f; }
-.notes-list { max-height: 240px; }
+.notes-list { max-height: none; }
 .toast { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; box-shadow: 0 8px 24px rgba(20,40,70,0.12); }
 .toast.error { background: #fff0f0; border-color: #f3c0c0; color: #c0392b; }
-.settings-fab { background: #ffffff; color: #006eb6; border-color: #c9d8ea; box-shadow: 0 8px 24px rgba(20,40,70,0.14); }
+.settings-fab { background: #ffffff; color: #a6192e; border-color: #e5b7be; box-shadow: 0 8px 24px rgba(20,40,70,0.14); }
 .settings-modal { background: rgba(22,32,51,0.35); }
 .settings-card { background: #ffffff; border-color: #d7e1ef; }
 .settings-title { color: #003b71; }
 .settings-label, .settings-help { color: #61738a; }
 .settings-input { background: #ffffff; border-color: #c9d8ea; color: #162033; }
-.settings-save { background: #005ea8; border-color: #005ea8; color: #ffffff; }
+.settings-save { background: #a6192e; border-color: #a6192e; color: #ffffff; }
 .mode-bar { background: rgba(255,255,255,0.96); border-top-color: #d7e1ef; box-shadow: 0 -8px 24px rgba(20,40,70,0.08); }
 .mode-btn { background: #f6f9fc; border-color: #d7e1ef; color: #61738a; }
-.mode-btn.active, .mode-btn.dash-active { background: #005ea8; border-color: #005ea8; color: #fff; }
+.mode-btn.active, .mode-btn.dash-active { background: #a6192e; border-color: #a6192e; color: #fff; }
+.copy-bed-btn { color: #981b2d; border-color: #e5b7be; }
+.nc-kind { color: #981b2d; background: #fff1f3; border-color: #efb6bf; }
+.note-edit-btn { color: #981b2d; border-color: #e5b7be; }
 .sum-logout, .d-btn-danger { background: #fff; border-color: #f0c6c6; color: #c0392b; }
 .role-page .mode-bar { display: none !important; }
 .role-page #screen-login,
@@ -427,17 +432,14 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .back-chip { font-size: 16px; padding: 9px 15px; }
   .bed-heading { font-size: 28px; }
   .patient-bed-details { font-size: 16px; line-height: 1.45; margin-top: 5px; }
-  .mic-btn { width: min(100%, 260px); border-radius: 18px; }
-  .mic-tap-label { font-size: 24px; }
-  .mic-tap-sub { font-size: 16px; }
-  .mic-tap-hint { font-size: 13px; }
-  .mic-status { font-size: 16px; }
-  .mic-controls { width: 100%; justify-content: center; flex-wrap: wrap; }
-  .ctrl-btn { flex: 1 1 130px; padding: 14px 10px; font-size: 15px; }
+  .mic-btn { width: 100%; min-height: 46px; border-radius: 11px; }
+  .mic-tap-label { font-size: 15px; }
+  .mic-status { font-size: 14px; }
+  .dictation-actions .ctrl-btn { min-height: 46px; padding: 10px 8px; font-size: 15px; }
   .preview-edit-box { font-size: 17px; line-height: 1.55; min-height: 150px; padding: 13px 14px; }
   .section-lbl { font-size: 14px; letter-spacing: 0.7px; }
   .copy-bed-btn { font-size: 15px; padding: 11px 13px; }
-  .notes-list { gap: 10px; max-height: 280px; }
+  .notes-list { gap: 10px; max-height: none; }
   .note-card { padding: 13px 14px; }
   .nc-time { font-size: 13px; }
   .nc-kind { font-size: 12px; }
@@ -594,34 +596,37 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   </div>
   <div id="bedTransferPanel"></div>
   <div class="mic-area">
-    <div class="mic-btn" id="micBtn" onclick="toggleMic()">
-      <div class="mic-tap-label" id="micTapLabel">TAP TO DICTATE</div>
-      <div class="mic-wave hidden" id="micWave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="mic-tap-sub" id="micTapSub">Speak in Malayalam</div>
-      <div class="mic-tap-hint">Tap again to stop</div>
+    <div class="dictation-actions">
+      <button type="button" class="mic-btn" id="micBtn" onclick="toggleMic()">
+        <span class="mic-tap-label" id="micTapLabel">TAP TO DICTATE</span>
+        <span class="mic-wave hidden" id="micWave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+        <span class="mic-tap-sub" id="micTapSub">Speak in Malayalam</span>
+      </button>
+      <div class="mic-controls">
+        <button class="ctrl-btn" id="btnPause" onclick="togglePauseMic()" disabled="">Pause</button>
+      </div>
     </div>
     <div class="mic-status" id="micStatus"></div>
-    <div class="mic-controls">
-      <button class="ctrl-btn" id="btnPause" onclick="togglePauseMic()" disabled="">⏸ Pause</button>
-      <button class="ctrl-btn handover" id="btnHandover" onclick="startHandoverDictation()">📝 Dictate Handover</button>
-      <button class="ctrl-btn save" id="btnSave" onclick="recordAndSave()" disabled="">✓ Record &amp; Save</button>
-    </div>
   </div>
 
-  <div class="transcript-section">
-    <div class="tbox">
-      <textarea class="preview-edit-box" id="englishTranscript" disabled></textarea>
-      <div id="rawTranscript" style="display:none;"></div>
+  <div class="draft-panel" id="draftPanel">
+    <div class="transcript-section">
+      <div class="tbox">
+        <textarea class="preview-edit-box" id="englishTranscript" disabled></textarea>
+        <div id="rawTranscript" style="display:none;"></div>
+      </div>
     </div>
+    <button class="ctrl-btn save" id="btnSave" onclick="recordAndSave()" disabled="">✓ Record &amp; Save</button>
   </div>
 
   <div class="notes-toolbar">
     <div class="section-lbl" style="margin:0;">Saved notes this shift</div>
-    <button class="copy-bed-btn" onclick="copyCurrentBedNotes()">📋 Copy Bed Notes</button>
+    <button class="ctrl-btn handover handover-toolbar-btn" id="btnHandover" onclick="startHandoverDictation()">Dictate Handover</button>
   </div>
   <div class="notes-list" id="notesList">
     <div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>
   </div>
+  <button class="copy-bed-btn copy-bed-bottom" onclick="copyCurrentBedNotes()">Copy Bed Notes</button>
 </div>
 
 <!-- ══ SUMMARY ══ -->
@@ -1044,7 +1049,7 @@ function renderBedGrid() {
   nurseRooms.forEach(room => {
     const count = (notes[room.id]||[]).length;
     const reqCount = transferRequests.filter(r => r.bedId === room.id && !isRequestClosed(r.status)).length;
-    const cls = (count > 0 || reqCount > 0) ? 'has-notes' : 'occ';
+    const cls = count > 0 ? 'has-notes' : 'occ';
     const div = document.createElement('div');
     div.className = 'bed-btn ' + cls;
     div.innerHTML = `
@@ -1085,7 +1090,7 @@ function renderCurrentBedPatientDetails() {
 }
 
 function goBackToBeds() {
-  if (isRecording) stopRecording();
+  if (isRecording || isPaused) stopRecording();
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
@@ -1117,13 +1122,16 @@ function setMicUI(state) {
   const wave = document.getElementById('micWave');
   const sub = document.getElementById('micTapSub');
   const status = document.getElementById('micStatus');
+  const draft = document.getElementById('draftPanel');
   btn.classList.toggle('recording', state === 'recording');
   btn.classList.toggle('paused', state === 'paused');
-  if (state === 'idle') { status.textContent = ''; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = '⏸ Pause'; }
-  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? '🔴 Recording handover…' : '🔴 Listening…'; status.className = 'mic-status recording'; label.textContent = 'RECORDING'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = '⏸ Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover…' : 'Listening…'); }
-  if (state === 'paused') { status.textContent = '⏸ Paused — tap Resume to continue'; status.className = 'mic-status'; label.textContent = 'STOP'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = '▶ Resume'; }
-  if (state === 'processing') { status.textContent = '✦ Structuring note…'; status.className = 'mic-status processing'; label.textContent = 'PROCESSING'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
-  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready — tap Record & Save ✓' : 'Note ready — tap Record & Save ✓'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
+  btn.disabled = state === 'processing';
+  draft.classList.toggle('show', state === 'processing' || state === 'done');
+  if (state === 'idle') { status.textContent = ''; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Pause'; }
+  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? 'Recording handover…' : 'Listening…'; status.className = 'mic-status recording'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = 'Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover…' : 'Listening…'); }
+  if (state === 'paused') { status.textContent = 'Paused'; status.className = 'mic-status'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Resume'; }
+  if (state === 'processing') { status.textContent = 'Structuring note…'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING…'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
+  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
 }
 
 function toggleMic() {
@@ -1195,7 +1203,7 @@ function stopRecording() {
   isRecording = false;
   isPaused = false;
   document.getElementById('btnPause').disabled = true;
-  document.getElementById('btnPause').textContent = '⏸ Pause';
+  document.getElementById('btnPause').textContent = 'Pause';
   document.getElementById('btnHandover').disabled = true;
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micBtn').classList.remove('paused');
