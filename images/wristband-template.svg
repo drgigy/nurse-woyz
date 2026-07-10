@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="White hospital wristband template">
+  <defs>
+    <linearGradient id="bandFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.56" stop-color="#f9fbf8"/>
+      <stop offset="1" stop-color="#edf2ec"/>
+    </linearGradient>
+    <linearGradient id="loopFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e9eee7"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-20%" width="120%" height="150%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#1b2632" flood-opacity="0.18"/>
+    </filter>
+    <filter id="softInset">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="600" cy="326" rx="390" ry="22" fill="#000" opacity="0.13"/>
+
+  <g filter="url(#shadow)">
+    <path d="M122 166 C210 70 986 70 1078 166 L986 190 C864 126 338 126 214 190 Z"
+          fill="url(#loopFace)"/>
+    <path d="M122 166 C210 70 986 70 1078 166 L986 190 C864 126 338 126 214 190 Z"
+          fill="none" stroke="#dbe3da" stroke-width="2" opacity="0.75"/>
+
+    <g fill="#050505">
+      <ellipse cx="255" cy="150" rx="10" ry="17" transform="rotate(8 255 150)"/>
+      <ellipse cx="345" cy="132" rx="10" ry="17" transform="rotate(4 345 132)"/>
+      <ellipse cx="445" cy="122" rx="10" ry="17"/>
+      <ellipse cx="555" cy="118" rx="10" ry="17"/>
+      <ellipse cx="665" cy="118" rx="10" ry="17"/>
+      <ellipse cx="775" cy="124" rx="10" ry="17" transform="rotate(-4 775 124)"/>
+      <ellipse cx="875" cy="136" rx="10" ry="17" transform="rotate(-7 875 136)"/>
+      <ellipse cx="965" cy="154" rx="10" ry="17" transform="rotate(-10 965 154)"/>
+    </g>
+    <g fill="#ffffff" opacity="0.54" filter="url(#softInset)">
+      <ellipse cx="255" cy="150" rx="15" ry="22" transform="rotate(8 255 150)"/>
+      <ellipse cx="345" cy="132" rx="15" ry="22" transform="rotate(4 345 132)"/>
+      <ellipse cx="445" cy="122" rx="15" ry="22"/>
+      <ellipse cx="555" cy="118" rx="15" ry="22"/>
+      <ellipse cx="665" cy="118" rx="15" ry="22"/>
+      <ellipse cx="775" cy="124" rx="15" ry="22" transform="rotate(-4 775 124)"/>
+      <ellipse cx="875" cy="136" rx="15" ry="22" transform="rotate(-7 875 136)"/>
+      <ellipse cx="965" cy="154" rx="15" ry="22" transform="rotate(-10 965 154)"/>
+    </g>
+
+    <path d="M74 170
+             C166 134 302 144 430 162
+             C462 130 738 130 770 162
+             C902 144 1035 134 1126 170
+             C1165 186 1164 260 1123 277
+             C1035 313 906 297 774 270
+             C740 300 460 300 426 270
+             C294 297 165 313 77 277
+             C36 260 35 186 74 170 Z"
+          fill="url(#bandFace)"/>
+    <path d="M74 170
+             C166 134 302 144 430 162
+             C462 130 738 130 770 162
+             C902 144 1035 134 1126 170
+             C1165 186 1164 260 1123 277
+             C1035 313 906 297 774 270
+             C740 300 460 300 426 270
+             C294 297 165 313 77 277
+             C36 260 35 186 74 170 Z"
+          fill="none" stroke="#dce5dc" stroke-width="2"/>
+    <path d="M96 182 C190 160 300 170 420 188 C462 162 738 162 780 188 C900 170 1010 160 1104 182"
+          fill="none" stroke="#ffffff" stroke-width="15" opacity="0.55" stroke-linecap="round"/>
+  </g>
+</svg>

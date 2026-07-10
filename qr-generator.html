@@ -192,60 +192,31 @@
 
     .qr-card {
       background: transparent;
-      min-height: 300px;
+      height: 360px;
       page-break-inside: avoid;
       position: relative;
-      filter: drop-shadow(0 22px 30px rgba(20, 35, 55, 0.18));
     }
 
-    .qr-card::before {
-      background:
-        radial-gradient(circle at 18% 48%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 28% 42%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 38% 38%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 48% 36%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 58% 36%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 68% 39%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(circle at 78% 44%, #121212 0 6px, transparent 6.5px),
-        radial-gradient(ellipse at 50% 132%, transparent 0 43%, #f7faf8 44% 62%, transparent 63%);
-      content: "";
-      height: 170px;
-      left: 8%;
+    .wristband-bg {
+      height: 100%;
+      inset: 0;
+      object-fit: contain;
       position: absolute;
-      right: 8%;
-      top: 0;
-      z-index: 0;
-    }
-
-    .qr-card::after {
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.16), transparent 68%);
-      bottom: 8px;
-      content: "";
-      height: 30px;
-      left: 18%;
-      position: absolute;
-      right: 18%;
+      width: 100%;
       z-index: 0;
     }
 
     .band-face {
       align-items: center;
-      background:
-        linear-gradient(100deg, rgba(255, 255, 255, 0.3), transparent 30%),
-        linear-gradient(180deg, #ffffff 0%, #f6f8f5 58%, #eef2ed 100%);
-      border-radius: 999px;
-      box-shadow:
-        inset 0 12px 18px rgba(255, 255, 255, 0.9),
-        inset 0 -13px 22px rgba(182, 191, 184, 0.42);
       display: flex;
-      gap: clamp(16px, 3vw, 34px);
+      gap: clamp(18px, 3vw, 36px);
       justify-items: center;
-      min-height: 174px;
-      padding: 28px clamp(30px, 6vw, 76px);
+      min-height: 120px;
+      padding: 0;
       position: absolute;
-      left: 3%;
-      right: 3%;
-      bottom: 30px;
+      left: 21%;
+      right: 16%;
+      top: 176px;
       z-index: 1;
     }
 
@@ -254,7 +225,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       display: grid;
       justify-items: center;
-      padding: 9px;
+      padding: 8px;
       transform: rotate(-8deg);
     }
 
@@ -263,20 +234,20 @@
     }
 
     .band-qr img {
-      height: 132px;
+      height: 116px;
       image-rendering: crisp-edges;
-      width: 132px;
+      width: 116px;
     }
 
     .patient-panel {
       color: #050505;
       flex: 1;
-      min-width: 260px;
+      min-width: 220px;
       text-align: left;
     }
 
     .patient-name {
-      font-size: clamp(34px, 5vw, 56px);
+      font-size: clamp(30px, 4.6vw, 52px);
       font-weight: 500;
       letter-spacing: 0.01em;
       line-height: 1;
@@ -284,7 +255,7 @@
     }
 
     .patient-line {
-      font-size: clamp(20px, 2.4vw, 33px);
+      font-size: clamp(18px, 2.2vw, 30px);
       font-weight: 500;
       letter-spacing: 0.02em;
       line-height: 1.2;
@@ -292,7 +263,7 @@
     }
 
     .patient-line.small {
-      font-size: clamp(16px, 2vw, 25px);
+      font-size: clamp(15px, 1.8vw, 23px);
     }
 
     .barcode {
@@ -355,16 +326,14 @@
       }
 
       .qr-card {
-        min-height: 520px;
+        height: 560px;
       }
 
       .band-face {
-        border-radius: 38px;
         flex-direction: column;
-        left: 0;
-        right: 0;
-        padding: 28px 20px;
-        position: relative;
+        left: 10%;
+        right: 10%;
+        top: 190px;
       }
 
       .patient-panel {
@@ -401,7 +370,6 @@
       }
 
       .qr-card {
-        filter: none;
         height: 32mm;
         min-height: 32mm;
         print-color-adjust: exact;
@@ -412,26 +380,17 @@
         break-after: page;
       }
 
-      .qr-card::before {
-        height: 16mm;
-        left: 9%;
-        right: 9%;
-        top: 0;
+      .wristband-bg {
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
       }
 
-      .qr-card::after {
-        display: none;
-      }
-
       .band-face {
-        bottom: 2mm;
-        gap: 4mm;
-        left: 1%;
-        min-height: 23mm;
-        padding: 3mm 8mm;
-        right: 1%;
+        gap: 3.2mm;
+        left: 20%;
+        min-height: 12mm;
+        right: 15%;
+        top: 15.6mm;
       }
 
       .band-qr {
@@ -439,8 +398,8 @@
       }
 
       .band-qr img {
-        height: 17mm;
-        width: 17mm;
+        height: 12mm;
+        width: 12mm;
       }
 
       .patient-panel {
@@ -448,22 +407,22 @@
       }
 
       .patient-name {
-        font-size: 15px;
-        margin-bottom: 1mm;
+        font-size: 11px;
+        margin-bottom: 0.4mm;
       }
 
       .patient-line,
       .patient-line.small {
-        font-size: 9px;
+        font-size: 6.8px;
       }
 
       .bed-chip {
-        font-size: 8px;
+        font-size: 6.2px;
       }
 
       .barcode {
-        height: 5mm;
-        margin-top: 1mm;
+        height: 3.2mm;
+        margin-top: 0.5mm;
       }
     }
   </style>
@@ -630,6 +589,7 @@
         };
         cards.push(`
           <article class="qr-card">
+            <img class="wristband-bg" src="./images/wristband-template.svg" alt="" aria-hidden="true">
             <div class="band-face">
               <div class="band-qr">
                 <img src="${qrUrl}" alt="QR code for ${prefix} ${bed}">
