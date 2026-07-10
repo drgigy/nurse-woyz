@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nurse-woyz-demo-v9';
+const CACHE_NAME = 'nurse-woyz-demo-v11';
 const APP_SHELL = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const APP_SHELL = [
   './manager.html',
   './ot.html',
   './cathlab.html',
+  './qr-generator.html',
   './firebase-config.js',
   './manifest.webmanifest',
   './offline.html',

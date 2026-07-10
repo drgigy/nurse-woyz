@@ -187,6 +187,16 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .sum-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .sum-copy { background: #1e3a2f; border: 1.5px solid #2d5a41; border-radius: 12px; padding: 14px 10px; color: #4ade80; font-size: 13px; font-weight: 700; text-align: center; cursor: pointer; font-family: inherit; }
 .sum-logout { background: #1e1215; border: 1.5px solid #3a2a2a; border-radius: 12px; padding: 14px 10px; color: #e63946; font-size: 13px; font-weight: 700; text-align: center; cursor: pointer; font-family: inherit; }
+.qr-scan-btn { background: #fff; border: 1.5px solid #e5b7be; border-radius: 12px; padding: 12px 10px; color: #981b2d; font-size: 13px; font-weight: 800; text-align: center; cursor: pointer; font-family: inherit; }
+.qr-scan-btn:active { transform: scale(0.98); }
+.qr-modal { position: fixed; inset: 0; background: rgba(10,18,30,0.72); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 80; }
+.qr-modal.show { display: flex; }
+.qr-card { width: min(430px, 100%); background: #fff; border-radius: 22px; padding: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.qr-title { color: #8f1729; font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+.qr-help { color: #61738a; font-size: 14px; line-height: 1.45; margin-bottom: 14px; }
+#qrReader { overflow: hidden; border: 1px solid #d9e2ef; border-radius: 16px; min-height: 260px; }
+.qr-actions { display: flex; gap: 10px; margin-top: 14px; }
+.qr-close { flex: 1; background: #fff; border: 1.5px solid #f0c6c6; border-radius: 12px; color: #c0392b; font: inherit; font-weight: 800; padding: 12px; }
 .sum-note { font-size: 10px; color: #444; text-align: center; margin-bottom: 16px; }
 .sum-timeline { display: flex; flex-direction: column; gap: 9px; overflow-y: auto; max-height: 420px; }
 .st-item { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 12px 14px; }
@@ -538,6 +548,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div class="topbar">
     <div class="nurse-name" data-current-nurse>Nurse</div>
     <div class="topbar-right">
+      <button class="qr-scan-btn" onclick="openQrScanner()">Scan QR</button>
       <button class="exit-btn" onclick="doLogout()">🔒 Exit Shift</button>
     </div>
   </div>
@@ -627,6 +638,17 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>
   </div>
   <button class="copy-bed-btn copy-bed-bottom" onclick="copyCurrentBedNotes()">Copy Bed Notes</button>
+</div>
+
+<div class="qr-modal" id="qrModal" aria-hidden="true">
+  <div class="qr-card">
+    <div class="qr-title">Scan Bed QR</div>
+    <div class="qr-help">Point the camera at the QR code near the bed. Only beds assigned to this nurse will open.</div>
+    <div id="qrReader"></div>
+    <div class="qr-actions">
+      <button class="qr-close" onclick="closeQrScanner()">Close Scanner</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ SUMMARY ══ -->
@@ -825,6 +847,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 // ══════════════════════════════════════════
 // CONFIG
@@ -874,6 +897,9 @@ let nursesUnsubscribe = null;
 let roomsUnsubscribe = null;
 let localSaveIds = new Set();
 let editingNoteId = null;
+let qrScanner = null;
+let qrScanBusy = false;
+let pendingUrlBedId = new URLSearchParams(window.location.search).get('bed') || '';
 let nurses = [{ id: 'nurse-priya', name: 'Nurse Priya', pin: '2222', active: true }];
 let rooms = Array.from({ length: 20 }, (_, index) => {
   const id = String(101 + index);
@@ -1018,6 +1044,11 @@ function doLogin() {
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
+  if (pendingUrlBedId) {
+    const bedId = pendingUrlBedId;
+    pendingUrlBedId = '';
+    setTimeout(() => openBedFromQr(bedId), 350);
+  }
 }
 function doLogout() {
   pinEntry = ''; updateDots();
@@ -1076,6 +1107,104 @@ function openBed(bedId) {
   renderNotesList();
   renderBedTransferPanel();
   showScreen('mic');
+}
+
+function extractBedIdFromQr(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+
+  const codeMatch = text.match(/^NURSE_WOYZ_BED\s*:\s*([A-Za-z0-9_-]+)$/i);
+  if (codeMatch) return codeMatch[1];
+
+  try {
+    const url = new URL(text);
+    const bed = url.searchParams.get('bed') || url.searchParams.get('room');
+    if (bed) return bed.trim();
+  } catch (error) {
+    // QR may contain the short Nurse WOYZ code instead of a URL.
+  }
+
+  const plainMatch = text.match(/^(?:bed|room)?\s*([0-9]{1,5})$/i);
+  return plainMatch ? plainMatch[1] : '';
+}
+
+function openBedFromQr(rawValue) {
+  const bedId = extractBedIdFromQr(rawValue);
+  if (!bedId) {
+    showToast('This is not a valid Nurse WOYZ bed QR code', true);
+    return;
+  }
+
+  if (!activeNurse) {
+    pendingUrlBedId = bedId;
+    showToast('Enter nurse PIN first, then the scanned bed will open');
+    showScreen('login');
+    return;
+  }
+
+  if (!assignedRooms().some(room => room.id === bedId)) {
+    showToast('This bed is not assigned to your shift', true);
+    return;
+  }
+
+  openBed(bedId);
+}
+
+async function openQrScanner() {
+  if (!activeNurse) {
+    showToast('Enter nurse PIN before scanning a bed QR code', true);
+    return;
+  }
+  if (!window.isSecureContext && location.protocol !== 'file:') {
+    showToast('Camera scanning needs HTTPS. Use the GitHub Pages site on mobile.', true);
+    return;
+  }
+  if (!window.Html5Qrcode) {
+    showToast('QR scanner is still loading. Try again in a moment.', true);
+    return;
+  }
+
+  const modal = document.getElementById('qrModal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  qrScanBusy = false;
+
+  try {
+    qrScanner = qrScanner || new Html5Qrcode('qrReader');
+    await qrScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 230, height: 230 } },
+      async decodedText => {
+        if (qrScanBusy) return;
+        qrScanBusy = true;
+        await closeQrScanner(false);
+        openBedFromQr(decodedText);
+      }
+    );
+  } catch (error) {
+    await closeQrScanner(false);
+    showToast('Camera could not open. Check browser camera permission.', true);
+  }
+}
+
+async function closeQrScanner(showMessage = true) {
+  const modal = document.getElementById('qrModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  if (qrScanner) {
+    try {
+      await qrScanner.stop();
+    } catch (error) {
+      // Browser may already have stopped the camera stream.
+    }
+    try {
+      await qrScanner.clear();
+    } catch (error) {
+      // Scanner view may already be clear.
+    }
+  }
+  qrScanBusy = false;
+  if (showMessage) showToast('QR scanner closed');
 }
 
 function renderCurrentBedPatientDetails() {

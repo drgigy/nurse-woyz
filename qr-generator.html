@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a6192e">
+  <title>Nurse WOYZ QR Generator</title>
+  <style>
+    :root {
+      --red: #a6192e;
+      --red-dark: #7d1020;
+      --ink: #102033;
+      --muted: #617089;
+      --line: #d9e2ef;
+      --paper: #ffffff;
+      --soft: #f6f8fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      background: var(--red);
+      color: white;
+      padding: 22px clamp(18px, 4vw, 42px);
+      box-shadow: 0 10px 25px rgba(68, 14, 25, 0.22);
+    }
+
+    .brand {
+      align-items: center;
+      display: flex;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      align-items: center;
+      background: white;
+      border-radius: 14px;
+      color: var(--red);
+      display: grid;
+      font-size: 25px;
+      font-weight: 900;
+      height: 48px;
+      place-items: center;
+      width: 48px;
+    }
+
+    h1 {
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.05;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 15px;
+      margin: 4px 0 0;
+    }
+
+    main {
+      margin: 0 auto;
+      max-width: 1160px;
+      padding: 26px clamp(14px, 3vw, 34px) 44px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 18px 44px rgba(21, 38, 64, 0.08);
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .controls {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+    }
+
+    label {
+      color: var(--muted);
+      display: grid;
+      font-size: 13px;
+      font-weight: 800;
+      gap: 7px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    input,
+    select {
+      appearance: none;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--ink);
+      font: inherit;
+      font-size: 17px;
+      font-weight: 750;
+      min-height: 48px;
+      outline: none;
+      padding: 12px 14px;
+      width: 100%;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(166, 25, 46, 0.12);
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 850;
+      min-height: 48px;
+      padding: 12px 18px;
+    }
+
+    .primary {
+      background: var(--red);
+      color: white;
+    }
+
+    .primary:hover {
+      background: var(--red-dark);
+    }
+
+    .secondary {
+      background: #eef2f7;
+      color: var(--ink);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 18px 0 0;
+    }
+
+    .status {
+      color: var(--red);
+      font-weight: 800;
+      margin-left: auto;
+    }
+
+    .sheet {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      margin-top: 24px;
+    }
+
+    .qr-card {
+      background: white;
+      border: 1px solid #cfd8e6;
+      border-radius: 18px;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      min-height: 270px;
+      padding: 16px;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+
+    .qr-card h2 {
+      color: var(--red);
+      font-size: 28px;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .qr-card img {
+      height: 170px;
+      image-rendering: crisp-edges;
+      width: 170px;
+    }
+
+    .payload {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .empty {
+      align-items: center;
+      border: 2px dashed var(--line);
+      border-radius: 22px;
+      color: var(--muted);
+      display: grid;
+      font-size: 18px;
+      font-weight: 750;
+      min-height: 180px;
+      place-items: center;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .wide {
+        grid-column: span 2;
+      }
+
+      .status {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      header,
+      .panel {
+        display: none;
+      }
+
+      main {
+        max-width: none;
+        padding: 0;
+      }
+
+      .sheet {
+        gap: 10mm;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 0;
+      }
+
+      .qr-card {
+        border: 1px solid #222;
+        border-radius: 8px;
+        box-shadow: none;
+        min-height: 82mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-mark">NW</div>
+      <div>
+        <h1>Nurse WOYZ QR Generator</h1>
+        <p class="subtitle">Create printable bed QR codes for the ward device scanner.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="generator-title">
+      <h2 id="generator-title" style="margin:0 0 18px;">Generate Bed QR Codes</h2>
+      <div class="controls">
+        <label>
+          Start Bed
+          <input id="startBed" inputmode="numeric" value="101">
+        </label>
+        <label>
+          End Bed
+          <input id="endBed" inputmode="numeric" value="120">
+        </label>
+        <label>
+          Payload
+          <select id="payloadMode">
+            <option value="code">Nurse WOYZ code</option>
+            <option value="url">Website URL</option>
+          </select>
+        </label>
+        <label>
+          QR Size
+          <select id="qrSize">
+            <option value="220">Standard</option>
+            <option value="300">Large</option>
+          </select>
+        </label>
+        <label class="wide">
+          Website URL, only for URL mode
+          <input id="baseUrl" value="https://nurse.woyz.in/ward.html">
+        </label>
+        <label class="wide">
+          Label Prefix
+          <input id="labelPrefix" value="Bed">
+        </label>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="generateBtn" type="button">Generate QR Codes</button>
+        <button class="secondary" id="printBtn" type="button">Print</button>
+        <button class="secondary" id="clearBtn" type="button">Clear</button>
+        <span class="status" id="statusText"></span>
+      </div>
+
+      <p class="hint">
+        Recommended mode: <strong>Nurse WOYZ code</strong>. It creates QR text like
+        <strong>NURSE_WOYZ_BED:101</strong>, which the ward app can validate before opening the bed.
+        No patient details are stored in the QR code.
+      </p>
+    </section>
+
+    <section class="sheet" id="qrSheet" aria-live="polite">
+      <div class="empty">Enter the bed range and click Generate QR Codes.</div>
+    </section>
+  </main>
+
+  <script>
+    const startBed = document.getElementById('startBed');
+    const endBed = document.getElementById('endBed');
+    const payloadMode = document.getElementById('payloadMode');
+    const qrSize = document.getElementById('qrSize');
+    const baseUrl = document.getElementById('baseUrl');
+    const labelPrefix = document.getElementById('labelPrefix');
+    const qrSheet = document.getElementById('qrSheet');
+    const statusText = document.getElementById('statusText');
+
+    function makePayload(bed) {
+      if (payloadMode.value === 'url') {
+        const url = new URL(baseUrl.value.trim());
+        url.searchParams.set('bed', bed);
+        return url.toString();
+      }
+
+      return `NURSE_WOYZ_BED:${bed}`;
+    }
+
+    function makeQrUrl(payload) {
+      const size = Number(qrSize.value) || 220;
+      const encoded = encodeURIComponent(payload);
+      return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=12&data=${encoded}`;
+    }
+
+    function generate() {
+      const start = Number.parseInt(startBed.value, 10);
+      const end = Number.parseInt(endBed.value, 10);
+      const prefix = labelPrefix.value.trim() || 'Bed';
+
+      statusText.textContent = '';
+
+      if (!Number.isInteger(start) || !Number.isInteger(end) || start <= 0 || end <= 0) {
+        statusText.textContent = 'Please enter valid bed numbers.';
+        return;
+      }
+
+      if (end < start) {
+        statusText.textContent = 'End bed should be greater than start bed.';
+        return;
+      }
+
+      if (end - start > 199) {
+        statusText.textContent = 'Please generate a maximum of 200 QR codes at a time.';
+        return;
+      }
+
+      if (payloadMode.value === 'url' && !baseUrl.value.trim()) {
+        statusText.textContent = 'Please enter the website URL.';
+        return;
+      }
+
+      const cards = [];
+      for (let bed = start; bed <= end; bed += 1) {
+        const payload = makePayload(String(bed));
+        const qrUrl = makeQrUrl(payload);
+        cards.push(`
+          <article class="qr-card">
+            <h2>${prefix} ${bed}</h2>
+            <img src="${qrUrl}" alt="QR code for ${prefix} ${bed}">
+            <div class="payload">${payload}</div>
+          </article>
+        `);
+      }
+
+      qrSheet.innerHTML = cards.join('');
+      statusText.textContent = `${cards.length} QR codes generated.`;
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', generate);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      qrSheet.innerHTML = '<div class="empty">Enter the bed range and click Generate QR Codes.</div>';
+      statusText.textContent = '';
+    });
+
+    generate();
+  </script>
+</body>
+</html>
