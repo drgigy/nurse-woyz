@@ -38,7 +38,7 @@
     .screen.active {
       display: block;
     }
-    .login {
+    .screen.login.active {
       display: grid;
       place-items: center;
     }
@@ -90,6 +90,66 @@
       letter-spacing: 0.08em;
       margin-bottom: 12px;
       text-transform: uppercase;
+    }
+    .pin-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      margin: 12px 0 14px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .pin-dots {
+      display: flex;
+      gap: 11px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .pin-dot {
+      background: #e5eaf2;
+      border-radius: 999px;
+      height: 15px;
+      width: 15px;
+    }
+    .pin-dot.filled {
+      background: var(--red);
+      box-shadow: 0 0 0 5px rgba(166, 25, 46, 0.12);
+    }
+    .numpad {
+      display: grid;
+      gap: 11px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 14px;
+    }
+    .num-btn {
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 7px 18px rgba(20, 30, 45, 0.06);
+      color: var(--ink);
+      cursor: pointer;
+      display: grid;
+      font-size: 26px;
+      font-weight: 950;
+      min-height: 64px;
+      place-items: center;
+      user-select: none;
+    }
+    .num-btn:active {
+      background: #fff2f4;
+      border-color: #e5b7be;
+      transform: scale(0.97);
+    }
+    .num-btn.empty {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      cursor: default;
+    }
+    .num-btn.del {
+      color: var(--red);
     }
     input {
       border: 1px solid var(--line);
@@ -328,11 +388,29 @@
           <div class="sub">Mobile patient, nurse, and room assignment.</div>
         </div>
       </div>
-      <label>
-        Admin PIN
-        <input id="pinInput" inputmode="numeric" maxlength="4" placeholder="Enter 1234">
-      </label>
-      <button class="btn primary" onclick="login()">Open Admin</button>
+      <input id="pinInput" type="hidden" value="">
+      <div class="pin-label">Enter Admin PIN</div>
+      <div class="pin-dots" aria-label="PIN entry">
+        <div class="pin-dot" id="pinDot0"></div>
+        <div class="pin-dot" id="pinDot1"></div>
+        <div class="pin-dot" id="pinDot2"></div>
+        <div class="pin-dot" id="pinDot3"></div>
+      </div>
+      <div class="numpad">
+        <button class="num-btn" type="button" onclick="pinTap('1')">1</button>
+        <button class="num-btn" type="button" onclick="pinTap('2')">2</button>
+        <button class="num-btn" type="button" onclick="pinTap('3')">3</button>
+        <button class="num-btn" type="button" onclick="pinTap('4')">4</button>
+        <button class="num-btn" type="button" onclick="pinTap('5')">5</button>
+        <button class="num-btn" type="button" onclick="pinTap('6')">6</button>
+        <button class="num-btn" type="button" onclick="pinTap('7')">7</button>
+        <button class="num-btn" type="button" onclick="pinTap('8')">8</button>
+        <button class="num-btn" type="button" onclick="pinTap('9')">9</button>
+        <div class="num-btn empty" aria-hidden="true"></div>
+        <button class="num-btn" type="button" onclick="pinTap('0')">0</button>
+        <button class="num-btn del" type="button" onclick="pinDel()">⌫</button>
+      </div>
+      <button class="btn primary" id="openAdminBtn" type="button" style="width:100%;">Open Admin</button>
     </div>
   </section>
 
@@ -407,8 +485,31 @@
     let rooms = [];
     let pendingPatient = null;
     let qrScanner = null;
+    let pinEntry = '';
 
     function $(id) { return document.getElementById(id); }
+
+    function updatePinDots() {
+      $('pinInput').value = pinEntry;
+      for (let i = 0; i < 4; i += 1) {
+        $('pinDot' + i).classList.toggle('filled', i < pinEntry.length);
+      }
+    }
+
+    function pinTap(number) {
+      if (pinEntry.length >= 4) return;
+      pinEntry += number;
+      updatePinDots();
+      if (pinEntry.length === 4) setTimeout(login, 180);
+    }
+
+    function pinDel() {
+      pinEntry = pinEntry.slice(0, -1);
+      updatePinDots();
+    }
+
+    window.pinTap = pinTap;
+    window.pinDel = pinDel;
 
     function showToast(message) {
       const toast = $('toast');
@@ -507,8 +608,10 @@
     }
 
     function login() {
-      if ($('pinInput').value.trim() !== ADMIN_PIN) {
+      if (pinEntry !== ADMIN_PIN) {
         showToast('Wrong PIN');
+        pinEntry = '';
+        updatePinDots();
         return;
       }
       $('loginScreen').classList.remove('active');
@@ -517,8 +620,11 @@
       initFirebase();
     }
 
+    window.login = login;
+
     function logout() {
-      $('pinInput').value = '';
+      pinEntry = '';
+      updatePinDots();
       $('appScreen').classList.remove('active');
       $('loginScreen').classList.add('active');
     }
@@ -924,6 +1030,17 @@
         navigator.serviceWorker.register('./service-worker.js').catch(() => {});
       });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      $('openAdminBtn').addEventListener('click', login);
+      document.addEventListener('keydown', event => {
+        if (!$('loginScreen').classList.contains('active')) return;
+        if (/^\d$/.test(event.key)) pinTap(event.key);
+        if (event.key === 'Backspace') pinDel();
+        if (event.key === 'Enter') login();
+      });
+      updatePinDots();
+    });
   </script>
 </body>
 </html>
