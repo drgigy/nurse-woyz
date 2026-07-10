@@ -177,8 +177,8 @@
 
     .qr-card {
       background:
-        radial-gradient(ellipse at 50% -45%, transparent 0 38%, #303232 39% 57%, transparent 58%),
-        linear-gradient(180deg, #444747 0%, #262828 55%, #171818 100%);
+        radial-gradient(ellipse at 50% -58%, transparent 0 45%, #2f3131 46% 58%, transparent 59%),
+        linear-gradient(180deg, #444747 0%, #292b2b 48%, #171818 100%);
       border: 0;
       border-radius: 999px;
       box-shadow:
@@ -186,12 +186,12 @@
         inset 0 16px 18px rgba(255, 255, 255, 0.08),
         inset 0 -18px 24px rgba(0, 0, 0, 0.35);
       display: grid;
-      gap: 26px;
-      grid-template-columns: 1fr auto 1fr;
+      gap: clamp(16px, 4vw, 46px);
+      grid-template-columns: minmax(130px, 0.78fr) auto minmax(130px, 0.78fr);
       align-items: center;
-      min-height: 240px;
+      min-height: 218px;
       overflow: hidden;
-      padding: 58px clamp(34px, 7vw, 90px) 36px;
+      padding: 48px clamp(22px, 5vw, 72px) 28px;
       page-break-inside: avoid;
       position: relative;
     }
@@ -222,14 +222,15 @@
 
     .band-center {
       background: white;
-      border: 4px solid #f5f5f5;
-      border-radius: 16px;
+      border: 5px solid #f7f7f7;
+      border-radius: 18px;
       box-shadow:
-        0 8px 18px rgba(0, 0, 0, 0.28),
-        inset 0 0 0 4px #f2f2f2;
+        0 10px 22px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 5px #f2f2f2;
       display: grid;
       justify-items: center;
-      padding: 11px;
+      padding: 13px;
+      transform: scale(1.06);
     }
 
     .band-right {
@@ -242,32 +243,33 @@
 
     .band-kicker {
       color: rgba(255, 255, 255, 0.88);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
     }
 
     .qr-card h2 {
       color: white;
-      font-size: clamp(24px, 4vw, 42px);
+      font-size: clamp(30px, 5vw, 54px);
       letter-spacing: -0.04em;
       line-height: 0.95;
-      margin: 7px 0 0;
+      margin: 8px 0 0;
       text-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
     }
 
     .band-note {
-      color: rgba(255, 255, 255, 0.72);
-      font-size: 12px;
-      font-weight: 800;
-      margin-top: 4px;
+      color: white;
+      font-size: clamp(16px, 2vw, 24px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-top: 10px;
+      max-width: 150px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
     }
 
     .medical-mark {
-      height: 76px;
+      height: 64px;
       position: relative;
-      width: 76px;
+      width: 64px;
     }
 
     .medical-mark::before,
@@ -282,31 +284,31 @@
     }
 
     .medical-mark::before {
-      height: 76px;
-      width: 24px;
+      height: 64px;
+      width: 20px;
     }
 
     .medical-mark::after {
-      height: 24px;
-      width: 76px;
+      height: 20px;
+      width: 64px;
     }
 
     .medical-mark .rod {
       background: #2b2d2d;
       border-radius: 999px;
-      height: 54px;
+      height: 45px;
       left: 50%;
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 7px;
+      width: 6px;
       z-index: 2;
     }
 
     .qr-card img {
-      height: 148px;
+      height: 178px;
       image-rendering: crisp-edges;
-      width: 148px;
+      width: 178px;
     }
 
     .payload {
@@ -361,6 +363,11 @@
     }
 
     @media print {
+      @page {
+        size: A4;
+        margin: 8mm;
+      }
+
       body {
         background: white;
       }
@@ -372,13 +379,13 @@
 
       main {
         max-width: none;
-        padding: 0 6mm;
+        padding: 0;
       }
 
       .sheet {
         display: flex;
         flex-direction: column;
-        gap: 7mm;
+        gap: 3mm;
         margin: 0;
       }
 
@@ -388,36 +395,67 @@
         box-shadow:
           inset 0 10px 12px rgba(255, 255, 255, 0.08),
           inset 0 -14px 20px rgba(0, 0, 0, 0.34);
-        grid-template-columns: 1fr auto 1fr;
-        min-height: 58mm;
-        padding: 13mm 16mm 8mm;
+        grid-template-columns: 0.72fr auto 0.72fr;
+        height: 32mm;
+        min-height: 32mm;
+        padding: 5mm 9mm 4mm;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
       }
 
+      .qr-card:nth-of-type(8n) {
+        break-after: page;
+      }
+
       .qr-card::before {
+        bottom: -9mm;
+        height: 7mm;
+        left: 20%;
+        right: 20%;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
       }
 
       .qr-card h2 {
-        font-size: 28px;
+        font-size: 20px;
       }
 
       .qr-card img {
-        height: 34mm;
-        width: 34mm;
+        height: 22mm;
+        width: 22mm;
       }
 
       .band-center {
-        border-radius: 4mm;
-        box-shadow: inset 0 0 0 1.2mm #f2f2f2;
-        padding: 2.5mm;
+        border: 1mm solid #f7f7f7;
+        border-radius: 3mm;
+        box-shadow: inset 0 0 0 0.8mm #f2f2f2;
+        padding: 1.4mm;
+        transform: scale(1.04);
       }
 
       .medical-mark {
-        height: 19mm;
-        width: 19mm;
+        height: 10mm;
+        width: 10mm;
+      }
+
+      .medical-mark::before {
+        height: 10mm;
+        width: 3.1mm;
+      }
+
+      .medical-mark::after {
+        height: 3.1mm;
+        width: 10mm;
+      }
+
+      .medical-mark .rod {
+        height: 7mm;
+        width: 1mm;
+      }
+
+      .band-note {
+        font-size: 10px;
+        max-width: 25mm;
       }
 
       .payload {
@@ -553,7 +591,6 @@
           <article class="qr-card">
             <div class="band-left">
               <div class="medical-mark" aria-hidden="true"><span class="rod"></span></div>
-              <div class="band-kicker">Nurse WOYZ</div>
               <h2>${prefix} ${bed}</h2>
             </div>
             <div class="band-center">
@@ -562,7 +599,6 @@
             <div class="band-right">
               <div class="medical-mark" aria-hidden="true"><span class="rod"></span></div>
               <div class="band-note">Scan from Ward Device</div>
-              <div class="payload">${payload}</div>
             </div>
           </article>
         `);
