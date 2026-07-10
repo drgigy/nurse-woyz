@@ -190,6 +190,46 @@
       margin-top: 24px;
     }
 
+    .registry-panel {
+      margin-top: 20px;
+    }
+
+    .search-row {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr auto;
+      margin-top: 14px;
+    }
+
+    .wristband-shell {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 14px 34px rgba(20, 40, 70, 0.08);
+      padding: 14px;
+    }
+
+    .wristband-actions {
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .wristband-meta {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .mini-btn {
+      border-radius: 999px;
+      font-size: 13px;
+      min-height: 38px;
+      padding: 9px 13px;
+    }
+
     .qr-card {
       background: transparent;
       height: 340px;
@@ -347,7 +387,10 @@
       }
 
       header,
-      .panel {
+      .panel,
+      .registry-panel,
+      .wristband-actions,
+      .no-print {
         display: none;
       }
 
@@ -363,11 +406,22 @@
         margin: 0;
       }
 
+      .wristband-shell {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+
       .qr-card {
         height: 32mm;
         min-height: 32mm;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
+      }
+
+      body.print-one .wristband-shell:not(.print-target),
+      body.print-selected .wristband-shell:not(.print-target) {
+        display: none;
       }
 
       .qr-card:nth-of-type(8n) {
@@ -469,7 +523,7 @@
 
       <div class="actions">
         <button class="primary" id="generateBtn" type="button">Generate Wristband QR</button>
-        <button class="secondary" id="printBtn" type="button">Print</button>
+        <button class="secondary" id="printBtn" type="button">Print Selected / Visible</button>
         <button class="secondary" id="clearBtn" type="button">Clear</button>
         <span class="status" id="statusText"></span>
       </div>
@@ -483,6 +537,15 @@
     <section class="sheet" id="qrSheet" aria-live="polite">
       <div class="empty">Enter patient details and click Generate Wristband QR.</div>
     </section>
+
+    <section class="panel registry-panel no-print" aria-labelledby="registry-title">
+      <h2 id="registry-title" style="margin:0;">Saved Wristbands</h2>
+      <div class="search-row">
+        <input id="searchInput" placeholder="Search patient name or UHID">
+        <button class="secondary" id="clearSearchBtn" type="button">Clear Search</button>
+      </div>
+      <p class="hint">Saved in this browser for demo use. Search by patient name or UHID, then print a single wristband.</p>
+    </section>
   </main>
 
   <script>
@@ -494,6 +557,9 @@
     const qrSize = document.getElementById('qrSize');
     const qrSheet = document.getElementById('qrSheet');
     const statusText = document.getElementById('statusText');
+    const searchInput = document.getElementById('searchInput');
+    const STORAGE_KEY = 'nurse_woyz_wristbands';
+    let wristbands = [];
 
     function makeQrUrl(payload) {
       const size = Number(qrSize.value) || 220;
@@ -521,6 +587,73 @@
       return age >= 0 ? String(age) : '';
     }
 
+    function loadWristbands() {
+      try {
+        wristbands = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch (error) {
+        wristbands = [];
+      }
+    }
+
+    function saveWristbands() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(wristbands));
+    }
+
+    function wristbandHtml(patient) {
+      const payload = JSON.stringify({
+        type: 'NURSE_WOYZ_PATIENT',
+        name: patient.name,
+        uhid: patient.uhid,
+        dob: patient.dob,
+        age: patient.age,
+        gender: patient.gender,
+        doctor: patient.doctor
+      });
+      const qrUrl = makeQrUrl(payload);
+      return `
+        <article class="qr-card">
+          <img class="wristband-bg" src="./images/wristband-template.svg" alt="" aria-hidden="true">
+          <div class="band-face">
+            <div class="band-qr">
+              <img src="${qrUrl}" alt="QR code for ${escapeHtml(patient.name)}">
+            </div>
+            <div class="patient-panel">
+              <div class="patient-name">${escapeHtml(patient.name)}</div>
+              <div class="patient-line">UHID ${escapeHtml(patient.uhid)} &nbsp; AGE ${escapeHtml(patient.age || '—')} &nbsp; ${escapeHtml(patient.gender)}</div>
+              <div class="patient-line">DOB ${escapeHtml(patient.dob)}</div>
+              <div class="patient-line">DR ${escapeHtml(patient.doctor).replace(/^Dr\.?\s*/i, '')}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderWristbands() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = wristbands.filter(item => {
+        if (!query) return true;
+        return item.name.toLowerCase().includes(query) || item.uhid.toLowerCase().includes(query);
+      });
+
+      if (!filtered.length) {
+        qrSheet.innerHTML = '<div class="empty">No wristbands found. Generate one or change the search.</div>';
+        return;
+      }
+
+      qrSheet.innerHTML = filtered.map(item => `
+        <div class="wristband-shell" data-id="${escapeHtml(item.id)}">
+          <div class="wristband-actions">
+            <label class="wristband-meta" style="display:flex;align-items:center;gap:8px;margin:0;text-transform:none;letter-spacing:0;">
+              <input type="checkbox" class="print-pick" value="${escapeHtml(item.id)}">
+              <span>${escapeHtml(item.name)} · UHID ${escapeHtml(item.uhid)}</span>
+            </label>
+            <button class="secondary mini-btn" type="button" onclick="printWristband('${escapeHtml(item.id)}')">Print This</button>
+          </div>
+          ${wristbandHtml(item)}
+        </div>
+      `).join('');
+    }
+
     function generate() {
       const name = patientName.value.trim();
       const uhid = patientUhid.value.trim();
@@ -536,37 +669,58 @@
         return;
       }
 
-      const patient = { type: 'NURSE_WOYZ_PATIENT', name, uhid, dob, age, gender, doctor };
-      const payload = JSON.stringify(patient);
-      const qrUrl = makeQrUrl(payload);
-
-      qrSheet.innerHTML = `
-          <article class="qr-card">
-            <img class="wristband-bg" src="./images/wristband-template.svg" alt="" aria-hidden="true">
-            <div class="band-face">
-              <div class="band-qr">
-                <img src="${qrUrl}" alt="QR code for ${escapeHtml(name)}">
-              </div>
-              <div class="patient-panel">
-                <div class="patient-name">${escapeHtml(name)}</div>
-                <div class="patient-line">UHID ${escapeHtml(uhid)} &nbsp; AGE ${escapeHtml(age || '—')} &nbsp; ${escapeHtml(gender)}</div>
-                <div class="patient-line">DOB ${escapeHtml(dob)}</div>
-                <div class="patient-line">DR ${escapeHtml(doctor).replace(/^Dr\.?\s*/i, '')}</div>
-              </div>
-            </div>
-          </article>
-        `;
-      statusText.textContent = 'Patient wristband QR generated.';
+      const id = (uhid || name).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'patient-' + Date.now();
+      const patient = { id, name, uhid, dob, age, gender, doctor, createdAtMs: Date.now() };
+      wristbands = wristbands.filter(item => item.id !== id);
+      wristbands.unshift(patient);
+      saveWristbands();
+      searchInput.value = '';
+      renderWristbands();
+      statusText.textContent = 'Patient wristband QR saved.';
     }
 
-    document.getElementById('generateBtn').addEventListener('click', generate);
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      qrSheet.innerHTML = '<div class="empty">Enter patient details and click Generate Wristband QR.</div>';
-      statusText.textContent = '';
+    function printWristband(id) {
+      document.querySelectorAll('.wristband-shell').forEach(shell => {
+        shell.classList.toggle('print-target', shell.dataset.id === id);
+      });
+      document.body.classList.add('print-one');
+      window.print();
+    }
+
+    window.printWristband = printWristband;
+
+    function printSelectedOrVisible() {
+      const selected = Array.from(document.querySelectorAll('.print-pick:checked')).map(input => input.value);
+      document.querySelectorAll('.wristband-shell').forEach(shell => {
+        shell.classList.toggle('print-target', !selected.length || selected.includes(shell.dataset.id));
+      });
+      document.body.classList.add('print-selected');
+      window.print();
+    }
+
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('print-one');
+      document.body.classList.remove('print-selected');
+      document.querySelectorAll('.wristband-shell.print-target').forEach(shell => shell.classList.remove('print-target'));
     });
 
-    generate();
+    document.getElementById('generateBtn').addEventListener('click', generate);
+    document.getElementById('printBtn').addEventListener('click', printSelectedOrVisible);
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      if (!confirm('Clear all saved wristbands in this browser?')) return;
+      wristbands = [];
+      saveWristbands();
+      renderWristbands();
+      statusText.textContent = '';
+    });
+    document.getElementById('clearSearchBtn').addEventListener('click', () => {
+      searchInput.value = '';
+      renderWristbands();
+    });
+    searchInput.addEventListener('input', renderWristbands);
+
+    loadWristbands();
+    renderWristbands();
   </script>
 </body>
 </html>
