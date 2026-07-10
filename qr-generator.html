@@ -169,43 +169,108 @@
     }
 
     .sheet {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
       margin-top: 24px;
     }
 
     .qr-card {
       background: white;
       border: 1px solid #cfd8e6;
-      border-radius: 18px;
+      border-radius: 999px;
+      box-shadow: 0 14px 34px rgba(20, 40, 70, 0.08);
       display: grid;
-      gap: 10px;
-      justify-items: center;
-      min-height: 270px;
-      padding: 16px;
+      gap: 18px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      min-height: 150px;
+      overflow: hidden;
+      padding: 18px 34px;
       page-break-inside: avoid;
-      text-align: center;
+      position: relative;
+    }
+
+    .qr-card::before,
+    .qr-card::after {
+      background:
+        radial-gradient(circle at center, #dfe7f1 0 2px, transparent 2.5px),
+        linear-gradient(90deg, rgba(166, 25, 46, 0.06), transparent);
+      background-size: 16px 16px, 100% 100%;
+      content: "";
+      inset: 0 auto 0 0;
+      opacity: 0.75;
+      position: absolute;
+      width: 23%;
+    }
+
+    .qr-card::after {
+      inset: 0 0 0 auto;
+      transform: scaleX(-1);
+    }
+
+    .band-left,
+    .band-center,
+    .band-right {
+      position: relative;
+      z-index: 1;
+    }
+
+    .band-left {
+      text-align: left;
+    }
+
+    .band-center {
+      background: white;
+      border: 1px solid #dde6f2;
+      border-radius: 22px;
+      box-shadow: inset 0 0 0 7px #f7fafc;
+      display: grid;
+      justify-items: center;
+      padding: 12px;
+    }
+
+    .band-right {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: right;
+    }
+
+    .band-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
 
     .qr-card h2 {
       color: var(--red);
-      font-size: 28px;
-      line-height: 1;
-      margin: 0;
+      font-size: clamp(30px, 5vw, 52px);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      margin: 5px 0;
+    }
+
+    .band-note {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 850;
     }
 
     .qr-card img {
-      height: 170px;
+      height: 132px;
       image-rendering: crisp-edges;
-      width: 170px;
+      width: 132px;
     }
 
     .payload {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       line-height: 1.35;
       overflow-wrap: anywhere;
+      max-width: 220px;
     }
 
     .empty {
@@ -234,6 +299,24 @@
         margin-left: 0;
         width: 100%;
       }
+
+      .qr-card {
+        border-radius: 28px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .qr-card::before,
+      .qr-card::after {
+        width: 18%;
+      }
+
+      .band-left,
+      .band-right {
+        text-align: center;
+      }
     }
 
     @media print {
@@ -248,20 +331,48 @@
 
       main {
         max-width: none;
-        padding: 0;
+        padding: 0 6mm;
       }
 
       .sheet {
-        gap: 10mm;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-direction: column;
+        gap: 7mm;
         margin: 0;
       }
 
       .qr-card {
         border: 1px solid #222;
-        border-radius: 8px;
+        border-radius: 999px;
         box-shadow: none;
-        min-height: 82mm;
+        grid-template-columns: 1fr auto 1fr;
+        min-height: 42mm;
+        padding: 6mm 14mm;
+      }
+
+      .qr-card::before,
+      .qr-card::after {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .qr-card h2 {
+        font-size: 34px;
+      }
+
+      .qr-card img {
+        height: 32mm;
+        width: 32mm;
+      }
+
+      .band-center {
+        border-radius: 8mm;
+        box-shadow: none;
+        padding: 3mm;
+      }
+
+      .payload {
+        font-size: 8px;
       }
     }
   </style>
@@ -391,9 +502,19 @@
         const qrUrl = makeQrUrl(payload);
         cards.push(`
           <article class="qr-card">
-            <h2>${prefix} ${bed}</h2>
-            <img src="${qrUrl}" alt="QR code for ${prefix} ${bed}">
-            <div class="payload">${payload}</div>
+            <div class="band-left">
+              <div class="band-kicker">Nurse WOYZ</div>
+              <h2>${prefix} ${bed}</h2>
+              <div class="band-note">Bed identification wristband</div>
+            </div>
+            <div class="band-center">
+              <img src="${qrUrl}" alt="QR code for ${prefix} ${bed}">
+            </div>
+            <div class="band-right">
+              <strong>Scan from Ward Device</strong><br>
+              Opens only if assigned to the logged-in nurse.
+              <div class="payload">${payload}</div>
+            </div>
           </article>
         `);
       }
