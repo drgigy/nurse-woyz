@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#a6192e">
+  <title>Nurse WOYZ Admin</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <style>
+    :root {
+      --red: #a6192e;
+      --red-dark: #861425;
+      --ink: #111827;
+      --muted: #667085;
+      --line: #d8e0eb;
+      --soft: #f6f8fb;
+      --card: #ffffff;
+      --green: #147a4a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #fff4f5 0%, #f8fafc 44%, #ffffff 100%);
+      color: var(--ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input {
+      font: inherit;
+    }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 18px;
+    }
+    .screen.active {
+      display: block;
+    }
+    .login {
+      display: grid;
+      place-items: center;
+    }
+    .login-card, .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: 0 18px 44px rgba(25, 35, 55, 0.09);
+      width: min(520px, 100%);
+      padding: 24px;
+    }
+    .brand {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .mark {
+      align-items: center;
+      background: var(--red);
+      border-radius: 16px;
+      color: white;
+      display: grid;
+      font-size: 20px;
+      font-weight: 900;
+      height: 52px;
+      place-items: center;
+      width: 52px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+    }
+    h1 {
+      color: var(--red);
+      font-size: 30px;
+      line-height: 1;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    label {
+      color: var(--muted);
+      display: grid;
+      font-size: 12px;
+      font-weight: 850;
+      gap: 7px;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    input {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 750;
+      min-height: 50px;
+      outline: none;
+      padding: 12px 14px;
+      width: 100%;
+    }
+    input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(166, 25, 46, 0.12);
+    }
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 900;
+      min-height: 50px;
+      padding: 12px 16px;
+    }
+    .primary {
+      background: var(--red);
+      color: white;
+    }
+    .primary:active {
+      background: var(--red-dark);
+    }
+    .secondary {
+      background: #eef2f7;
+      color: var(--ink);
+    }
+    .danger {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #be123c;
+    }
+    .topbar {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin: 0 auto 16px;
+      max-width: 760px;
+    }
+    .top-title {
+      color: var(--red);
+      font-size: 24px;
+      font-weight: 950;
+    }
+    .sync {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .content {
+      margin: 0 auto;
+      max-width: 760px;
+    }
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .nav-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 10px 28px rgba(25, 35, 55, 0.07);
+      cursor: pointer;
+      min-height: 132px;
+      padding: 18px;
+    }
+    .nav-icon {
+      color: var(--red);
+      font-size: 28px;
+      font-weight: 950;
+      margin-bottom: 14px;
+    }
+    .nav-title {
+      color: var(--ink);
+      font-size: 19px;
+      font-weight: 950;
+    }
+    .nav-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      margin-top: 5px;
+    }
+    .section-head {
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .back {
+      background: #eef2f7;
+      border: 0;
+      border-radius: 999px;
+      color: var(--ink);
+      font-weight: 900;
+      padding: 10px 13px;
+    }
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+    .item {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      cursor: pointer;
+      padding: 14px;
+    }
+    .item-title {
+      font-size: 18px;
+      font-weight: 950;
+    }
+    .item-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+    .badge {
+      background: #ecfdf3;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      color: var(--green);
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      margin-top: 8px;
+      padding: 5px 8px;
+    }
+    .empty {
+      background: white;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      color: var(--muted);
+      padding: 22px;
+      text-align: center;
+    }
+    .modal {
+      align-items: center;
+      background: rgba(15, 23, 42, 0.66);
+      display: none;
+      inset: 0;
+      justify-content: center;
+      padding: 16px;
+      position: fixed;
+      z-index: 50;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 24px;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 20px;
+      width: min(480px, 100%);
+    }
+    #qrReader {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      min-height: 280px;
+      overflow: hidden;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .row .btn {
+      flex: 1;
+    }
+    .check-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .check-item {
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+    }
+    .check-item input {
+      min-height: 0;
+      width: auto;
+    }
+    .toast {
+      background: #111827;
+      border-radius: 999px;
+      bottom: 18px;
+      color: white;
+      display: none;
+      font-size: 13px;
+      font-weight: 800;
+      left: 50%;
+      max-width: calc(100% - 28px);
+      padding: 12px 16px;
+      position: fixed;
+      text-align: center;
+      transform: translateX(-50%);
+      z-index: 90;
+    }
+    .toast.show {
+      display: block;
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .screen { padding: 14px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <section class="screen login active" id="loginScreen">
+    <div class="login-card">
+      <div class="brand">
+        <div class="mark">NW</div>
+        <div>
+          <h1>Nurse WOYZ Admin</h1>
+          <div class="sub">Mobile patient, nurse, and room assignment.</div>
+        </div>
+      </div>
+      <label>
+        Admin PIN
+        <input id="pinInput" inputmode="numeric" maxlength="4" placeholder="Enter 1234">
+      </label>
+      <button class="btn primary" onclick="login()">Open Admin</button>
+    </div>
+  </section>
+
+  <section class="screen" id="appScreen">
+    <div class="topbar">
+      <div>
+        <div class="top-title">Nurse WOYZ Admin</div>
+        <div class="sync" id="syncStatus">Local mode</div>
+      </div>
+      <button class="btn secondary" onclick="logout()">Logout</button>
+    </div>
+    <main class="content" id="content"></main>
+  </section>
+
+  <div class="modal" id="qrModal">
+    <div class="modal-card">
+      <h2>Scan Patient QR</h2>
+      <p class="sub">Scan the wristband QR generated from the QR Generator page.</p>
+      <div id="qrReader"></div>
+      <div class="row">
+        <button class="btn secondary" onclick="closeScanner()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmModal">
+    <div class="modal-card">
+      <h2>Add Patient?</h2>
+      <div id="confirmPatient"></div>
+      <div class="row">
+        <button class="btn primary" onclick="confirmAddPatient()">Yes, Add</button>
+        <button class="btn secondary" onclick="hideConfirm()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="roomsModal">
+    <div class="modal-card">
+      <h2>Manage Rooms</h2>
+      <label>
+        Room Number
+        <input id="roomInput" placeholder="Example: 101">
+      </label>
+      <button class="btn primary" onclick="addRoom()">Add Room</button>
+      <div class="list" id="manageRoomsList" style="margin-top:14px;"></div>
+      <div class="row">
+        <button class="btn secondary" onclick="hideRoomsManager()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script>
+    const SHIFT_ID = 'ward-3-night-demo';
+    const ADMIN_PIN = '1234';
+    let db = null;
+    let firebaseReady = false;
+    let patientsCollection = null;
+    let nursesCollection = null;
+    let roomsCollection = null;
+    let unsubPatients = null;
+    let unsubNurses = null;
+    let unsubRooms = null;
+    let patients = [];
+    let nurses = [];
+    let rooms = [];
+    let pendingPatient = null;
+    let qrScanner = null;
+
+    function $(id) { return document.getElementById(id); }
+
+    function showToast(message) {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function slug(value) {
+      return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || 'item-' + Date.now();
+    }
+
+    function calculateAge(dobValue) {
+      if (!dobValue) return '';
+      const dob = new Date(dobValue + 'T00:00:00');
+      if (Number.isNaN(dob.getTime())) return '';
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) age -= 1;
+      return age >= 0 ? String(age) : '';
+    }
+
+    function isFirebaseConfigured() {
+      const cfg = window.NURSE_WOYZ_FIREBASE_CONFIG || {};
+      return Boolean(cfg.apiKey && cfg.projectId && !String(cfg.apiKey).includes('PASTE_'));
+    }
+
+    async function initFirebase() {
+      if (!isFirebaseConfigured() || !window.firebase) {
+        loadLocal();
+        return;
+      }
+      try {
+        firebase.initializeApp(window.NURSE_WOYZ_FIREBASE_CONFIG);
+        await firebase.auth().signInAnonymously();
+        db = firebase.firestore();
+        patientsCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('patients');
+        nursesCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('nurses');
+        roomsCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('rooms');
+        firebaseReady = true;
+        $('syncStatus').textContent = 'Firebase sync live';
+        listen();
+      } catch (error) {
+        firebaseReady = false;
+        $('syncStatus').textContent = 'Local mode';
+        loadLocal();
+      }
+    }
+
+    function listen() {
+      if (unsubPatients) unsubPatients();
+      if (unsubNurses) unsubNurses();
+      if (unsubRooms) unsubRooms();
+      unsubPatients = patientsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+        patients = [];
+        snapshot.forEach(doc => patients.push({ id: doc.id, ...doc.data() }));
+        renderCurrent();
+      });
+      unsubNurses = nursesCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+        nurses = [];
+        snapshot.forEach(doc => nurses.push({ id: doc.id, ...doc.data() }));
+        renderCurrent();
+      });
+      unsubRooms = roomsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+        rooms = [];
+        snapshot.forEach(doc => rooms.push({ id: doc.id, ...doc.data() }));
+        renderCurrent();
+      });
+    }
+
+    function loadLocal() {
+      patients = JSON.parse(localStorage.getItem('nwa_patients') || '[]');
+      nurses = JSON.parse(localStorage.getItem('nwa_nurses') || '[]');
+      rooms = JSON.parse(localStorage.getItem('nwa_rooms') || '[]');
+      renderCurrent();
+    }
+
+    function saveLocal() {
+      localStorage.setItem('nwa_patients', JSON.stringify(patients));
+      localStorage.setItem('nwa_nurses', JSON.stringify(nurses));
+      localStorage.setItem('nwa_rooms', JSON.stringify(rooms));
+    }
+
+    function login() {
+      if ($('pinInput').value.trim() !== ADMIN_PIN) {
+        showToast('Wrong PIN');
+        return;
+      }
+      $('loginScreen').classList.remove('active');
+      $('appScreen').classList.add('active');
+      renderHome();
+      initFirebase();
+    }
+
+    function logout() {
+      $('pinInput').value = '';
+      $('appScreen').classList.remove('active');
+      $('loginScreen').classList.add('active');
+    }
+
+    let currentView = 'home';
+    function setView(view) {
+      currentView = view;
+      renderCurrent();
+    }
+
+    function renderCurrent() {
+      if (!$('appScreen').classList.contains('active')) return;
+      if (currentView === 'patients') renderPatients();
+      else if (currentView === 'nurses') renderNurses();
+      else if (currentView === 'rooms') renderRooms();
+      else renderHome();
+    }
+
+    function renderHome() {
+      currentView = 'home';
+      $('content').innerHTML = `
+        <div class="grid">
+          <div class="nav-card" onclick="openScanner()">
+            <div class="nav-icon">QR</div>
+            <div class="nav-title">Scan QR Code</div>
+            <div class="nav-desc">Scan patient wristband QR and add patient to the list.</div>
+          </div>
+          <div class="nav-card" onclick="setView('patients')">
+            <div class="nav-icon">${patients.length}</div>
+            <div class="nav-title">Patients</div>
+            <div class="nav-desc">Assign patients to nurses.</div>
+          </div>
+          <div class="nav-card" onclick="setView('nurses')">
+            <div class="nav-icon">${nurses.length}</div>
+            <div class="nav-title">Nurses</div>
+            <div class="nav-desc">Add nurses and assign unassigned patients.</div>
+          </div>
+          <div class="nav-card" onclick="setView('rooms')">
+            <div class="nav-icon">${rooms.length}</div>
+            <div class="nav-title">Rooms</div>
+            <div class="nav-desc">Create rooms and assign available rooms to nurses.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn danger" onclick="resetDemoData()">Reset patients, nurses and rooms</button>
+        </div>
+      `;
+    }
+
+    function parsePatientQr(text) {
+      try {
+        const data = JSON.parse(text);
+        if (data.type !== 'NURSE_WOYZ_PATIENT') return null;
+        const age = data.age || calculateAge(data.dob);
+        return {
+          name: data.name || '',
+          uhid: data.uhid || '',
+          dob: data.dob || '',
+          age,
+          gender: data.gender || '',
+          doctor: data.doctor || ''
+        };
+      } catch (error) {
+        return null;
+      }
+    }
+
+    async function openScanner() {
+      if (!window.Html5Qrcode) {
+        showToast('QR scanner loading. Try again.');
+        return;
+      }
+      $('qrModal').classList.add('show');
+      try {
+        qrScanner = qrScanner || new Html5Qrcode('qrReader');
+        await qrScanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 230, height: 230 } },
+          decodedText => {
+            const parsed = parsePatientQr(decodedText);
+            closeScanner(false);
+            if (!parsed) {
+              showToast('Not a Nurse WOYZ patient QR');
+              return;
+            }
+            pendingPatient = parsed;
+            showPatientConfirm(parsed);
+          }
+        );
+      } catch (error) {
+        closeScanner(false);
+        showToast('Camera could not open. Use HTTPS and allow camera.');
+      }
+    }
+
+    async function closeScanner(show = true) {
+      $('qrModal').classList.remove('show');
+      if (qrScanner) {
+        try { await qrScanner.stop(); } catch (error) {}
+        try { await qrScanner.clear(); } catch (error) {}
+      }
+      if (show) showToast('Scanner closed');
+    }
+
+    function showPatientConfirm(patient) {
+      $('confirmPatient').innerHTML = `
+        <div class="item" style="margin-top:12px;">
+          <div class="item-title">${escapeHtml(patient.name)}</div>
+          <div class="item-meta">UHID ${escapeHtml(patient.uhid)} · Age ${escapeHtml(patient.age)} · ${escapeHtml(patient.gender)}</div>
+          <div class="item-meta">DOB ${escapeHtml(patient.dob)} · ${escapeHtml(patient.doctor)}</div>
+        </div>
+      `;
+      $('confirmModal').classList.add('show');
+    }
+
+    function hideConfirm() {
+      pendingPatient = null;
+      $('confirmModal').classList.remove('show');
+    }
+
+    async function confirmAddPatient() {
+      if (!pendingPatient) return;
+      const patient = {
+        ...pendingPatient,
+        assignedNurseId: '',
+        assignedNurseName: '',
+        assignedRoomId: '',
+        assignedRoomName: '',
+        createdAtMs: Date.now()
+      };
+      const id = slug(patient.uhid || patient.name);
+      if (firebaseReady) {
+        await patientsCollection.doc(id).set(patient, { merge: true });
+      } else {
+        patients = patients.filter(item => item.id !== id);
+        patients.push({ id, ...patient });
+        saveLocal();
+      }
+      hideConfirm();
+      setView('patients');
+      showToast('Patient added');
+    }
+
+    function renderPatients() {
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('home')">Back</button>
+          <h2>Patients</h2>
+          <span class="sync">${patients.length}</span>
+        </div>
+        <div class="list">
+          ${patients.length ? patients.map(patientCard).join('') : '<div class="empty">No patients added yet. Scan a wristband QR first.</div>'}
+        </div>
+      `;
+    }
+
+    function patientCard(patient) {
+      return `
+        <div class="item" onclick="showPatientAssign('${escapeHtml(patient.id)}')">
+          <div class="item-title">${escapeHtml(patient.name)}</div>
+          <div class="item-meta">UHID ${escapeHtml(patient.uhid)} · Age ${escapeHtml(patient.age)} · ${escapeHtml(patient.gender)}</div>
+          <div class="item-meta">${escapeHtml(patient.doctor)}</div>
+          ${patient.assignedNurseName ? `<span class="badge">Nurse: ${escapeHtml(patient.assignedNurseName)}</span>` : '<span class="badge" style="background:#fff7ed;border-color:#fed7aa;color:#c2410c;">Unassigned nurse</span>'}
+        </div>
+      `;
+    }
+
+    function showPatientAssign(patientId) {
+      const patient = patients.find(item => item.id === patientId);
+      if (!patient) return;
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('patients')">Back</button>
+          <h2>${escapeHtml(patient.name)}</h2>
+          <span></span>
+        </div>
+        <div class="panel">
+          <div class="item-meta">Select nurse for this patient.</div>
+          <div class="list" style="margin-top:12px;">
+            ${nurses.length ? nurses.map(n => `<div class="item" onclick="assignPatientToNurse('${escapeHtml(patient.id)}','${escapeHtml(n.id)}')"><div class="item-title">${escapeHtml(n.name)}</div><div class="item-meta">PIN ${escapeHtml(n.pin || 'not set')}</div></div>`).join('') : '<div class="empty">No nurses created yet.</div>'}
+          </div>
+        </div>
+      `;
+    }
+
+    async function assignPatientToNurse(patientId, nurseId) {
+      const nurse = nurses.find(item => item.id === nurseId);
+      if (!nurse) return;
+      const data = { assignedNurseId: nurse.id, assignedNurseName: nurse.name, updatedAtMs: Date.now() };
+      if (firebaseReady) await patientsCollection.doc(patientId).set(data, { merge: true });
+      else {
+        patients = patients.map(p => p.id === patientId ? { ...p, ...data } : p);
+        saveLocal();
+      }
+      showToast('Patient assigned');
+      setView('patients');
+    }
+
+    function renderNurses() {
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('home')">Back</button>
+          <h2>Nurses</h2>
+          <span></span>
+        </div>
+        <div class="panel" style="margin-bottom:14px;">
+          <label>Nurse Name<input id="newNurseName" placeholder="Example: Nurse Priya"></label>
+          <label>4-digit PIN<input id="newNursePin" inputmode="numeric" maxlength="4" placeholder="2222"></label>
+          <button class="btn primary" onclick="addNurse()">Add Nurse</button>
+        </div>
+        <div class="list">
+          ${nurses.length ? nurses.map(nurseCard).join('') : '<div class="empty">No nurses added yet.</div>'}
+        </div>
+      `;
+    }
+
+    function nurseCard(nurse) {
+      const assigned = patients.filter(p => p.assignedNurseId === nurse.id).length;
+      return `<div class="item" onclick="showNurseAssign('${escapeHtml(nurse.id)}')"><div class="item-title">${escapeHtml(nurse.name)}</div><div class="item-meta">PIN ${escapeHtml(nurse.pin || 'not set')} · ${assigned} patient(s)</div></div>`;
+    }
+
+    async function addNurse() {
+      const name = $('newNurseName').value.trim();
+      const pin = $('newNursePin').value.trim();
+      if (!name || !/^\d{4}$/.test(pin)) {
+        showToast('Enter nurse name and 4-digit PIN');
+        return;
+      }
+      const id = slug(name);
+      const data = { name, pin, active: true, createdAtMs: Date.now() };
+      if (firebaseReady) await nursesCollection.doc(id).set(data, { merge: true });
+      else {
+        nurses = nurses.filter(n => n.id !== id);
+        nurses.push({ id, ...data });
+        saveLocal();
+      }
+      showToast('Nurse added');
+      renderNurses();
+    }
+
+    function showNurseAssign(nurseId) {
+      const nurse = nurses.find(item => item.id === nurseId);
+      if (!nurse) return;
+      const unassigned = patients.filter(p => !p.assignedNurseId);
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('nurses')">Back</button>
+          <h2>${escapeHtml(nurse.name)}</h2>
+          <span></span>
+        </div>
+        <div class="panel">
+          <div class="item-meta">Select unassigned patients for this nurse.</div>
+          <div class="check-list">
+            ${unassigned.length ? unassigned.map(p => `<label class="check-item"><input type="checkbox" value="${escapeHtml(p.id)}" name="patientPick"> ${escapeHtml(p.name)} · UHID ${escapeHtml(p.uhid)}</label>`).join('') : '<div class="empty">No unassigned patients.</div>'}
+          </div>
+          <button class="btn primary" onclick="assignPickedPatients('${escapeHtml(nurse.id)}')">Assign Selected</button>
+        </div>
+      `;
+    }
+
+    async function assignPickedPatients(nurseId) {
+      const nurse = nurses.find(item => item.id === nurseId);
+      const ids = Array.from(document.querySelectorAll('input[name="patientPick"]:checked')).map(input => input.value);
+      if (!nurse || !ids.length) {
+        showToast('Select at least one patient');
+        return;
+      }
+      const data = { assignedNurseId: nurse.id, assignedNurseName: nurse.name, updatedAtMs: Date.now() };
+      if (firebaseReady) {
+        const batch = db.batch();
+        ids.forEach(id => batch.set(patientsCollection.doc(id), data, { merge: true }));
+        await batch.commit();
+      } else {
+        patients = patients.map(p => ids.includes(p.id) ? { ...p, ...data } : p);
+        saveLocal();
+      }
+      showToast('Patients assigned');
+      setView('nurses');
+    }
+
+    function renderRooms() {
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('home')">Back</button>
+          <h2>Rooms</h2>
+          <button class="back" onclick="showRoomsManager()">Manage Rooms</button>
+        </div>
+        <div class="list">
+          ${nurses.length ? nurses.map(n => {
+            const count = rooms.filter(room => room.assignedNurseId === n.id).length;
+            return `<div class="item" onclick="showRoomAssign('${escapeHtml(n.id)}')"><div class="item-title">${escapeHtml(n.name)}</div><div class="item-meta">${count} room(s) assigned</div></div>`;
+          }).join('') : '<div class="empty">Add nurses first.</div>'}
+        </div>
+      `;
+    }
+
+    function showRoomAssign(nurseId) {
+      const nurse = nurses.find(item => item.id === nurseId);
+      if (!nurse) return;
+      const available = rooms.filter(room => !room.assignedNurseId);
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('rooms')">Back</button>
+          <h2>${escapeHtml(nurse.name)}</h2>
+          <span></span>
+        </div>
+        <div class="panel">
+          <div class="item-meta">Select unassigned rooms for this nurse.</div>
+          <div class="check-list">
+            ${available.length ? available.map(room => `<label class="check-item"><input type="checkbox" value="${escapeHtml(room.id)}" name="roomPick"> ${escapeHtml(room.name || room.roomNumber || room.id)}</label>`).join('') : '<div class="empty">No unassigned rooms.</div>'}
+          </div>
+          <button class="btn primary" onclick="assignPickedRooms('${escapeHtml(nurse.id)}')">Assign Selected Rooms</button>
+        </div>
+      `;
+    }
+
+    async function assignPickedRooms(nurseId) {
+      const nurse = nurses.find(item => item.id === nurseId);
+      const ids = Array.from(document.querySelectorAll('input[name="roomPick"]:checked')).map(input => input.value);
+      if (!nurse || !ids.length) {
+        showToast('Select at least one room');
+        return;
+      }
+      const data = { assignedNurseId: nurse.id, assignedNurseName: nurse.name, updatedAtMs: Date.now() };
+      if (firebaseReady) {
+        const batch = db.batch();
+        ids.forEach(id => batch.set(roomsCollection.doc(id), data, { merge: true }));
+        await batch.commit();
+      } else {
+        rooms = rooms.map(room => ids.includes(room.id) ? { ...room, ...data } : room);
+        saveLocal();
+      }
+      showToast('Rooms assigned');
+      setView('rooms');
+    }
+
+    function showRoomsManager() {
+      renderManageRooms();
+      $('roomsModal').classList.add('show');
+    }
+
+    function hideRoomsManager() {
+      $('roomsModal').classList.remove('show');
+    }
+
+    function renderManageRooms() {
+      $('manageRoomsList').innerHTML = rooms.length
+        ? rooms.map(room => `<div class="item"><div class="item-title">${escapeHtml(room.name || room.roomNumber || room.id)}</div><div class="item-meta">${room.assignedNurseName ? 'Assigned to ' + escapeHtml(room.assignedNurseName) : 'Unassigned'}</div><button class="btn danger" onclick="deleteRoom('${escapeHtml(room.id)}')">Delete</button></div>`).join('')
+        : '<div class="empty">No rooms added yet.</div>';
+    }
+
+    async function addRoom() {
+      const number = $('roomInput').value.trim();
+      if (!number) {
+        showToast('Enter room number');
+        return;
+      }
+      const id = slug(number);
+      const data = { roomNumber: number, name: 'Room ' + number, active: true, assignedNurseId: '', assignedNurseName: '', createdAtMs: Date.now() };
+      if (firebaseReady) await roomsCollection.doc(id).set(data, { merge: true });
+      else {
+        rooms = rooms.filter(room => room.id !== id);
+        rooms.push({ id, ...data });
+        saveLocal();
+      }
+      $('roomInput').value = '';
+      renderManageRooms();
+      renderRooms();
+      showToast('Room added');
+    }
+
+    async function deleteRoom(roomId) {
+      if (!confirm('Delete this room?')) return;
+      if (firebaseReady) await roomsCollection.doc(roomId).delete();
+      else {
+        rooms = rooms.filter(room => room.id !== roomId);
+        saveLocal();
+      }
+      renderManageRooms();
+      renderRooms();
+    }
+
+    async function resetDemoData() {
+      if (!confirm('Delete all patients, nurses and rooms for this demo shift?')) return;
+      if (firebaseReady) {
+        const batch = db.batch();
+        patients.forEach(p => batch.delete(patientsCollection.doc(p.id)));
+        nurses.forEach(n => batch.delete(nursesCollection.doc(n.id)));
+        rooms.forEach(r => batch.delete(roomsCollection.doc(r.id)));
+        await batch.commit();
+      } else {
+        patients = [];
+        nurses = [];
+        rooms = [];
+        saveLocal();
+      }
+      showToast('Demo data reset');
+      renderHome();
+    }
+
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

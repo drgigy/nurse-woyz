@@ -432,85 +432,68 @@
 
   <main>
     <section class="panel" aria-labelledby="generator-title">
-      <h2 id="generator-title" style="margin:0 0 18px;">Generate Bed QR Codes</h2>
+      <h2 id="generator-title" style="margin:0 0 18px;">Generate Patient Wristband QR</h2>
       <div class="controls">
         <label>
-          Start Bed
-          <input id="startBed" inputmode="numeric" value="101">
+          Patient Name
+          <input id="patientName" value="Michelle Teoh">
         </label>
         <label>
-          End Bed
-          <input id="endBed" inputmode="numeric" value="120">
+          UHID
+          <input id="patientUhid" value="UHID1001">
         </label>
         <label>
-          Payload
-          <select id="payloadMode">
-            <option value="code">Nurse WOYZ code</option>
-            <option value="url">Website URL</option>
+          Date of Birth
+          <input id="patientDob" type="date" value="1972-05-14">
+        </label>
+        <label>
+          Gender
+          <select id="patientGender">
+            <option>Female</option>
+            <option>Male</option>
+            <option>Other</option>
           </select>
         </label>
-        <label>
+        <label class="wide">
+          Doctor Name
+          <input id="doctorName" value="Dr Paul Johnson">
+        </label>
+        <label class="wide">
           QR Size
           <select id="qrSize">
-            <option value="220">Standard</option>
-            <option value="300">Large</option>
+            <option value="260">Standard</option>
+            <option value="320">Large</option>
           </select>
-        </label>
-        <label class="wide">
-          Website URL, only for URL mode
-          <input id="baseUrl" value="https://nurse.woyz.in/ward.html">
-        </label>
-        <label class="wide">
-          Label Prefix
-          <input id="labelPrefix" value="Bed">
-        </label>
-        <label class="full">
-          Patient details, one line per bed: bed, patient name, age, doctor name
-          <textarea id="patientRows">101, Michelle Teoh, 54, Dr Paul Johnson
-102, Rajan Menon, 68, Dr Anil Kumar
-103, Mary Thomas, 72, Dr Susan Mathew
-104, Abdul Rahman, 61, Dr Paul Johnson</textarea>
         </label>
       </div>
 
       <div class="actions">
-        <button class="primary" id="generateBtn" type="button">Generate QR Codes</button>
+        <button class="primary" id="generateBtn" type="button">Generate Wristband QR</button>
         <button class="secondary" id="printBtn" type="button">Print</button>
         <button class="secondary" id="clearBtn" type="button">Clear</button>
         <span class="status" id="statusText"></span>
       </div>
 
       <p class="hint">
-        Recommended mode: <strong>Nurse WOYZ code</strong>. The QR contains only the bed code,
-        while the printed wristband can show patient name, age, and doctor's name.
+        The QR stores patient identity for Nurse WOYZ Admin scanning: name, UHID, date of birth,
+        age, gender, and doctor name. Room and nurse assignment happens later in Nurse WOYZ Admin.
       </p>
     </section>
 
     <section class="sheet" id="qrSheet" aria-live="polite">
-      <div class="empty">Enter the bed range and click Generate QR Codes.</div>
+      <div class="empty">Enter patient details and click Generate Wristband QR.</div>
     </section>
   </main>
 
   <script>
-    const startBed = document.getElementById('startBed');
-    const endBed = document.getElementById('endBed');
-    const payloadMode = document.getElementById('payloadMode');
+    const patientName = document.getElementById('patientName');
+    const patientUhid = document.getElementById('patientUhid');
+    const patientDob = document.getElementById('patientDob');
+    const patientGender = document.getElementById('patientGender');
+    const doctorName = document.getElementById('doctorName');
     const qrSize = document.getElementById('qrSize');
-    const baseUrl = document.getElementById('baseUrl');
-    const labelPrefix = document.getElementById('labelPrefix');
-    const patientRows = document.getElementById('patientRows');
     const qrSheet = document.getElementById('qrSheet');
     const statusText = document.getElementById('statusText');
-
-    function makePayload(bed) {
-      if (payloadMode.value === 'url') {
-        const url = new URL(baseUrl.value.trim());
-        url.searchParams.set('bed', bed);
-        return url.toString();
-      }
-
-      return `NURSE_WOYZ_BED:${bed}`;
-    }
 
     function makeQrUrl(payload) {
       const size = Number(qrSize.value) || 220;
@@ -527,84 +510,59 @@
         .replaceAll("'", '&#039;');
     }
 
-    function readPatientRows() {
-      const details = new Map();
-      patientRows.value.split(/\n+/).forEach(line => {
-        const parts = line.split(',').map(part => part.trim());
-        if (!parts[0]) return;
-        details.set(parts[0], {
-          name: parts[1] || `Patient ${parts[0]}`,
-          age: parts[2] || '—',
-          doctor: parts[3] || 'Doctor'
-        });
-      });
-      return details;
+    function calculateAge(dobValue) {
+      if (!dobValue) return '';
+      const dob = new Date(dobValue + 'T00:00:00');
+      if (Number.isNaN(dob.getTime())) return '';
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) age -= 1;
+      return age >= 0 ? String(age) : '';
     }
 
     function generate() {
-      const start = Number.parseInt(startBed.value, 10);
-      const end = Number.parseInt(endBed.value, 10);
-      const prefix = labelPrefix.value.trim() || 'Bed';
+      const name = patientName.value.trim();
+      const uhid = patientUhid.value.trim();
+      const dob = patientDob.value;
+      const gender = patientGender.value;
+      const doctor = doctorName.value.trim();
+      const age = calculateAge(dob);
 
       statusText.textContent = '';
 
-      if (!Number.isInteger(start) || !Number.isInteger(end) || start <= 0 || end <= 0) {
-        statusText.textContent = 'Please enter valid bed numbers.';
+      if (!name || !uhid || !dob || !gender || !doctor) {
+        statusText.textContent = 'Please enter all patient details.';
         return;
       }
 
-      if (end < start) {
-        statusText.textContent = 'End bed should be greater than start bed.';
-        return;
-      }
+      const patient = { type: 'NURSE_WOYZ_PATIENT', name, uhid, dob, age, gender, doctor };
+      const payload = JSON.stringify(patient);
+      const qrUrl = makeQrUrl(payload);
 
-      if (end - start > 199) {
-        statusText.textContent = 'Please generate a maximum of 200 QR codes at a time.';
-        return;
-      }
-
-      if (payloadMode.value === 'url' && !baseUrl.value.trim()) {
-        statusText.textContent = 'Please enter the website URL.';
-        return;
-      }
-
-      const cards = [];
-      const detailsByBed = readPatientRows();
-      for (let bed = start; bed <= end; bed += 1) {
-        const bedId = String(bed);
-        const payload = makePayload(String(bed));
-        const qrUrl = makeQrUrl(payload);
-        const patient = detailsByBed.get(bedId) || {
-          name: `Patient ${bedId}`,
-          age: '—',
-          doctor: 'Doctor'
-        };
-        cards.push(`
+      qrSheet.innerHTML = `
           <article class="qr-card">
             <img class="wristband-bg" src="./images/wristband-template.svg" alt="" aria-hidden="true">
             <div class="band-face">
               <div class="band-qr">
-                <img src="${qrUrl}" alt="QR code for ${prefix} ${bed}">
+                <img src="${qrUrl}" alt="QR code for ${escapeHtml(name)}">
               </div>
               <div class="patient-panel">
-                <div class="patient-name">${escapeHtml(patient.name)}</div>
-                <div class="patient-line">${escapeHtml(prefix)} ${escapeHtml(bedId)} &nbsp; AGE ${escapeHtml(patient.age)}</div>
-                <div class="patient-line">DR ${escapeHtml(patient.doctor).replace(/^Dr\.?\s*/i, '')}</div>
-                <div class="patient-line small">NURSE WOYZ WARD DEVICE</div>
+                <div class="patient-name">${escapeHtml(name)}</div>
+                <div class="patient-line">UHID ${escapeHtml(uhid)} &nbsp; AGE ${escapeHtml(age || '—')} &nbsp; ${escapeHtml(gender)}</div>
+                <div class="patient-line">DOB ${escapeHtml(dob)}</div>
+                <div class="patient-line">DR ${escapeHtml(doctor).replace(/^Dr\.?\s*/i, '')}</div>
               </div>
             </div>
           </article>
-        `);
-      }
-
-      qrSheet.innerHTML = cards.join('');
-      statusText.textContent = `${cards.length} QR codes generated.`;
+        `;
+      statusText.textContent = 'Patient wristband QR generated.';
     }
 
     document.getElementById('generateBtn').addEventListener('click', generate);
     document.getElementById('printBtn').addEventListener('click', () => window.print());
     document.getElementById('clearBtn').addEventListener('click', () => {
-      qrSheet.innerHTML = '<div class="empty">Enter the bed range and click Generate QR Codes.</div>';
+      qrSheet.innerHTML = '<div class="empty">Enter patient details and click Generate Wristband QR.</div>';
       statusText.textContent = '';
     });
 

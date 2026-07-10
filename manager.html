@@ -1067,29 +1067,20 @@ function escapeJsArg(value) {
 }
 
 function defaultWardRooms() {
-  return Array.from({ length: 20 }, (_, index) => {
-    const id = String(101 + index);
-    return {
-      id,
-      name: 'Bed ' + id,
-      active: true,
-      assignedNurseId: index < 8 ? 'nurse-priya' : '',
-      assignedNurseName: index < 8 ? 'Nurse Priya' : ''
-    };
-  });
+  return [];
 }
 
 function defaultWardNurses() {
-  return [{ id: 'nurse-priya', name: 'Nurse Priya', pin: '2222', active: true }];
+  return [];
 }
 
 function seedLocalWardSetup() {
-  if (!nurses.length) nurses = defaultWardNurses();
-  if (!rooms.length) rooms = defaultWardRooms();
+  nurses = nurses.filter(Boolean);
+  rooms = rooms.filter(Boolean);
 }
 
 function getDashboardRooms() {
-  return rooms.length ? rooms : defaultWardRooms();
+  return rooms;
 }
 
 function getActiveDashboardRooms() {
@@ -1922,23 +1913,7 @@ function saveNursePin() {
 }
 
 function seedDemoWardSetup() {
-  if (firebaseReady && nursesCollection && roomsCollection) {
-    const batch = db.batch();
-    defaultWardNurses().forEach(nurse => batch.set(nursesCollection.doc(nurse.id), nurse));
-    defaultWardRooms().forEach(room => batch.set(roomsCollection.doc(room.id), room));
-    batch.commit()
-      .then(() => showToast('Demo staff and rooms loaded'))
-      .catch(() => showToast('Could not load demo setup', true));
-    return;
-  }
-  nurses = defaultWardNurses();
-  rooms = defaultWardRooms();
-  selectedAdminNurseId = 'nurse-priya';
-  pendingAssignedRoomIds = new Set(rooms.filter(room => room.assignedNurseId === 'nurse-priya').map(room => room.id));
-  renderAdminSetup();
-  refreshDashboard();
-  renderCommand();
-  showToast('Demo staff and rooms loaded locally');
+  showToast('Use Nurse WOYZ Admin to create nurses and rooms manually');
 }
 
 // ══════════════════════════════════════════
@@ -2463,11 +2438,6 @@ function listenToNurses() {
   nursesUnsubscribe = nursesCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
     nurses = [];
     snapshot.forEach(doc => nurses.push({ id: doc.id, ...doc.data() }));
-    const priya = nurses.find(nurse => nurse.id === 'nurse-priya');
-    if (!defaultPinChecked && priya && !priya.pin) {
-      defaultPinChecked = true;
-      nursesCollection.doc('nurse-priya').update({ pin: '2222', updatedAtMs: Date.now() });
-    }
     renderAdminSetup();
     refreshDashboard();
     renderCommand();
@@ -2482,16 +2452,6 @@ function listenToRooms() {
   roomsUnsubscribe = roomsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
     rooms = [];
     snapshot.forEach(doc => rooms.push({ id: doc.id, ...doc.data() }));
-    if (!defaultBedsChecked) {
-      defaultBedsChecked = true;
-      const existingIds = new Set(rooms.map(room => room.id));
-      const missingRooms = defaultWardRooms().filter(room => !existingIds.has(room.id));
-      if (missingRooms.length) {
-        const batch = db.batch();
-        missingRooms.forEach(room => batch.set(roomsCollection.doc(room.id), room));
-        batch.commit().catch(() => showToast('Could not create all default beds', true));
-      }
-    }
     if (activeDashBed && !getDashboardRooms().some(room => room.id === activeDashBed)) activeDashBed = null;
     renderAdminSetup();
     refreshDashboard();

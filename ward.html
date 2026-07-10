@@ -900,17 +900,8 @@ let editingNoteId = null;
 let qrScanner = null;
 let qrScanBusy = false;
 let pendingUrlBedId = new URLSearchParams(window.location.search).get('bed') || '';
-let nurses = [{ id: 'nurse-priya', name: 'Nurse Priya', pin: '2222', active: true }];
-let rooms = Array.from({ length: 20 }, (_, index) => {
-  const id = String(101 + index);
-  return {
-    id,
-    name: 'Bed ' + id,
-    active: true,
-    assignedNurseId: index < 8 ? 'nurse-priya' : '',
-    assignedNurseName: index < 8 ? 'Nurse Priya' : ''
-  };
-});
+let nurses = [];
+let rooms = [];
 let activeNurse = null;
 
 function currentNurseName() {
@@ -1999,7 +1990,6 @@ function listenToNurses() {
     const syncedNurses = [];
     snapshot.forEach(doc => {
       const nurse = { id: doc.id, ...doc.data() };
-      if (nurse.id === 'nurse-priya' && !nurse.pin) nurse.pin = '2222';
       syncedNurses.push(nurse);
     });
     if (syncedNurses.length) nurses = syncedNurses;

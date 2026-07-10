@@ -29,6 +29,11 @@ service cloud.firestore {
         allow read, create, update, delete: if isDemoSignedIn();
       }
 
+      // Nurse WOYZ Admin patient list scanned from wristband QR codes.
+      match /patients/{patientId} {
+        allow read, create, update, delete: if isDemoSignedIn();
+      }
+
       // Keep the demo flexible if we add another subcollection later.
       match /{document=**} {
         allow read, create, update, delete: if isDemoSignedIn();
