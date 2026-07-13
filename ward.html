@@ -62,6 +62,17 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .shift-pill { background: #1e3a2f; color: #4ade80; font-size: 10px; padding: 4px 12px; border-radius: 20px; border: 1px solid #2d5a41; }
 .exit-btn { background: transparent; border: 1px solid #2a2d3a; border-radius: 7px; padding: 5px 10px; color: #555; font-size: 10px; cursor: pointer; font-family: inherit; }
 .section-lbl { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 10px; }
+.ward-entry-actions { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 12px 0 16px; }
+.ward-entry-card { background: #fff; border: 1.5px solid #e5b7be; border-radius: 18px; padding: 18px 16px; color: #162033; cursor: pointer; box-shadow: 0 10px 28px rgba(20,40,70,0.08); }
+.ward-entry-card:active { transform: scale(0.98); }
+.ward-entry-card.primary { background: linear-gradient(135deg,#b42336,#8f1729); color: #fff; border-color: #b42336; }
+.ward-entry-title { font-size: 18px; font-weight: 900; }
+.ward-entry-sub { font-size: 12px; color: #6b7c93; margin-top: 5px; line-height: 1.4; }
+.ward-entry-card.primary .ward-entry-sub { color: rgba(255,255,255,0.78); }
+.rooms-panel { display: none; }
+.rooms-panel.show { display: block; }
+.review-banner { display: none; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 12px; padding: 10px 12px; font-size: 12px; font-weight: 750; line-height: 1.4; margin: 0 0 12px; }
+.review-banner.show { display: block; }
 .bed-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 20px; }
 .bed-btn { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 13px; padding: 15px 8px; text-align: center; cursor: pointer; position: relative; user-select: none; transition: transform 0.1s; }
 .bed-btn:active { transform: scale(0.96); }
@@ -88,6 +99,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .bed-subtext { font-size: 11px; color: #666; margin-top: 2px; }
 .patient-bed-details { font-size: 11px; color: #52657d; margin-top: 4px; line-height: 1.5; }
 .mic-area { display: flex; flex-direction: column; gap: 8px; padding: 8px 0 4px; }
+.mic-area.hidden, .draft-panel.hidden, .handover-toolbar-btn.hidden { display: none !important; }
 .dictation-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; width: 100%; }
 .mic-btn {
   width: 100%;
@@ -548,12 +560,23 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div class="topbar">
     <div class="nurse-name" data-current-nurse>Nurse</div>
     <div class="topbar-right">
-      <button class="qr-scan-btn" onclick="openQrScanner()">Scan QR</button>
       <button class="exit-btn" onclick="doLogout()">🔒 Exit Shift</button>
     </div>
   </div>
   <div class="nurse-alerts" id="nurseNotificationList"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
-  <div class="bed-grid" id="bedGrid"><div class="bed-btn occ">
+  <div class="ward-entry-actions">
+    <div class="ward-entry-card primary" onclick="openQrScanner()">
+      <div class="ward-entry-title">Scan QR</div>
+      <div class="ward-entry-sub">Scan the patient wristband to open recording mode.</div>
+    </div>
+    <div class="ward-entry-card" onclick="showAssignedRooms()">
+      <div class="ward-entry-title">Rooms</div>
+      <div class="ward-entry-sub">Open assigned rooms for review, copy, and edit existing notes.</div>
+    </div>
+  </div>
+  <div class="rooms-panel" id="roomsPanel">
+    <div class="section-lbl">Assigned rooms</div>
+    <div class="bed-grid" id="bedGrid"><div class="bed-btn occ">
       <div class="b-dot"></div>
       
       <div class="b-num">101</div>
@@ -594,6 +617,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="b-num">108</div>
       <div class="b-st">Vacant</div>
     </div></div>
+  </div>
 </div>
 
 <!-- ══ MIC ══ -->
@@ -606,6 +630,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     </div>
   </div>
   <div id="bedTransferPanel"></div>
+  <div class="review-banner" id="reviewModeBanner">Review mode - scan patient QR to record a new note. You can copy notes and edit existing saved notes here.</div>
   <div class="mic-area">
     <div class="dictation-actions">
       <button type="button" class="mic-btn" id="micBtn" onclick="toggleMic()">
@@ -642,8 +667,8 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 
 <div class="qr-modal" id="qrModal" aria-hidden="true">
   <div class="qr-card">
-    <div class="qr-title">Scan Bed QR</div>
-    <div class="qr-help">Point the camera at the QR code near the bed. Only beds assigned to this nurse will open.</div>
+    <div class="qr-title">Scan Patient QR</div>
+    <div class="qr-help">Point the camera at the patient wristband QR. Verified patients open in recording mode.</div>
     <div id="qrReader"></div>
     <div class="qr-actions">
       <button class="qr-close" onclick="closeQrScanner()">Close Scanner</button>
@@ -890,11 +915,13 @@ let notesCollection = null;
 let transfersCollection = null;
 let nursesCollection = null;
 let roomsCollection = null;
+let patientsCollection = null;
 let firebaseReady = false;
 let notesUnsubscribe = null;
 let transfersUnsubscribe = null;
 let nursesUnsubscribe = null;
 let roomsUnsubscribe = null;
+let patientsUnsubscribe = null;
 let localSaveIds = new Set();
 let editingNoteId = null;
 let qrScanner = null;
@@ -902,7 +929,10 @@ let qrScanBusy = false;
 let pendingUrlBedId = new URLSearchParams(window.location.search).get('bed') || '';
 let nurses = [];
 let rooms = [];
+let patients = [];
 let activeNurse = null;
+let roomsPanelVisible = false;
+let currentBedMode = 'review';
 
 function currentNurseName() {
   return activeNurse?.name || 'Nurse';
@@ -911,6 +941,11 @@ function currentNurseName() {
 function assignedRooms() {
   if (!activeNurse) return [];
   return rooms.filter(room => room.active !== false && room.assignedNurseId === activeNurse.id);
+}
+
+function assignedPatients() {
+  if (!activeNurse) return [];
+  return patients.filter(patient => patient.assignedNurseId === activeNurse.id);
 }
 
 function updateNurseIdentity() {
@@ -1031,6 +1066,8 @@ function doLogin() {
   }
   activeNurse = nurse;
   pinEntry = ''; updateDots();
+  roomsPanelVisible = false;
+  currentBedMode = 'review';
   updateNurseIdentity();
   renderBedGrid();
   renderNurseNotifications();
@@ -1045,6 +1082,8 @@ function doLogout() {
   pinEntry = ''; updateDots();
   activeNurse = null;
   currentBed = null;
+  currentBedMode = 'review';
+  roomsPanelVisible = false;
   updateNurseIdentity();
   if (deviceMode === 'desktop') {
     managerLoggedIn = false;
@@ -1061,8 +1100,11 @@ function doLogout() {
 // BED GRID
 // ══════════════════════════════════════════
 function renderBedGrid() {
+  const panel = document.getElementById('roomsPanel');
+  if (panel) panel.classList.toggle('show', roomsPanelVisible);
   const grid = document.getElementById('bedGrid');
   grid.innerHTML = '';
+  if (!roomsPanelVisible) return;
   const nurseRooms = assignedRooms();
   if (!nurseRooms.length) {
     grid.innerHTML = '<div style="grid-column:1/-1;background:#fff;border:1px solid #d7e1ef;border-radius:14px;padding:22px;text-align:center;color:#61738a;">No beds are currently assigned to you. Please contact the ward manager.</div>';
@@ -1080,23 +1122,30 @@ function renderBedGrid() {
       <div class="b-num">${escapeHtml(room.name.replace(/^Bed\s*/i, ''))}</div>
       <div class="b-st">${reqCount > 0 ? reqCount+' request'+(reqCount>1?'s':'') : count > 0 ? count+' note'+(count>1?'s':'') : 'Assigned'}</div>
     `;
-    div.onclick = () => openBed(room.id);
+    div.onclick = () => openBed(room.id, 'review');
     grid.appendChild(div);
   });
 }
 
-function openBed(bedId) {
+function showAssignedRooms() {
+  roomsPanelVisible = true;
+  renderBedGrid();
+}
+
+function openBed(bedId, mode = 'review') {
   if (!assignedRooms().some(room => room.id === bedId)) {
     showToast('This bed is not assigned to your station', true);
     return;
   }
   currentBed = bedId;
+  currentBedMode = mode === 'record' ? 'record' : 'review';
   const room = rooms.find(item => item.id === bedId);
   document.getElementById('micBedTitle').textContent = room?.name || 'Bed ' + bedId;
   renderCurrentBedPatientDetails();
   resetMicState();
   renderNotesList();
   renderBedTransferPanel();
+  applyBedModeUI();
   showScreen('mic');
 }
 
@@ -1119,10 +1168,95 @@ function extractBedIdFromQr(value) {
   return plainMatch ? plainMatch[1] : '';
 }
 
+function parsePatientQr(value) {
+  const text = String(value || '').trim();
+  if (!text) return null;
+  try {
+    const data = JSON.parse(text);
+    if (data && String(data.type || '').toUpperCase() === 'NURSE_WOYZ_PATIENT') return data;
+  } catch (error) {
+    // Not a JSON patient wristband QR.
+  }
+  try {
+    const url = new URL(text);
+    if ((url.searchParams.get('type') || '').toUpperCase() === 'NURSE_WOYZ_PATIENT') {
+      return {
+        type: 'NURSE_WOYZ_PATIENT',
+        uhid: url.searchParams.get('uhid') || '',
+        name: url.searchParams.get('name') || ''
+      };
+    }
+  } catch (error) {
+    // Not a URL patient QR.
+  }
+  return null;
+}
+
+function normalizeKey(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function findPatientForQr(patientQr) {
+  if (!patientQr) return null;
+  const qrUhid = normalizeKey(patientQr.uhid);
+  const qrName = normalizeKey(patientQr.name);
+  return patients.find(patient => {
+    const patientUhid = normalizeKey(patient.uhid);
+    const patientName = normalizeKey(patient.name);
+    return (qrUhid && patientUhid === qrUhid) || (qrName && patientName === qrName);
+  }) || null;
+}
+
+function findRoomForPatient(patient) {
+  if (!patient) return null;
+  const assigned = assignedRooms();
+  if (patient.assignedRoomId) {
+    const exact = assigned.find(room => room.id === patient.assignedRoomId);
+    if (exact) return exact;
+  }
+  if (patient.assignedRoomName) {
+    const byName = assigned.find(room => room.name === patient.assignedRoomName || room.roomNumber === patient.assignedRoomName || room.id === patient.assignedRoomName);
+    if (byName) return byName;
+  }
+  if (patient.uhid) {
+    const byUhid = assigned.find(room => normalizeKey(room.patientUhid) === normalizeKey(patient.uhid));
+    if (byUhid) return byUhid;
+  }
+  if (assigned.length === 1) return assigned[0];
+  return null;
+}
+
 function openBedFromQr(rawValue) {
+  const patientQr = parsePatientQr(rawValue);
+  if (patientQr) {
+    if (!activeNurse) {
+      showToast('Enter nurse PIN first, then scan the patient QR');
+      showScreen('login');
+      return;
+    }
+
+    const patient = findPatientForQr(patientQr);
+    if (!patient) {
+      showToast('Patient is not added to the ward list yet', true);
+      return;
+    }
+    if (patient.assignedNurseId !== activeNurse.id) {
+      showToast('This patient is not assigned to your station', true);
+      return;
+    }
+    const room = findRoomForPatient(patient);
+    if (!room) {
+      showToast('Patient found, but no assigned room is linked yet', true);
+      return;
+    }
+    openBed(room.id, 'record');
+    showToast('Patient QR verified. Recording mode opened.');
+    return;
+  }
+
   const bedId = extractBedIdFromQr(rawValue);
   if (!bedId) {
-    showToast('This is not a valid Nurse WOYZ bed QR code', true);
+    showToast('This is not a valid Nurse WOYZ QR code', true);
     return;
   }
 
@@ -1138,12 +1272,12 @@ function openBedFromQr(rawValue) {
     return;
   }
 
-  openBed(bedId);
+  openBed(bedId, 'record');
 }
 
 async function openQrScanner() {
   if (!activeNurse) {
-    showToast('Enter nurse PIN before scanning a bed QR code', true);
+    showToast('Enter nurse PIN before scanning a patient QR code', true);
     return;
   }
   if (!window.isSecureContext && location.protocol !== 'file:') {
@@ -1202,15 +1336,25 @@ function renderCurrentBedPatientDetails() {
   const details = document.getElementById('micPatientDetails');
   if (!details || !currentBed) return;
   const room = rooms.find(item => item.id === currentBed) || {};
-  const name = String(room.patientName || '—').trim() || '—';
-  const age = String(room.patientAge || '—').trim() || '—';
-  const sex = String(room.patientSex || '—').trim() || '—';
-  const uhid = String(room.patientUhid || '—').trim() || '—';
+  const patient = patients.find(item => item.assignedRoomId === currentBed || item.assignedRoomName === room.name || item.assignedRoomName === room.roomNumber) || {};
+  const name = String(room.patientName || patient.name || '—').trim() || '—';
+  const age = String(room.patientAge || patient.age || '—').trim() || '—';
+  const sex = String(room.patientSex || patient.gender || '—').trim() || '—';
+  const uhid = String(room.patientUhid || patient.uhid || '—').trim() || '—';
   details.textContent = `${name} · ${age} years · ${sex} · UHID: ${uhid}`;
+}
+
+function applyBedModeUI() {
+  const isRecordMode = currentBedMode === 'record';
+  document.querySelector('#screen-mic .mic-area')?.classList.toggle('hidden', !isRecordMode);
+  document.getElementById('draftPanel')?.classList.toggle('hidden', !isRecordMode);
+  document.getElementById('btnHandover')?.classList.toggle('hidden', !isRecordMode);
+  document.getElementById('reviewModeBanner')?.classList.toggle('show', !isRecordMode);
 }
 
 function goBackToBeds() {
   if (isRecording || isPaused) stopRecording();
+  currentBedMode = 'review';
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
@@ -1255,6 +1399,10 @@ function setMicUI(state) {
 }
 
 function toggleMic() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to record a new note', true);
+    return;
+  }
   if (isRecording || isPaused) { stopRecording(); }
   else {
     currentNoteType = 'note';
@@ -1263,6 +1411,10 @@ function toggleMic() {
 }
 
 async function startRecording() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to record a new note', true);
+    return;
+  }
   rawTranscript = '';
   englishNote = '';
   currentAudioBlob = null;
@@ -1305,12 +1457,20 @@ async function startRecording() {
 }
 
 function startHandoverDictation() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to dictate handover', true);
+    return;
+  }
   if (isRecording || isPaused) return;
   currentNoteType = 'handover';
   startRecording();
 }
 
 function recordAndSave() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to save a new note', true);
+    return;
+  }
   if (isRecording || isPaused) {
     autoSaveAfterTranscription = true;
     stopRecording();
@@ -1489,6 +1649,10 @@ function runSimulation() {
 // SAVE NOTE
 // ══════════════════════════════════════════
 async function saveNote() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to save a new note', true);
+    return;
+  }
   const text = getPreviewText() || englishNote.trim() || rawTranscript.trim();
   if (!text) { showToast('Nothing to save'); return; }
   englishNote = text;
@@ -1933,12 +2097,14 @@ async function initFirebaseSync() {
     transfersCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('transferRequests');
     nursesCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('nurses');
     roomsCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('rooms');
+    patientsCollection = db.collection('demoShifts').doc(SHIFT_ID).collection('patients');
     firebaseReady = true;
     updateSyncStatus();
     listenToNotes();
     listenToTransfers();
     listenToNurses();
     listenToRooms();
+    listenToPatients();
   } catch (err) {
     firebaseReady = false;
     updateSyncStatus();
@@ -2016,6 +2182,18 @@ function listenToRooms() {
       renderNurseNotifications();
       if (currentBed) renderCurrentBedPatientDetails();
     }
+  });
+}
+
+function listenToPatients() {
+  if (patientsUnsubscribe) patientsUnsubscribe();
+  patientsUnsubscribe = patientsCollection.orderBy('name', 'asc').onSnapshot(snapshot => {
+    patients = [];
+    snapshot.forEach(doc => patients.push({ id: doc.id, ...doc.data() }));
+    if (currentBed) renderCurrentBedPatientDetails();
+  }, () => {
+    firebaseReady = false;
+    updateSyncStatus();
   });
 }
 
