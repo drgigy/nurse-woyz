@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nurse WOYZ Demo Patient QR Codes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #111827;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      max-width: 900px;
+      margin: 24px auto 12px;
+      padding: 0 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    h1 { font-size: 24px; margin: 0; color: #8f1729; }
+    p { margin: 6px 0 0; color: #64748b; font-size: 14px; }
+    button {
+      border: 0;
+      border-radius: 12px;
+      background: #b42336;
+      color: #fff;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      padding: 12px 18px 30px;
+      display: grid;
+      gap: 16px;
+    }
+    .band {
+      min-height: 170px;
+      background:
+        radial-gradient(ellipse at center, #ffffff 0%, #ffffff 36%, transparent 37%),
+        linear-gradient(180deg, #f8fafc, #ffffff 52%, #eef2f7);
+      border: 1px solid #d9e2ec;
+      border-radius: 999px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 22px 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    .band::before {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      top: -34px;
+      height: 76px;
+      border: 10px solid rgba(148, 163, 184, 0.22);
+      border-bottom: 0;
+      border-radius: 999px 999px 0 0;
+    }
+    .qr {
+      width: 124px;
+      height: 124px;
+      background: #fff;
+      border: 8px solid #fff;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+      transform: rotate(-3deg);
+    }
+    .name { font-size: 34px; line-height: 1; font-weight: 900; letter-spacing: -1px; }
+    .line { margin-top: 7px; font-size: 19px; font-weight: 850; text-transform: uppercase; }
+    .small { font-size: 16px; color: #334155; }
+    .scan { margin-top: 10px; color: #8f1729; font-size: 16px; font-weight: 900; letter-spacing: 1px; }
+    @media print {
+      body { background: #fff; }
+      header { display: none; }
+      main { max-width: none; padding: 0; gap: 0; }
+      .band {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        height: 20vh;
+        margin: 0;
+        border-radius: 80px;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Nurse WOYZ Demo Patient QR Codes</h1>
+      <p>These five QR codes match the Firestore demo patients assigned to Jewel, PIN 1234.</p>
+    </div>
+    <button onclick="window.print()">Print</button>
+  </header>
+  <main id="sheet"></main>
+
+  <script>
+    const patients = [
+      { room: "101", name: "Michelle Teoh", uhid: "UHID1001", dob: "1972-05-14", age: "54", gender: "F", doctor: "Dr Paul Johnson" },
+      { room: "102", name: "Rajan Menon", uhid: "UHID1002", dob: "1968-11-02", age: "57", gender: "M", doctor: "Dr Anita Varghese" },
+      { room: "103", name: "Mary Thomas", uhid: "UHID1003", dob: "1954-02-20", age: "72", gender: "F", doctor: "Dr Susan Mathew" },
+      { room: "104", name: "Abdul Rahman", uhid: "UHID1004", dob: "1965-08-18", age: "60", gender: "M", doctor: "Dr Rahul Johnson" },
+      { room: "105", name: "Leela Nair", uhid: "UHID1005", dob: "1949-12-05", age: "76", gender: "F", doctor: "Dr Meera Nair" }
+    ];
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    function qrPayload(patient) {
+      return JSON.stringify({
+        type: "NURSE_WOYZ_PATIENT",
+        name: patient.name,
+        uhid: patient.uhid,
+        dob: patient.dob,
+        age: patient.age,
+        gender: patient.gender,
+        doctor: patient.doctor
+      });
+    }
+
+    document.getElementById("sheet").innerHTML = patients.map(patient => {
+      const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=" + encodeURIComponent(qrPayload(patient));
+      return `
+        <section class="band">
+          <img class="qr" src="${qrUrl}" alt="QR code for ${escapeHtml(patient.name)}">
+          <div>
+            <div class="name">${escapeHtml(patient.name)}</div>
+            <div class="line">Room ${escapeHtml(patient.room)} &nbsp; UHID ${escapeHtml(patient.uhid)} &nbsp; Age ${escapeHtml(patient.age)} &nbsp; ${escapeHtml(patient.gender)}</div>
+            <div class="line small">DOB ${escapeHtml(patient.dob)} &nbsp; ${escapeHtml(patient.doctor)}</div>
+            <div class="scan">SCAN QR TO OPEN RECORDING MODE</div>
+          </div>
+        </section>
+      `;
+    }).join("");
+  </script>
+</body>
+</html>
