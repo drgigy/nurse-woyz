@@ -489,6 +489,71 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .desktop-only { display: none !important; }
   .mobile-only { display: initial; }
 }
+
+@media (min-width: 900px) and (pointer: fine) {
+  body.role-page.mobile-app {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 12%, rgba(193,18,31,0.08), transparent 34%),
+      linear-gradient(135deg, #fff7f8 0%, #ffffff 44%, #f3f6fa 100%);
+  }
+  body.role-page.mobile-app::before {
+    content: "Ward Device Mobile Preview";
+    position: fixed;
+    top: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #8a9ab4;
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  body.role-page.mobile-app .screen {
+    width: min(430px, calc(100vw - 64px));
+    min-height: min(860px, calc(100vh - 64px));
+    height: min(860px, calc(100vh - 64px));
+    border: 12px solid #121722;
+    border-radius: 48px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
+    box-shadow:
+      0 34px 90px rgba(18,23,34,0.26),
+      0 0 0 1px rgba(255,255,255,0.9) inset;
+    position: relative;
+    scrollbar-width: none;
+  }
+  body.role-page.mobile-app .screen::-webkit-scrollbar {
+    display: none;
+  }
+  body.role-page.mobile-app .screen.active::before {
+    content: "";
+    position: sticky;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 82px;
+    height: 5px;
+    margin: 0 auto;
+    border-radius: 999px;
+    background: rgba(18,23,34,0.24);
+    z-index: 20;
+    flex: 0 0 auto;
+  }
+  body.role-page.mobile-app #screen-login > div {
+    padding-top: 26px !important;
+  }
+  body.role-page.mobile-app .settings-fab {
+    right: calc(50vw - 215px + 18px);
+    bottom: max(28px, calc((100vh - 860px) / 2 + 18px));
+  }
+}
 </style>
 </head>
 <body>
