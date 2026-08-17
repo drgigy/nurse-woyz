@@ -302,13 +302,22 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-nurse-row { display: flex; align-items: center; gap: 7px; border: 1px solid #e1e8f2; border-radius: 10px; padding: 7px; background: #fff; }
 .admin-nurse-row.selected { border-color: #e0717d; background: #fff4f5; }
 .admin-nurse-select { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; cursor: pointer; padding: 5px; }
-.admin-row-title { color: #1a2233; font-size: 13px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-row-title { color: #1a2233; font-size: 13px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .admin-row-sub { color: #8a9ab4; font-size: 10px; margin-top: 2px; }
+.admin-competency-badge,
+.admin-acuity-badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.admin-competency-badge { color: #981b2d; background: #fff1f3; border: 1px solid #efb6bf; }
+.admin-competency-badge.high { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
+.admin-competency-badge.mid { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
+.admin-acuity-badge { margin-top: 7px; color: #61738a; background: #f6f9fc; border: 1px solid #d7e1ef; }
+.admin-acuity-badge.high { color: #981b2d; background: #fff1f3; border-color: #efb6bf; }
+.admin-acuity-badge.mid { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
+.admin-acuity-badge.low { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nurse-settings-btn { width: 32px; height: 32px; border: 1px solid #c8d4e4; border-radius: 8px; background: #fff; color: #52657d; cursor: pointer; }
 .admin-bed-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
 .admin-bed-guidance { color: #61738a; font-size: 12px; line-height: 1.45; margin-top: 4px; }
 .admin-bed-grid { display: grid; grid-template-columns: repeat(5, minmax(92px,1fr)); gap: 10px; }
-.admin-bed-tile { border: 1px solid #d3deeb; border-radius: 12px; background: #fff; padding: 12px 8px; text-align: center; cursor: pointer; color: #25364d; min-height: 92px; }
+.admin-bed-tile { border: 1px solid #d3deeb; border-radius: 12px; background: #fff; padding: 12px 8px; text-align: center; cursor: pointer; color: #25364d; min-height: 112px; }
 .admin-bed-tile:hover { border-color: #e0717d; }
 .admin-bed-tile.selected { background: #e8f5ef; border-color: #62b489; color: #0d6b43; }
 .admin-bed-tile.occupied { background: #f5f7fa; color: #8a9ab4; cursor: not-allowed; }
@@ -1935,6 +1944,44 @@ function renderAdminSetup() {
   renderAdminRoomList();
 }
 
+function getDemoNurseCompetency(nurse) {
+  const name = String(nurse?.name || '').trim().toLowerCase();
+  const known = {
+    jewel: { level: 5, label: 'L5 Expert', cls: 'high' },
+    priya: { level: 4, label: 'L4 Proficient', cls: 'high' },
+    ancy: { level: 3, label: 'L3 Competent', cls: 'mid' },
+    anu: { level: 3, label: 'L3 Competent', cls: 'mid' },
+    nisha: { level: 2, label: 'L2 Adv Beginner', cls: 'mid' },
+    meera: { level: 2, label: 'L2 Adv Beginner', cls: 'mid' },
+    riya: { level: 1, label: 'L1 Novice', cls: '' }
+  };
+  if (known[name]) return known[name];
+  if (nurse?.competencyLevel) {
+    const level = Number(nurse.competencyLevel);
+    return { level, label: 'L' + level + ' Competency', cls: level >= 4 ? 'high' : level >= 2 ? 'mid' : '' };
+  }
+  return { level: 1, label: 'L1 pending', cls: '' };
+}
+
+function getDemoRoomAcuity(room) {
+  const roomNumber = String(room?.id || room?.name || '').match(/\d+/)?.[0] || '';
+  const patientMatch = smartAssignmentPatients.find(patient => String(patient.bed).includes(roomNumber));
+  if (patientMatch) {
+    return {
+      label: patientMatch.acuity + ' · RHPASS ' + patientMatch.score,
+      cls: patientMatch.requiredLevel >= 4 ? 'high' : patientMatch.requiredLevel >= 2 ? 'mid' : 'low'
+    };
+  }
+  if (room?.acuityLabel) {
+    const requiredLevel = Number(room.requiredLevel || 1);
+    return { label: room.acuityLabel, cls: requiredLevel >= 4 ? 'high' : requiredLevel >= 2 ? 'mid' : 'low' };
+  }
+  if (room?.patientName) {
+    return { label: 'Acuity not set', cls: '' };
+  }
+  return { label: 'No patient / acuity', cls: '' };
+}
+
 function renderAdminNurseList() {
   const list = document.getElementById('adminNurseList');
   if (!list) return;
@@ -1944,10 +1991,11 @@ function renderAdminNurseList() {
   }
   list.innerHTML = nurses.map(nurse => {
     const assignedCount = rooms.filter(room => room.assignedNurseId === nurse.id).length;
+    const competency = getDemoNurseCompetency(nurse);
     return `
       <div class="admin-nurse-row ${selectedAdminNurseId === nurse.id ? 'selected' : ''}">
         <button class="admin-nurse-select" onclick="selectAdminNurse('${escapeJsArg(nurse.id)}')">
-          <div class="admin-row-title">${escapeHtml(nurse.name)}</div>
+          <div class="admin-row-title">${escapeHtml(nurse.name)} <span class="admin-competency-badge ${competency.cls}">${escapeHtml(competency.label)}</span></div>
           <div class="admin-row-sub">${assignedCount} bed${assignedCount !== 1 ? 's' : ''} · PIN ${nurse.pin ? 'set' : 'not set'}</div>
         </button>
         <button class="nurse-settings-btn" onclick="openPinEditor('${escapeJsArg(nurse.id)}')" title="PIN settings">⚙</button>
@@ -1980,11 +2028,13 @@ function renderAdminRoomList() {
       const occupiedByOther = nurse && room.assignedNurseId && room.assignedNurseId !== nurse.id;
       const stateClass = occupiedByOther ? 'occupied' : (selected ? 'selected' : '');
       const owner = occupiedByOther ? room.assignedNurseName : (selected ? 'Selected' : 'Available');
+      const acuity = getDemoRoomAcuity(room);
       return `
         <button class="admin-bed-tile ${stateClass}" onclick="toggleAdminBed('${escapeJsArg(room.id)}')" ${!nurse || occupiedByOther ? 'disabled' : ''}>
           <div class="admin-bed-icon">🛏</div>
           <div class="admin-bed-number">${escapeHtml(room.name)}</div>
           <div class="admin-bed-owner">${escapeHtml(owner)}</div>
+          <div class="admin-acuity-badge ${acuity.cls}">${escapeHtml(acuity.label)}</div>
         </button>
       `;
     }).join('');
