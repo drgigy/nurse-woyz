@@ -715,13 +715,13 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div class="gov-top">
       <div>
         <div class="gov-title">Nursing Governance & Patient Acuity</div>
-        <div class="gov-sub">Prototype extension for hierarchy login, RHPASS ICU/Ward scoring, and Level 1 competency assessment.</div>
+        <div class="gov-sub">Prototype extension for hierarchy login, PASS ICU/Ward scoring, and Level 1 competency assessment.</div>
       </div>
       <button class="gov-close" onclick="closeGovernancePanel()">Close</button>
     </div>
     <div class="gov-body">
       <div class="gov-tabs">
-        <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">RHPASS Patient Acuity</button>
+        <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">PASS Patient Acuity</button>
         <button class="gov-tab" data-gov-tab="hierarchy" onclick="showGovTab('hierarchy')">Nursing Hierarchy Login</button>
         <button class="gov-tab" data-gov-tab="competency" onclick="showGovTab('competency')">Competency Assessment</button>
         <button class="gov-tab" data-gov-tab="assignment" onclick="showGovTab('assignment')">Smart Assignment</button>
@@ -730,7 +730,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <section class="gov-panel active" id="gov-rhpass">
         <div class="gov-grid">
           <div class="gov-card">
-            <h3>Patient RHPASS Assessment</h3>
+            <h3>Patient PASS Assessment</h3>
             <div class="gov-muted">Select ICU or Ward depending on patient location. This prototype can later be linked to each patient record from the dashboard.</div>
             <div class="gov-mini-grid">
               <div class="gov-field"><label>Patient name</label><input id="govPatientName" placeholder="Patient name"></div>
@@ -739,8 +739,8 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
               <div class="gov-field"><label>Ward / Bed</label><input id="govPatientBed" placeholder="Ward / Bed"></div>
             </div>
             <div class="rhpass-mode">
-              <button id="rhpassWardBtn" class="active" onclick="setRhpassMode('ward')">RHPASS Ward</button>
-              <button id="rhpassIcuBtn" onclick="setRhpassMode('icu')">RHPASS ICU</button>
+              <button id="rhpassWardBtn" class="active" onclick="setRhpassMode('ward')">PASS Ward</button>
+              <button id="rhpassIcuBtn" onclick="setRhpassMode('icu')">PASS ICU</button>
             </div>
             <div class="rhpass-score">
               <div class="score-tile"><div class="score-value" id="rhpassTotal">0</div><div class="score-label">Total score</div></div>
@@ -750,7 +750,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
             <div class="rhpass-list" id="rhpassList"></div>
           </div>
           <div class="gov-card">
-            <h3>RHPASS Rules Added</h3>
+            <h3>PASS Rules Added</h3>
             <p class="gov-muted">ICU scoring uses Modified TISS style weighted interventions. Ward scoring uses 15 parameters with 4 levels each.</p>
             <table class="level-table" style="margin-top:12px;">
               <thead><tr><th>Area</th><th>Rule</th><th>Staffing interpretation</th></tr></thead>
@@ -765,7 +765,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
               </tbody>
             </table>
             <div class="gov-actions">
-              <button class="gov-action" onclick="copyRhpassSummary()">Copy RHPASS Summary</button>
+              <button class="gov-action" onclick="copyRhpassSummary()">Copy PASS Summary</button>
               <button class="gov-action secondary" onclick="resetRhpass()">Reset Score</button>
             </div>
           </div>
@@ -1970,7 +1970,7 @@ function getDemoRoomAcuity(room) {
   const patientMatch = smartAssignmentPatients.find(patient => String(patient.bed).includes(roomNumber));
   if (patientMatch) {
     return {
-      label: patientMatch.acuity + ' · RHPASS ' + patientMatch.score,
+      label: patientMatch.acuity + ' · PASS ' + patientMatch.score,
       cls: patientMatch.requiredLevel >= 4 ? 'high' : patientMatch.requiredLevel >= 2 ? 'mid' : 'low'
     };
   }
@@ -2888,7 +2888,7 @@ const govRoles = [
   ['Nursing Superintendent - NPPD / Research / EBP', 'Education and practice development', 'Competency assessment, training records, levels, certifications, and audits.'],
   ['Assistant Nursing Superintendent', 'Operations / Quality / NPPD', 'Unit supervision, quality monitoring, and staff development workflows.'],
   ['Unit Manager', 'Unit administration', 'Unit staffing, patient acuity review, and nurse assignment.'],
-  ['Head Nurse', 'Ward shift lead', 'Shift supervision, transfer requests, nurse notes, RHPASS scoring, and escalation.'],
+  ['Head Nurse', 'Ward shift lead', 'Shift supervision, transfer requests, nurse notes, PASS scoring, and escalation.'],
   ['Team Leader', 'Team coordination', 'Assigned team monitoring, patient readiness, and task completion.'],
   ['Staff Nurse', 'Individual nurse', 'Assigned patient list, QR scanning, dictation, handover, and notifications.'],
   ['Clinical Instructor', 'Competency assessor', 'Training, assessment, validation, and sign-off.'],
@@ -3175,12 +3175,12 @@ function resetRhpass() {
   wardRhpassScores = Array(wardRhpassItems.length).fill(0);
   icuRhpassScores = Array(icuRhpassItems.length).fill(false);
   renderRhpass();
-  showToast('RHPASS score reset');
+  showToast('PASS score reset');
 }
 
 function copyRhpassSummary() {
   const text = [
-    'RHPASS ' + rhpassMode.toUpperCase() + ' SUMMARY',
+    'PASS ' + rhpassMode.toUpperCase() + ' SUMMARY',
     'Patient: ' + (document.getElementById('govPatientName').value || '—'),
     'UHID: ' + (document.getElementById('govPatientUhid').value || '—'),
     'Ward / Bed: ' + (document.getElementById('govPatientBed').value || '—'),
@@ -3188,7 +3188,7 @@ function copyRhpassSummary() {
     'Acuity: ' + document.getElementById('rhpassAcuity').textContent,
     'Recommended N:P: ' + document.getElementById('rhpassRatio').textContent
   ].join('\n');
-  navigator.clipboard.writeText(text).then(() => showToast('RHPASS summary copied')).catch(() => showToast('Ready to copy'));
+  navigator.clipboard.writeText(text).then(() => showToast('PASS summary copied')).catch(() => showToast('Ready to copy'));
 }
 
 function renderCompetencyList() {
@@ -3283,7 +3283,7 @@ function renderSmartAssignmentPrototype() {
       <div class="assignment-row">
         <div>
           <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
-          <div class="assignment-meta">${escapeHtml(patient.uhid)} · ${escapeHtml(patient.area)} · RHPASS ${patient.score}</div>
+          <div class="assignment-meta">${escapeHtml(patient.uhid)} · ${escapeHtml(patient.area)} · PASS ${patient.score}</div>
         </div>
         <div class="assignment-score">L${patient.requiredLevel}</div>
       </div>
@@ -3385,7 +3385,7 @@ function renderAssignmentSuggestions() {
         <div class="assignment-row">
           <div>
             <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
-            <div class="assignment-meta">${escapeHtml(patient.area)} · RHPASS ${patient.score} · ${escapeHtml(patient.acuity)} · Needs Level ${patient.requiredLevel}+</div>
+            <div class="assignment-meta">${escapeHtml(patient.area)} · PASS ${patient.score} · ${escapeHtml(patient.acuity)} · Needs Level ${patient.requiredLevel}+</div>
           </div>
           <span class="assignment-risk ${assignment.safe ? 'ok' : 'warn'}">${assignment.safe ? 'Competency matched' : 'Needs supervision'}</span>
         </div>
@@ -3446,7 +3446,7 @@ function copyAssignmentSummary() {
   smartAssignments.forEach(assignment => {
     const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
     const nurse = getPoolNurses().find(item => item.id === assignment.nurseId);
-    text.push(`${patient.bed} | ${patient.name} | ${patient.area} RHPASS ${patient.score} ${patient.acuity} | Nurse: ${nurse ? nurse.name : '-'} Level ${nurse ? nurse.level : '-'} | Status: ${assignment.status.toUpperCase()} | ${assignment.reason}`);
+    text.push(`${patient.bed} | ${patient.name} | ${patient.area} PASS ${patient.score} ${patient.acuity} | Nurse: ${nurse ? nurse.name : '-'} Level ${nurse ? nurse.level : '-'} | Status: ${assignment.status.toUpperCase()} | ${assignment.reason}`);
   });
   navigator.clipboard.writeText(text.join('\n')).then(() => showToast('Assignment plan copied')).catch(() => showToast('Ready to copy'));
 }
