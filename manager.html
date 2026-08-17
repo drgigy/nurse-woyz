@@ -1431,7 +1431,12 @@ function managerLogin() {
     managerLoggedIn = true;
     localStorage.setItem('nurse_woyz_manager_logged_in', 'yes');
     showScreen('dashboard');
-    showToast('Ward admin dashboard opened');
+    if (shouldOpenGovernanceFromUrl()) {
+      openGovernancePanel();
+      showToast('Nursing governance opened');
+    } else {
+      showToast('Ward admin dashboard opened');
+    }
   } else {
     showToast('Use demo login: manager / 1234', true);
   }
@@ -2999,6 +3004,22 @@ function showGovTab(tab) {
   if (tab === 'assignment') renderSmartAssignmentPrototype();
 }
 
+function shouldOpenGovernanceFromUrl() {
+  return new URLSearchParams(window.location.search).get('governance') === '1';
+}
+
+function openGovernanceFromHomeLink() {
+  if (!shouldOpenGovernanceFromUrl()) return;
+  if (managerLoggedIn) {
+    showScreen('dashboard');
+    openGovernancePanel();
+    showGovTab('assignment');
+  } else {
+    showScreen('manager-login');
+    showToast('Login with manager / 1234 to open Nursing Governance');
+  }
+}
+
 function renderGovernanceRoles() {
   const list = document.getElementById('hierarchyRoles');
   if (!list) return;
@@ -3431,6 +3452,7 @@ function initApp() {
   else if (PAGE_KIND === 'manager') showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
   else if (['ot','cathlab'].includes(PAGE_KIND)) showScreen('command');
   else showScreen(deviceMode === 'mobile' ? 'login' : (managerLoggedIn ? 'dashboard' : 'manager-login'));
+  openGovernanceFromHomeLink();
 }
 
 initApp();
