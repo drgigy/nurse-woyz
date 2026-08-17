@@ -769,15 +769,26 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
         </div>
         <div class="gov-card" style="margin-top:14px;">
           <h3>Level 1 Nurse Competency Record</h3>
-          <p class="gov-muted">Current prototype includes Level 1 parameters from the supplied competency record. Levels 2 to 5 are reserved for future expansion.</p>
+          <p class="gov-muted">Enter the nurse profile first, then complete the assessment items. The system assigns a competency grade from the completed score.</p>
+          <div class="gov-mini-grid" style="margin-top:14px;">
+            <div class="gov-field"><label>Nurse name</label><input id="competencyNurseName" placeholder="Enter nurse name" oninput="updateCompetencyScore()"></div>
+            <div class="gov-field"><label>Age</label><input id="competencyNurseAge" type="number" inputmode="numeric" min="18" max="80" placeholder="Age" oninput="updateCompetencyScore()"></div>
+            <div class="gov-field"><label>Hospital ID</label><input id="competencyHospitalId" placeholder="Hospital ID" oninput="updateCompetencyScore()"></div>
+            <div class="gov-field"><label>Designation / unit</label><input id="competencyDesignation" placeholder="Staff nurse / unit" oninput="updateCompetencyScore()"></div>
+          </div>
           <div class="rhpass-score">
             <div class="score-tile"><div class="score-value" id="competencyPct">0%</div><div class="score-label">Completion</div></div>
             <div class="score-tile"><div class="score-value" id="competencyDone">0</div><div class="score-label">Completed items</div></div>
-            <div class="score-tile"><div class="score-value" id="competencyStatus">Level 1</div><div class="score-label">Current record</div></div>
+            <div class="score-tile"><div class="score-value" id="competencyStatus">Level 1</div><div class="score-label">Assigned grade</div></div>
+          </div>
+          <div class="gov-card" style="margin-top:14px;background:#f8fbff;">
+            <h3 style="font-size:20px;margin-bottom:8px;">Nurse Assessment Summary</h3>
+            <p class="gov-muted" id="competencySummary">No nurse selected yet. Enter nurse name, age, and hospital ID to create the competency record.</p>
           </div>
           <div class="gov-actions">
             <button class="gov-action" onclick="markSampleCompetency()">Mark Sample Completed</button>
             <button class="gov-action secondary" onclick="resetCompetency()">Reset Competency</button>
+            <button class="gov-action secondary" onclick="copyCompetencySummary()">Copy Competency Summary</button>
           </div>
           <div class="rhpass-list" id="levelOneCompetencyList" style="margin-top:12px;"></div>
         </div>
@@ -2976,9 +2987,45 @@ function toggleCompetency(index) {
 function updateCompetencyScore() {
   const done = competencyDone.filter(Boolean).length;
   const pct = Math.round((done / competencyDone.length) * 100);
+  const grade = getCompetencyGrade(pct);
+  const nurseName = document.getElementById('competencyNurseName')?.value?.trim() || 'Nurse name not entered';
+  const nurseAge = document.getElementById('competencyNurseAge')?.value?.trim() || 'Age not entered';
+  const hospitalId = document.getElementById('competencyHospitalId')?.value?.trim() || 'Hospital ID not entered';
+  const designation = document.getElementById('competencyDesignation')?.value?.trim() || 'Designation / unit not entered';
   document.getElementById('competencyPct').textContent = pct + '%';
   document.getElementById('competencyDone').textContent = done + ' / ' + competencyDone.length;
-  document.getElementById('competencyStatus').textContent = pct >= 80 ? 'Ready' : 'Level 1';
+  document.getElementById('competencyStatus').textContent = grade.level;
+  const summary = document.getElementById('competencySummary');
+  if (summary) {
+    summary.innerHTML = `<strong>${escapeHtml(nurseName)}</strong> · Age: ${escapeHtml(nurseAge)} · Hospital ID: ${escapeHtml(hospitalId)} · ${escapeHtml(designation)}<br><strong>${escapeHtml(grade.level)} - ${escapeHtml(grade.title)}</strong> · ${escapeHtml(grade.rating)} · ${escapeHtml(grade.privilege)} · Score ${pct}%`;
+  }
+}
+
+function getCompetencyGrade(pct) {
+  if (pct >= 96) return { level: 'Level 5', title: 'Expert', rating: 'Independent (5)', privilege: 'G - Granted; may perform independently' };
+  if (pct >= 86) return { level: 'Level 4', title: 'Proficient', rating: 'Supervised (4)', privilege: 'GS - Granted under supervision' };
+  if (pct >= 61) return { level: 'Level 3', title: 'Competent', rating: 'Assisted (3)', privilege: 'GA - Granted under assistance' };
+  if (pct >= 41) return { level: 'Level 2', title: 'Advanced Beginner', rating: 'Supported (2)', privilege: 'GSU - Granted with support' };
+  return { level: 'Level 1', title: 'Novice', rating: 'Dependent (1)', privilege: 'NG - Not granted' };
+}
+
+function copyCompetencySummary() {
+  const done = competencyDone.filter(Boolean).length;
+  const pct = Math.round((done / competencyDone.length) * 100);
+  const grade = getCompetencyGrade(pct);
+  const text = [
+    'NURSE COMPETENCY ASSESSMENT',
+    'Nurse name: ' + (document.getElementById('competencyNurseName').value || '-'),
+    'Age: ' + (document.getElementById('competencyNurseAge').value || '-'),
+    'Hospital ID: ' + (document.getElementById('competencyHospitalId').value || '-'),
+    'Designation / unit: ' + (document.getElementById('competencyDesignation').value || '-'),
+    'Completed items: ' + done + ' / ' + competencyDone.length,
+    'Score: ' + pct + '%',
+    'Assigned grade: ' + grade.level + ' - ' + grade.title,
+    'Rating: ' + grade.rating,
+    'Privilege: ' + grade.privilege
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(() => showToast('Competency summary copied')).catch(() => showToast('Ready to copy'));
 }
 
 function markSampleCompetency() {
@@ -2989,6 +3036,10 @@ function markSampleCompetency() {
 
 function resetCompetency() {
   competencyDone = Array(levelOneCompetencies.length).fill(false);
+  ['competencyNurseName', 'competencyNurseAge', 'competencyHospitalId', 'competencyDesignation'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   renderCompetencyList();
   showToast('Competency assessment reset');
 }
