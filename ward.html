@@ -154,6 +154,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .dictation-actions .ctrl-btn { width: 100%; min-height: 46px; padding: 10px 12px; font-size: 14px; font-weight: 800; }
 .ctrl-btn.save { background: #1e3a2f; border-color: #2d5a41; color: #4ade80; font-weight: 600; }
 .ctrl-btn.handover { background: #10233f; border-color: #23466f; color: #93c5fd; font-weight: 600; }
+.ctrl-btn.careplan { background: #fff0f2; border-color: #f3b3bb; color: #a6192e; font-weight: 800; }
 .ctrl-btn:disabled { opacity: 0.35; cursor: default; }
 
 /* Two transcript boxes */
@@ -180,6 +181,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-time { font-size: 10px; color: #e63946; margin-bottom: 4px; }
 .nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #c1121f; background: #fff0f2; border: 1px solid #f3b3bb; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
+.nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
@@ -188,6 +190,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .note-edit-btn.cancel-edit { color: #61738a; }
 .note-edit-box { width: 100%; min-height: 110px; border: 1px solid #c9d8ea; border-radius: 10px; padding: 10px 11px; color: #162033; background: #fff; font: inherit; font-size: 13px; line-height: 1.45; resize: vertical; margin-top: 8px; }
 .notes-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0 10px; }
+.notes-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 .copy-bed-btn { background: #fff; border: 1.5px solid #c8d4e4; border-radius: 10px; padding: 9px 12px; color: #c1121f; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
 .copy-bed-bottom { width: 100%; margin: 12px 0 4px; padding: 12px; }
 .handover-toolbar-btn { border-radius: 10px; padding: 9px 12px; font-size: 11px; cursor: pointer; font-family: inherit; font-weight: 800; }
@@ -632,7 +635,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div class="ward-entry-actions">
     <div class="ward-entry-card primary" onclick="openQrScanner()">
       <div class="ward-entry-title">Scan QR</div>
-      <div class="ward-entry-sub">Scan the patient wristband to open recording mode.</div>
+      <div class="ward-entry-sub">Demo mode: opens the assigned patient directly.</div>
     </div>
     <div class="ward-entry-card" onclick="showAssignedRooms()">
       <div class="ward-entry-title">Rooms</div>
@@ -722,7 +725,10 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 
   <div class="notes-toolbar">
     <div class="section-lbl" style="margin:0;">Saved notes this shift</div>
-    <button class="ctrl-btn handover handover-toolbar-btn" id="btnHandover" onclick="startHandoverDictation()">Dictate Handover</button>
+    <div class="notes-actions">
+      <button class="ctrl-btn careplan handover-toolbar-btn" id="btnCarePlan" onclick="startCarePlanDictation()">Care Plan</button>
+      <button class="ctrl-btn handover handover-toolbar-btn" id="btnHandover" onclick="startHandoverDictation()">Dictate Handover</button>
+    </div>
   </div>
   <div class="notes-list" id="notesList">
     <div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>
@@ -944,6 +950,19 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 // ══════════════════════════════════════════
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const SHIFT_ID = 'ward-3-night-demo';
+const APPROVED_CARE_PLAN_LIBRARY = [
+  'Risk for impaired skin integrity',
+  'Risk for falls',
+  'Impaired physical mobility',
+  'Self-care deficit',
+  'Deficient knowledge',
+  'Anxiety',
+  'Ineffective protection',
+  'Hyperthermia',
+  'Ineffective breathing pattern',
+  'Insomnia',
+  'Acute pain'
+];
 
 // ══════════════════════════════════════════
 // STATE
@@ -1340,7 +1359,28 @@ function openBedFromQr(rawValue) {
   openBed(bedId, 'record');
 }
 
+function openDemoQrPatient() {
+  if (!activeNurse) {
+    showToast('Enter nurse PIN before opening demo QR', true);
+    return;
+  }
+  const assigned = assignedRooms();
+  if (!assigned.length) {
+    showToast('No rooms assigned to your station', true);
+    return;
+  }
+  const patientRoom = assigned.find(room => {
+    const patient = patients.find(item => item.assignedRoomId === room.id || item.assignedRoomName === room.name || item.assignedRoomName === room.roomNumber);
+    return patient || room.patientName || room.patientUhid;
+  }) || assigned[0];
+  openBed(patientRoom.id, 'record');
+  showToast('Demo QR bypassed. Recording mode opened for ' + (patientRoom.name || 'Room ' + patientRoom.id) + '.');
+}
+
 async function openQrScanner() {
+  openDemoQrPatient();
+  return;
+
   if (!activeNurse) {
     showToast('Enter nurse PIN before scanning a patient QR code', true);
     return;
@@ -1414,6 +1454,7 @@ function applyBedModeUI() {
   document.querySelector('#screen-mic .mic-area')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('draftPanel')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('btnHandover')?.classList.toggle('hidden', !isRecordMode);
+  document.getElementById('btnCarePlan')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('reviewModeBanner')?.classList.toggle('show', !isRecordMode);
 }
 
@@ -1442,6 +1483,7 @@ function resetMicState() {
   setPreviewText('');
   document.getElementById('btnPause').disabled = true;
   document.getElementById('btnHandover').disabled = false;
+  document.getElementById('btnCarePlan').disabled = false;
   document.getElementById('btnSave').disabled = true;
 }
 
@@ -1457,10 +1499,10 @@ function setMicUI(state) {
   btn.disabled = state === 'processing';
   draft.classList.toggle('show', state === 'processing' || state === 'done');
   if (state === 'idle') { status.textContent = ''; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Pause'; }
-  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? 'Recording handover…' : 'Listening…'; status.className = 'mic-status recording'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = 'Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover…' : 'Listening…'); }
+  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? 'Recording handover...' : currentNoteType === 'careplan' ? 'Recording care plan assessment...' : 'Listening...'; status.className = 'mic-status recording'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = 'Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover...' : currentNoteType === 'careplan' ? 'Listening for care-plan triggers...' : 'Listening...'); }
   if (state === 'paused') { status.textContent = 'Paused'; status.className = 'mic-status'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Resume'; }
-  if (state === 'processing') { status.textContent = 'Structuring note…'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING…'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
-  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
+  if (state === 'processing') { status.textContent = currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring note...'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING...'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
+  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : currentNoteType === 'careplan' ? 'Care plan ready to review' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
 }
 
 function toggleMic() {
@@ -1488,6 +1530,7 @@ async function startRecording() {
   setPreviewText('');
   document.getElementById('btnSave').disabled = true;
   document.getElementById('btnHandover').disabled = true;
+  document.getElementById('btnCarePlan').disabled = true;
 
   if (!navigator.mediaDevices || !window.MediaRecorder) {
     runSimulation();
@@ -1516,6 +1559,7 @@ async function startRecording() {
     document.getElementById('btnPause').disabled = false;
   } catch(e) {
     document.getElementById('btnHandover').disabled = false;
+    document.getElementById('btnCarePlan').disabled = false;
     showToast('Mic blocked — check browser permissions', true);
     runSimulation();
   }
@@ -1528,6 +1572,16 @@ function startHandoverDictation() {
   }
   if (isRecording || isPaused) return;
   currentNoteType = 'handover';
+  startRecording();
+}
+
+function startCarePlanDictation() {
+  if (currentBedMode !== 'record') {
+    showToast('Scan the patient QR to create a care plan', true);
+    return;
+  }
+  if (isRecording || isPaused) return;
+  currentNoteType = 'careplan';
   startRecording();
 }
 
@@ -1550,6 +1604,7 @@ function stopRecording() {
   document.getElementById('btnPause').disabled = true;
   document.getElementById('btnPause').textContent = 'Pause';
   document.getElementById('btnHandover').disabled = true;
+  document.getElementById('btnCarePlan').disabled = true;
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micBtn').classList.remove('paused');
   if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
@@ -1598,9 +1653,47 @@ function blobToBase64(blob) {
   });
 }
 
+function noteTypeLabel(type) {
+  if (type === 'handover') return 'Handover';
+  if (type === 'careplan') return 'Care Plan';
+  return 'Nursing Note';
+}
+
+function noteTypeClass(type) {
+  if (type === 'handover') return 'handover';
+  if (type === 'careplan') return 'careplan';
+  return '';
+}
+
+function noteTypeCopyLabel(type) {
+  if (type === 'handover') return 'HANDOVER';
+  if (type === 'careplan') return 'CARE PLAN';
+  return 'NURSING NOTE';
+}
+
+function getDictationSystemInstruction() {
+  if (currentNoteType === 'handover') {
+    return 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.';
+  }
+  if (currentNoteType === 'careplan') {
+    return 'You are a hospital nursing care-plan drafting assistant for Kerala, India. A nurse dictates bedside clinical assessment details in Malayalam, sometimes mixed with English medical terms. Convert the assessment into English and draft a structured care plan only from the approved care-plan template headings supplied by the hospital. Strict safety rule: if the nurse did not dictate a clinical detail, do not add it. Do not assume symptoms, risks, treatments, medications, frequencies, escalation criteria, referrals, or diagnoses. Do not create medical orders. Include only details explicitly dictated by the nurse or selected from the approved template areas. If information is missing or uncertain, leave it blank or write "Nurse to verify". Return JSON only.';
+  }
+  return 'You are a clinical nursing documentation assistant for a hospital in Kerala, India. A nurse speaks in Malayalam, sometimes mixed with English medical terms. Convert the dictated audio into clear professional English nursing documentation. Keep it factual. Do not add diagnoses or details not spoken. Do not create separate event timestamps. Return JSON only.';
+}
+
+function getDictationUserPrompt() {
+  if (currentNoteType === 'handover') {
+    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"professional handover note dictated by the nurse"}. Do not generate an automatic summary and do not include timestamps inside the note.';
+  }
+  if (currentNoteType === 'careplan') {
+    return `Translate this Malayalam bedside assessment into English and generate a nurse-reviewable care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. Do not add any clinical problem, symptom, intervention, medication, monitoring frequency, referral, education point, or escalation criterion unless it was explicitly dictated by the nurse or clearly selected from the approved template areas. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. If information is missing, leave that section blank or write "Nurse to verify". Return JSON with this exact shape: {"nursingNote":"CARE PLAN DRAFT\\nAssessment cues: ...\\nSuggested approved templates: ...\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nObjective/expected outcome: ...\\nNursing interventions: ...\\nReferral: ...\\nPatient/family education: ...\\nEvaluation: Nurse to review and document goal met, partially met, or not met with reason."}. Keep it concise and editable.`;
+  }
+  return 'Translate this Malayalam nursing dictation into English. Return JSON with this exact shape: {"nursingNote":"2-4 short professional nursing documentation sentences"}. Do not include activity timestamps in the note.';
+}
+
 async function sendAudioToGemini(audioBlob) {
   setMicUI('processing');
-  setPreviewLoading('Structuring clinical note...');
+  setPreviewLoading(currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring clinical note...');
 
   const apiKey = getGeminiKey();
   if (!apiKey) {
@@ -1609,6 +1702,7 @@ async function sendAudioToGemini(audioBlob) {
     setPreviewText('Please add Gemini API key using the settings button, then record again.');
     setMicUI('idle');
     document.getElementById('btnHandover').disabled = false;
+    document.getElementById('btnCarePlan').disabled = false;
     showToast('Gemini API key missing', true);
     return;
   }
@@ -1619,12 +1713,12 @@ async function sendAudioToGemini(audioBlob) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: currentNoteType === 'handover' ? 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.' : 'You are a clinical nursing documentation assistant for a hospital in Kerala, India. A nurse speaks in Malayalam, sometimes mixed with English medical terms. Convert the dictated audio into clear professional English nursing documentation. Keep it factual. Do not add diagnoses or details not spoken. Do not create separate event timestamps. Return JSON only.' }] },
+        systemInstruction: { parts: [{ text: getDictationSystemInstruction() }] },
         contents: [{
           role: 'user',
           parts: [
             { inlineData: { mimeType: audioBlob.type || 'audio/webm', data: audioData } },
-            { text: currentNoteType === 'handover' ? 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"professional handover note dictated by the nurse"}. Do not generate an automatic summary and do not include timestamps inside the note.' : 'Translate this Malayalam nursing dictation into English. Return JSON with this exact shape: {"nursingNote":"2-4 short professional nursing documentation sentences"}. Do not include activity timestamps in the note.' }
+            { text: getDictationUserPrompt() }
           ]
         }],
         generationConfig: {
@@ -1645,6 +1739,7 @@ async function sendAudioToGemini(audioBlob) {
       setPreviewText(englishNote, { editable: true });
       document.getElementById('btnSave').disabled = false;
       document.getElementById('btnHandover').disabled = false;
+      document.getElementById('btnCarePlan').disabled = false;
       setMicUI('done');
       if (autoSaveAfterTranscription) saveNote();
     } else {
@@ -1656,6 +1751,7 @@ async function sendAudioToGemini(audioBlob) {
     setPreviewText('Gemini transcription failed. Check the API key and internet connection, then try again.');
     document.getElementById('btnSave').disabled = true;
     document.getElementById('btnHandover').disabled = false;
+    document.getElementById('btnCarePlan').disabled = false;
     setMicUI('idle');
     showToast('Gemini transcription failed', true);
   }
@@ -1679,6 +1775,7 @@ function runSimulation() {
   document.getElementById('btnPause').disabled = false;
 
   const phrase = SIM_PHRASES[simIdx % SIM_PHRASES.length];
+  const noteTypeAtStart = currentNoteType;
   simIdx++;
   let i = 0;
   rawTranscript = '';
@@ -1696,18 +1793,43 @@ function runSimulation() {
       // Use pre-built English for simulation
       currentDictationTime = getCurrentTime();
       rawTranscript = '[Simulated Malayalam dictation]';
-      englishNote = phrase.en;
+      englishNote = noteTypeAtStart === 'careplan' ? buildDemoCarePlan(phrase.en) : phrase.en;
       setTimeout(() => {
         setMicUI('processing');
-        setPreviewLoading('Structuring clinical note...');
+        setPreviewLoading(noteTypeAtStart === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring clinical note...');
         setTimeout(() => {
           setPreviewText(englishNote, { editable: true });
           document.getElementById('btnSave').disabled = false;
+          document.getElementById('btnHandover').disabled = false;
+          document.getElementById('btnCarePlan').disabled = false;
           setMicUI('done');
         }, 1400);
       }, 400);
     }
   }, 35);
+}
+
+function buildDemoCarePlan(assessmentText) {
+  const lower = assessmentText.toLowerCase();
+  const matched = [];
+  if (lower.includes('febrile') || lower.includes('temperature')) matched.push('Hyperthermia');
+  if (lower.includes('wound') || lower.includes('dressing')) matched.push('Risk for impaired skin integrity');
+  if (lower.includes('chest pain') || lower.includes('pain')) matched.push('Acute pain');
+  if (lower.includes('dry') || lower.includes('infection')) matched.push('Ineffective protection');
+  if (!matched.length) matched.push('Deficient knowledge');
+  return [
+    'CARE PLAN DRAFT',
+    'Assessment cues: ' + assessmentText,
+    'Suggested approved templates: ' + matched.join(', '),
+    'Nursing diagnosis/problem: Nurse to verify the applicable diagnosis from the suggested template.',
+    'Related to: Based on dictated clinical condition; nurse to verify.',
+    'As evidenced by: Dictated bedside assessment cues.',
+    'Objective/expected outcome: Patient remains stable and identified nursing risks are reduced.',
+    'Nursing interventions: Apply the selected hospital-approved care-plan interventions; document observations and escalate deterioration.',
+    'Referral: Inform doctor or relevant specialty team as clinically required.',
+    'Patient/family education: Explain safety precautions and reporting symptoms as applicable.',
+    'Evaluation: Nurse to review and document goal met, partially met, or not met with reason.'
+  ].join('\\n');
 }
 
 // ══════════════════════════════════════════
@@ -1741,7 +1863,7 @@ async function saveNote() {
   addLiveActivity(currentBed, text, time);
   refreshDashboard();
   resetMicState();
-  showToast((type === 'handover' ? 'Handover' : 'Note') + ' saved for Bed ' + currentBed + ' ✓');
+  showToast(noteTypeLabel(type) + ' saved for Bed ' + currentBed + ' ✓');
 }
 
 function renderNotesList() {
@@ -1758,7 +1880,7 @@ function renderNotesList() {
     return `
     <div class="note-card">
       <div class="nc-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
       ${isEditing ? `
         <textarea class="note-edit-box" id="editNoteText_${index}">${escapeHtml(n.text)}</textarea>
         <div class="note-edit-actions">
@@ -1823,7 +1945,7 @@ function copyCurrentBedNotes() {
     return;
   }
   const text = `BED ${currentBed} — NURSING RECORD\n\n` + bedNotes
-    .map(n => `${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`)
+    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`)
     .join('\n\n');
   navigator.clipboard.writeText(text)
     .then(() => showToast('All Bed ' + currentBed + ' notes copied ✓'))
@@ -1845,7 +1967,7 @@ function showSummary() {
     <div class="st-item">
       <div class="sti-bed">Bed ${escapeHtml(n.bed)}</div>
       <div class="sti-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
       <div class="sti-text">✦ ${escapeHtml(n.text)}</div>
     </div>
   `).join('') : '<div style="font-size:13px;color:#555;padding:20px;text-align:center;">No notes recorded this shift.</div>';
@@ -1861,7 +1983,7 @@ function copyToEMR() {
   all.sort((a,b) => a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes to copy'); return; }
   const text = 'SHIFT NOTES\n' + currentNurseName() + ' · Ward 3 · Night Shift\n\n' +
-    all.map(n => `${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+    all.map(n => `${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard ✓')).catch(() => showToast('Ready to paste'));
 }
 
@@ -1906,7 +2028,7 @@ function selectDashBed(bedId) {
     <div class="d-tl-item ${i===bedNotes.length-1?'new-item':''}">
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
-        <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+        <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
         <div class="d-tl-note">✦ ${escapeHtml(n.text)}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
@@ -2325,7 +2447,7 @@ function copyBedToEMR() {
   if (!activeDashBed) { showToast('Select a bed first'); return; }
   const bedNotes = notes[activeDashBed] || [];
   if (!bedNotes.length) { showToast('No notes for this bed'); return; }
-  const text = `BED ${activeDashBed} — ${currentNurseName()} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = `BED ${activeDashBed} — ${currentNurseName()} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Bed ' + activeDashBed + ' copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -2334,7 +2456,7 @@ function copyAllToEMR() {
   Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n=>all.push({bed,...n})));
   all.sort((a,b)=>a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes yet this shift'); return; }
-  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · ' + currentNurseName() + '\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · ' + currentNurseName() + '\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Full summary copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
