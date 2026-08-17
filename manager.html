@@ -516,6 +516,57 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .desktop-only { display: none !important; }
   .mobile-only { display: initial; }
 }
+
+/* Nursing governance prototype */
+.gov-btn { background:#fff; border:1px solid rgba(255,255,255,0.38); border-radius:7px; padding:6px 12px; color:#003b71; font-size:11px; font-weight:850; cursor:pointer; font-family:inherit; }
+.gov-modal { position:fixed; inset:0; z-index:2100; background:rgba(8,18,32,.62); display:none; align-items:stretch; justify-content:center; padding:22px; }
+.gov-modal.show { display:flex; }
+.gov-shell { width:min(1320px,100%); background:#f5f8fc; border-radius:22px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 28px 90px rgba(0,0,0,.35); }
+.gov-top { background:#003b71; color:#fff; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.gov-title { font-size:24px; font-weight:900; letter-spacing:-.4px; }
+.gov-sub { color:#a9c6e5; font-size:12px; margin-top:3px; }
+.gov-close { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.28); border-radius:10px; padding:9px 13px; cursor:pointer; font-weight:850; }
+.gov-body { overflow:auto; padding:18px; }
+.gov-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.gov-tab { border:1px solid #c9d8ea; border-radius:999px; background:#fff; color:#52657d; padding:9px 13px; font-size:12px; font-weight:850; cursor:pointer; }
+.gov-tab.active { background:#003b71; border-color:#003b71; color:#fff; }
+.gov-panel { display:none; }
+.gov-panel.active { display:block; }
+.gov-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:14px; }
+.gov-card { background:#fff; border:1px solid #d7e1ef; border-radius:16px; padding:16px; box-shadow:0 10px 26px rgba(16,42,72,.06); }
+.gov-card h3 { margin:0 0 8px; color:#003b71; font-size:18px; }
+.gov-muted { color:#61738a; font-size:12px; line-height:1.45; }
+.gov-mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }
+.gov-field label { display:block; color:#61738a; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.gov-field input, .gov-field select, .gov-field textarea { width:100%; border:1px solid #c9d8ea; border-radius:10px; padding:9px 10px; font:inherit; font-size:12px; color:#162033; background:#fff; }
+.rhpass-mode { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.rhpass-mode button { border:1px solid #c9d8ea; border-radius:12px; background:#fff; color:#003b71; padding:11px; font-weight:900; cursor:pointer; }
+.rhpass-mode button.active { background:#003b71; color:#fff; border-color:#003b71; }
+.rhpass-score { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:10px 0 14px; }
+.score-tile { border:1px solid #d7e1ef; border-radius:14px; padding:12px; background:linear-gradient(145deg,#fff,#f8fbff); }
+.score-value { font-size:28px; color:#003b71; font-weight:950; letter-spacing:-1px; }
+.score-label { color:#718198; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.5px; }
+.rhpass-list { display:grid; gap:8px; max-height:480px; overflow:auto; padding-right:4px; }
+.rhpass-item { border:1px solid #d7e1ef; border-radius:12px; padding:11px; background:#fff; }
+.rhpass-item-title { font-size:13px; color:#162033; font-weight:850; margin-bottom:7px; }
+.rhpass-options { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.rhpass-options button { border:1px solid #d7e1ef; border-radius:9px; padding:7px; background:#f8fbff; color:#52657d; font-size:11px; font-weight:850; cursor:pointer; }
+.rhpass-options button.active { background:#e8f2fb; border-color:#69a9dc; color:#003b71; }
+.yn-row { display:flex; gap:7px; align-items:center; }
+.yn-row button { flex:0 0 58px; }
+.hierarchy { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.role-card { border:1px solid #d7e1ef; border-radius:14px; background:#fff; padding:12px; }
+.role-title { color:#003b71; font-weight:900; font-size:13px; }
+.role-meta { color:#61738a; font-size:11px; margin-top:4px; line-height:1.35; }
+.level-table { width:100%; border-collapse:collapse; font-size:12px; }
+.level-table th { background:#e8f2fb; color:#003b71; text-align:left; padding:9px; }
+.level-table td { border-bottom:1px solid #e4ebf3; padding:9px; vertical-align:top; }
+.competency-pill { display:inline-flex; border:1px solid #d7e1ef; border-radius:999px; padding:6px 9px; margin:4px; background:#fff; color:#52657d; font-size:11px; font-weight:800; }
+.coming-card { opacity:.62; background:#f8fbff; border-style:dashed; }
+.gov-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.gov-action { border:0; border-radius:10px; background:#003b71; color:#fff; padding:10px 12px; font:inherit; font-size:12px; font-weight:850; cursor:pointer; }
+.gov-action.secondary { background:#e8eef4; color:#162033; }
+@media(max-width:980px){.gov-grid,.hierarchy{grid-template-columns:1fr}.gov-mini-grid,.rhpass-score{grid-template-columns:1fr 1fr}.rhpass-options{grid-template-columns:1fr}.gov-modal{padding:8px}.gov-shell{border-radius:14px}}
 </style>
 </head>
 <body>
@@ -619,6 +670,124 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <button class="admin-mini-btn danger" onclick="clearPatientDetails()">Clear</button>
       <button class="admin-mini-btn secondary" onclick="closePatientEditor()">Cancel</button>
       <button class="admin-mini-btn" onclick="savePatientDetails()">Save Patient</button>
+    </div>
+  </div>
+</div>
+
+<div class="gov-modal" id="governanceModal" onclick="governanceBackdrop(event)">
+  <div class="gov-shell" role="dialog" aria-modal="true" aria-label="Nursing governance">
+    <div class="gov-top">
+      <div>
+        <div class="gov-title">Nursing Governance & Patient Acuity</div>
+        <div class="gov-sub">Prototype extension for hierarchy login, RHPASS ICU/Ward scoring, and Level 1 competency assessment.</div>
+      </div>
+      <button class="gov-close" onclick="closeGovernancePanel()">Close</button>
+    </div>
+    <div class="gov-body">
+      <div class="gov-tabs">
+        <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">RHPASS Patient Acuity</button>
+        <button class="gov-tab" data-gov-tab="hierarchy" onclick="showGovTab('hierarchy')">Nursing Hierarchy Login</button>
+        <button class="gov-tab" data-gov-tab="competency" onclick="showGovTab('competency')">Competency Assessment</button>
+      </div>
+
+      <section class="gov-panel active" id="gov-rhpass">
+        <div class="gov-grid">
+          <div class="gov-card">
+            <h3>Patient RHPASS Assessment</h3>
+            <div class="gov-muted">Select ICU or Ward depending on patient location. This prototype can later be linked to each patient record from the dashboard.</div>
+            <div class="gov-mini-grid">
+              <div class="gov-field"><label>Patient name</label><input id="govPatientName" placeholder="Patient name"></div>
+              <div class="gov-field"><label>UHID</label><input id="govPatientUhid" placeholder="UHID"></div>
+              <div class="gov-field"><label>Area</label><select id="govPatientArea" onchange="setRhpassMode(this.value)"><option value="ward">Ward</option><option value="icu">ICU</option></select></div>
+              <div class="gov-field"><label>Ward / Bed</label><input id="govPatientBed" placeholder="Ward / Bed"></div>
+            </div>
+            <div class="rhpass-mode">
+              <button id="rhpassWardBtn" class="active" onclick="setRhpassMode('ward')">RHPASS Ward</button>
+              <button id="rhpassIcuBtn" onclick="setRhpassMode('icu')">RHPASS ICU</button>
+            </div>
+            <div class="rhpass-score">
+              <div class="score-tile"><div class="score-value" id="rhpassTotal">0</div><div class="score-label">Total score</div></div>
+              <div class="score-tile"><div class="score-value" id="rhpassAcuity">—</div><div class="score-label">Acuity</div></div>
+              <div class="score-tile"><div class="score-value" id="rhpassRatio">—</div><div class="score-label">Recommended N:P</div></div>
+            </div>
+            <div class="rhpass-list" id="rhpassList"></div>
+          </div>
+          <div class="gov-card">
+            <h3>RHPASS Rules Added</h3>
+            <p class="gov-muted">ICU scoring uses Modified TISS style weighted interventions. Ward scoring uses 15 parameters with 4 levels each.</p>
+            <table class="level-table" style="margin-top:12px;">
+              <thead><tr><th>Area</th><th>Rule</th><th>Staffing interpretation</th></tr></thead>
+              <tbody>
+                <tr><td><strong>ICU</strong></td><td>Immunocompromised / infectious / condition requiring 1:1 care</td><td>Stop and assign 1:1 care</td></tr>
+                <tr><td><strong>ICU</strong></td><td>Score ≥ 22</td><td>High acuity</td></tr>
+                <tr><td><strong>ICU</strong></td><td>Score &lt; 22</td><td>Low acuity</td></tr>
+                <tr><td><strong>Ward</strong></td><td>15</td><td>Acuity 1 · 1:6</td></tr>
+                <tr><td><strong>Ward</strong></td><td>16–29</td><td>Acuity 2 · 1:5</td></tr>
+                <tr><td><strong>Ward</strong></td><td>30–44</td><td>Acuity 3 · 1:3</td></tr>
+                <tr><td><strong>Ward</strong></td><td>45–60</td><td>Acuity 4 · 1:2</td></tr>
+              </tbody>
+            </table>
+            <div class="gov-actions">
+              <button class="gov-action" onclick="copyRhpassSummary()">Copy RHPASS Summary</button>
+              <button class="gov-action secondary" onclick="resetRhpass()">Reset Score</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="gov-panel" id="gov-hierarchy">
+        <div class="gov-card">
+          <h3>Nursing Hierarchy Login Prototype</h3>
+          <p class="gov-muted">Each nursing role can have its own login scope. This is a local UI prototype only; production should use secure authentication and role-based access.</p>
+          <div class="hierarchy" id="hierarchyRoles"></div>
+        </div>
+      </section>
+
+      <section class="gov-panel" id="gov-competency">
+        <div class="gov-grid">
+          <div class="gov-card">
+            <h3>Competency Levels</h3>
+            <table class="level-table">
+              <thead><tr><th>Level</th><th>Score</th><th>Rating</th><th>Privilege</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Level 5 · Expert</strong></td><td>96–100%</td><td>Independent (5)</td><td>G · Granted; may perform independently</td></tr>
+                <tr><td><strong>Level 4 · Proficient</strong></td><td>86–95%</td><td>Supervised (4)</td><td>GS · Granted under supervision</td></tr>
+                <tr><td><strong>Level 3 · Competent</strong></td><td>61–85%</td><td>Assisted (3)</td><td>GA · Granted under assistance</td></tr>
+                <tr><td><strong>Level 2 · Advanced Beginner</strong></td><td>41–60%</td><td>Supported (2)</td><td>GSU · Granted with support</td></tr>
+                <tr><td><strong>Level 1 · Novice</strong></td><td>Below 40%</td><td>Dependent (1)</td><td>NG · Not granted</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="gov-card">
+            <h3>Competency Categories</h3>
+            <span class="competency-pill">General competencies</span>
+            <span class="competency-pill">Routine competencies</span>
+            <span class="competency-pill">Routine-complex competencies</span>
+            <span class="competency-pill">Non-routine complex competencies</span>
+            <p class="gov-muted" style="margin-top:12px;">These categories determine the resulting Level 1–5 classification and privilege status.</p>
+          </div>
+        </div>
+        <div class="gov-card" style="margin-top:14px;">
+          <h3>Level 1 Nurse Competency Record</h3>
+          <p class="gov-muted">Current prototype includes Level 1 parameters from the supplied competency record. Levels 2 to 5 are reserved for future expansion.</p>
+          <div class="rhpass-score">
+            <div class="score-tile"><div class="score-value" id="competencyPct">0%</div><div class="score-label">Completion</div></div>
+            <div class="score-tile"><div class="score-value" id="competencyDone">0</div><div class="score-label">Completed items</div></div>
+            <div class="score-tile"><div class="score-value" id="competencyStatus">Level 1</div><div class="score-label">Current record</div></div>
+          </div>
+          <div class="gov-actions">
+            <button class="gov-action" onclick="markSampleCompetency()">Mark Sample Completed</button>
+            <button class="gov-action secondary" onclick="resetCompetency()">Reset Competency</button>
+          </div>
+          <div class="rhpass-list" id="levelOneCompetencyList" style="margin-top:12px;"></div>
+        </div>
+        <div class="hierarchy" style="margin-top:14px;">
+          <div class="role-card coming-card"><div class="role-title">Level 2</div><div class="role-meta">Advanced beginner competency module coming soon.</div></div>
+          <div class="role-card coming-card"><div class="role-title">Level 3</div><div class="role-meta">Competent nurse competency module coming soon.</div></div>
+          <div class="role-card coming-card"><div class="role-title">Level 4</div><div class="role-meta">Proficient nurse competency module coming soon.</div></div>
+          <div class="role-card coming-card"><div class="role-title">Level 5</div><div class="role-meta">Expert nurse / mentor competency module coming soon.</div></div>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -794,6 +963,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
       <div class="d-shift-badge"><div class="d-live"></div> LIVE</div>
       <div class="d-user"><div class="d-avatar">WM</div> Admin</div>
+      <button class="gov-btn" onclick="openGovernancePanel()">Nursing Governance</button>
       <button class="d-admin-btn" onclick="openAdminDrawer()">Admin</button>
       <button class="d-logout" onclick="doLogout()">🔒 Logout</button>
     </div>
@@ -2538,6 +2708,289 @@ function copyAllToEMR() {
   if (!all.length) { showToast('No notes yet this shift'); return; }
   const text = 'FULL WARD NOTES\nWard 3 · Night Shift\n\n' + all.map(n=>`${n.time} | ${getRoomLabel(n.bed)} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Full summary copied ✓')).catch(()=>showToast('Ready to paste'));
+}
+
+// ══════════════════════════════════════════
+// NURSING GOVERNANCE PROTOTYPE
+// ══════════════════════════════════════════
+const govRoles = [
+  ['Executive Director & CEO', 'Institution-level view', 'Read-only nursing governance overview and executive reports.'],
+  ['Director - Nursing', 'Nursing department head', 'Full dashboard access, competency oversight, acuity analytics, and policy governance.'],
+  ['Nursing Superintendent - Operations', 'Operations', 'Ward staffing, deployment, bed allocation, and transfer coordination oversight.'],
+  ['Nursing Superintendent - NPPD / Research / EBP', 'Education and practice development', 'Competency assessment, training records, levels, certifications, and audits.'],
+  ['Assistant Nursing Superintendent', 'Operations / Quality / NPPD', 'Unit supervision, quality monitoring, and staff development workflows.'],
+  ['Unit Manager', 'Unit administration', 'Unit staffing, patient acuity review, and nurse assignment.'],
+  ['Head Nurse', 'Ward shift lead', 'Shift supervision, transfer requests, nurse notes, RHPASS scoring, and escalation.'],
+  ['Team Leader', 'Team coordination', 'Assigned team monitoring, patient readiness, and task completion.'],
+  ['Staff Nurse', 'Individual nurse', 'Assigned patient list, QR scanning, dictation, handover, and notifications.'],
+  ['Clinical Instructor', 'Competency assessor', 'Training, assessment, validation, and sign-off.'],
+  ['Shift Supervisor', 'Shift oversight', 'Cross-unit transfer monitoring and incident escalation.'],
+  ['Nurse Quality & Specialty', 'Quality and specialty review', 'Specialty competency, documentation quality, and focused audits.']
+];
+
+const wardRhpassItems = [
+  ['Consciousness', ['Conscious / oriented', 'Drowsy / confused', 'Disoriented / requires close observation', 'Unconscious / high dependency observation']],
+  ['Activity', ['Ambulatory independently', 'Ambulatory with assistance', 'Bedridden with assistance', 'Complete bed care']],
+  ['Hygiene', ['Self-care', 'Partial assistance', 'Full assistance once/twice', 'Full care multiple times']],
+  ['Feeding', ['Self-feeding', 'Assisted feeding', 'Tube feeding / supervised feeding', 'Complex feeding / aspiration risk']],
+  ['IV Infusions', ['No IV medication or infusion', 'IV medications (1-2) / IV infusion (1)', 'IV medications (3-4) and IV infusions (2-3)', 'More than 4 IV medications and infusions / replacement of large fluid losses']],
+  ['Drainage Tubes', ['No drain', 'Single drain / Ryles tube', 'Multiple drains', 'Complex drain care / frequent monitoring']],
+  ['Dressing', ['No dressing', 'Dressing daily once', 'Dressing twice a day', 'Dressing more than twice / multiple dressings']],
+  ['Vital Signs', ['Routine monitoring every 4 hours', '2-hourly monitoring', 'Hourly monitoring', 'Continuous / frequent monitoring less than 1 hour']],
+  ['Skin Integrity', ['Braden score 16-19', 'Braden score 14-15', 'Braden score 12-13', 'Braden score less than 12 / frequent position change']],
+  ['Elimination', ['Independent', 'Incontinence / stoma with minimum assistance', '>3 times emptying stoma bag with full assistance', '>5 times complex stoma needs / continuous loose stools / melena']],
+  ['Additional Procedures', ['No procedures', '1-3 procedures in the unit', '1-3 procedures outside the unit', 'Multiple procedures >3 inside and outside department / multiple specific interventions']],
+  ['Mental Status / Safety', ['Calm and cooperative', 'Needs reassurance / fall precaution', 'Agitated / close observation', 'High-risk behaviour / continuous supervision']],
+  ['Airway Support', ['Spontaneous breathing', 'O2 <=5 L/min', 'O2 >5 L/min', 'Continuous or intermittent BiPAP / CPAP']],
+  ['Admission Status / Education', ['Admission with standard education', 'Transfer in/out / specific transfer education', 'Discharge / education regarding discharge', 'New ward admission / isolation / immediate post-op']],
+  ['Pain Management', ['Pain scale <3 with pain management', 'Pain scale 3-4 / medication with non-pharmacological management', 'Pain scale 5-6 with pain medication', 'Pain scale >6 with multiple pain medications (IV / IM / PO)']]
+];
+
+const icuRhpassItems = [
+  ['Immunocompromised / infectious / condition requiring 1:1 care', 0, 'If yes: stop and assign 1:1'],
+  ['Standard monitoring (hourly vital signs and IV fluid balance)', 5],
+  ['Multiple vasoactive medication', 5],
+  ['Multiple specific interventions in the ICU', 5],
+  ['Mechanical ventilation', 5],
+  ['IV replacement of large fluid losses (>3 litres/day)', 4],
+  ['Central venous line', 4],
+  ['Multiple intravenous medication', 3],
+  ['Care of drains (except nasogastric tube)', 3],
+  ['Specific interventions outside ICU', 3],
+  ['Supplementary ventilator support (O2, CPAP, NIV, HFNC, BiPAP)', 3],
+  ['Care of artificial airways', 3],
+  ['Hemofiltration / dialytic techniques', 3],
+  ['Measurement of ICP / EVD', 3],
+  ['Treatment of complicated metabolic acidosis / alkalosis', 3],
+  ['Intravenous hyperalimentation (TPN)', 3],
+  ['Laboratory investigations', 2],
+  ['Dressing changes', 2],
+  ['Arterial line / epidural', 2],
+  ['Quantitative urine output measurement', 2],
+  ['Active diuresis', 2],
+  ['GRBS monitoring with insulin infusion', 2],
+  ['Enteral feeding through tube / GI route', 2],
+  ['Treatment to improve lung function', 1]
+];
+
+const levelOneCompetencies = [
+  'Vital signs',
+  'Falls risk assessment - RHFRAT',
+  'Pressure injury assessment - Braden Scale',
+  'DVT assessment - Modified Wells Scoring',
+  'Pressure ulcer scale for healing (PUSH) scoring',
+  'Pain assessment and reassessment',
+  'GCS monitoring',
+  'Hand washing techniques - medical and surgical',
+  'Hair wash',
+  'Oral care',
+  'Back care',
+  'Sponge bath',
+  'Female catheterization',
+  'Catheter care',
+  'Condom catheterization - males',
+  'Oxygen administration',
+  'Nebulization',
+  'Ryles tube feeding',
+  'Safe transferring of patients',
+  'Collection of urine, stool and sputum samples',
+  '12-lead ECG placement and acquisition',
+  'GRBS monitoring and hypoglycemia management',
+  'Medication administration',
+  'Drug and fluid calculation',
+  'Application of restraints',
+  'Wound dressing',
+  'PPE donning and doffing',
+  'Safe handling of biomedical equipment',
+  'Announcement of codes',
+  'Clinical alarm management',
+  'ICU capstone: admission, discharge, transfer and ICU flow sheet documentation',
+  'ICU capstone: medication indenting and administration process',
+  'ICU capstone: IV cannulation, invasive line sampling and central line care'
+];
+
+let rhpassMode = 'ward';
+let wardRhpassScores = Array(wardRhpassItems.length).fill(0);
+let icuRhpassScores = Array(icuRhpassItems.length).fill(false);
+let competencyDone = Array(levelOneCompetencies.length).fill(false);
+
+function openGovernancePanel() {
+  document.getElementById('governanceModal').classList.add('show');
+  renderGovernanceRoles();
+  renderRhpass();
+  renderCompetencyList();
+}
+
+function closeGovernancePanel() {
+  document.getElementById('governanceModal').classList.remove('show');
+}
+
+function governanceBackdrop(event) {
+  if (event.target.id === 'governanceModal') closeGovernancePanel();
+}
+
+function showGovTab(tab) {
+  document.querySelectorAll('.gov-tab').forEach(btn => btn.classList.toggle('active', btn.dataset.govTab === tab));
+  document.querySelectorAll('.gov-panel').forEach(panel => panel.classList.toggle('active', panel.id === 'gov-' + tab));
+  if (tab === 'rhpass') renderRhpass();
+  if (tab === 'hierarchy') renderGovernanceRoles();
+  if (tab === 'competency') renderCompetencyList();
+}
+
+function renderGovernanceRoles() {
+  const list = document.getElementById('hierarchyRoles');
+  if (!list) return;
+  list.innerHTML = govRoles.map(role => `
+    <div class="role-card">
+      <div class="role-title">${escapeHtml(role[0])}</div>
+      <div class="role-meta"><strong>${escapeHtml(role[1])}</strong><br>${escapeHtml(role[2])}</div>
+      <div class="gov-actions"><button class="gov-action secondary" onclick="showToast('Prototype login role: ${escapeJsArg(role[0])}')">Preview Login</button></div>
+    </div>
+  `).join('');
+}
+
+function setRhpassMode(mode) {
+  rhpassMode = mode === 'icu' ? 'icu' : 'ward';
+  const area = document.getElementById('govPatientArea');
+  if (area) area.value = rhpassMode;
+  renderRhpass();
+}
+
+function renderRhpass() {
+  const wardBtn = document.getElementById('rhpassWardBtn');
+  const icuBtn = document.getElementById('rhpassIcuBtn');
+  if (wardBtn) wardBtn.classList.toggle('active', rhpassMode === 'ward');
+  if (icuBtn) icuBtn.classList.toggle('active', rhpassMode === 'icu');
+  const list = document.getElementById('rhpassList');
+  if (!list) return;
+  list.innerHTML = rhpassMode === 'icu' ? renderIcuRhpassItems() : renderWardRhpassItems();
+  updateRhpassScore();
+}
+
+function renderWardRhpassItems() {
+  return wardRhpassItems.map((item, index) => `
+    <div class="rhpass-item">
+      <div class="rhpass-item-title">${String(index + 1).padStart(2, '0')} · ${escapeHtml(item[0])}</div>
+      <div class="rhpass-options">
+        ${item[1].map((option, optionIndex) => {
+          const value = optionIndex + 1;
+          return `<button class="${wardRhpassScores[index] === value ? 'active' : ''}" onclick="setWardRhpassScore(${index},${value})"><strong>${value}</strong><br>${escapeHtml(option)}</button>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderIcuRhpassItems() {
+  return icuRhpassItems.map((item, index) => `
+    <div class="rhpass-item">
+      <div class="rhpass-item-title">${String(index + 1).padStart(2, '0')} · ${escapeHtml(item[0])} <span style="color:#718198;">(${item[1]} pts)</span></div>
+      ${item[2] ? `<div class="gov-muted" style="margin-bottom:7px;color:#c0392b;">${escapeHtml(item[2])}</div>` : ''}
+      <div class="yn-row">
+        <button class="gov-action ${icuRhpassScores[index] ? '' : 'secondary'}" onclick="setIcuRhpassScore(${index},true)">Yes</button>
+        <button class="gov-action ${icuRhpassScores[index] ? 'secondary' : ''}" onclick="setIcuRhpassScore(${index},false)">No</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setWardRhpassScore(index, value) {
+  wardRhpassScores[index] = value;
+  renderRhpass();
+}
+
+function setIcuRhpassScore(index, value) {
+  icuRhpassScores[index] = value;
+  renderRhpass();
+}
+
+function updateRhpassScore() {
+  let total = 0;
+  let acuity = '—';
+  let ratio = '—';
+  if (rhpassMode === 'icu') {
+    total = icuRhpassScores.reduce((sum, selected, index) => sum + (selected ? icuRhpassItems[index][1] : 0), 0);
+    if (icuRhpassScores[0]) {
+      acuity = '1:1 care';
+      ratio = '1:1';
+    } else if (total >= 22) {
+      acuity = 'High acuity';
+      ratio = 'High acuity';
+    } else {
+      acuity = total ? 'Low acuity' : '—';
+      ratio = total ? 'Low acuity' : '—';
+    }
+  } else {
+    total = wardRhpassScores.reduce((sum, value) => sum + value, 0);
+    if (total) {
+      if (total <= 15) { acuity = 'Acuity 1'; ratio = '1:6'; }
+      else if (total <= 29) { acuity = 'Acuity 2'; ratio = '1:5'; }
+      else if (total <= 44) { acuity = 'Acuity 3'; ratio = '1:3'; }
+      else { acuity = 'Acuity 4'; ratio = '1:2'; }
+    }
+  }
+  document.getElementById('rhpassTotal').textContent = total;
+  document.getElementById('rhpassAcuity').textContent = acuity;
+  document.getElementById('rhpassRatio').textContent = ratio;
+}
+
+function resetRhpass() {
+  wardRhpassScores = Array(wardRhpassItems.length).fill(0);
+  icuRhpassScores = Array(icuRhpassItems.length).fill(false);
+  renderRhpass();
+  showToast('RHPASS score reset');
+}
+
+function copyRhpassSummary() {
+  const text = [
+    'RHPASS ' + rhpassMode.toUpperCase() + ' SUMMARY',
+    'Patient: ' + (document.getElementById('govPatientName').value || '—'),
+    'UHID: ' + (document.getElementById('govPatientUhid').value || '—'),
+    'Ward / Bed: ' + (document.getElementById('govPatientBed').value || '—'),
+    'Score: ' + document.getElementById('rhpassTotal').textContent,
+    'Acuity: ' + document.getElementById('rhpassAcuity').textContent,
+    'Recommended N:P: ' + document.getElementById('rhpassRatio').textContent
+  ].join('\n');
+  navigator.clipboard.writeText(text).then(() => showToast('RHPASS summary copied')).catch(() => showToast('Ready to copy'));
+}
+
+function renderCompetencyList() {
+  const list = document.getElementById('levelOneCompetencyList');
+  if (!list) return;
+  list.innerHTML = levelOneCompetencies.map((item, index) => `
+    <div class="rhpass-item">
+      <div class="yn-row" style="justify-content:space-between;">
+        <div class="rhpass-item-title" style="margin:0;">${String(index + 1).padStart(2, '0')} · ${escapeHtml(item)}</div>
+        <button class="gov-action ${competencyDone[index] ? '' : 'secondary'}" onclick="toggleCompetency(${index})">${competencyDone[index] ? 'Completed' : 'Pending'}</button>
+      </div>
+    </div>
+  `).join('');
+  updateCompetencyScore();
+}
+
+function toggleCompetency(index) {
+  competencyDone[index] = !competencyDone[index];
+  renderCompetencyList();
+}
+
+function updateCompetencyScore() {
+  const done = competencyDone.filter(Boolean).length;
+  const pct = Math.round((done / competencyDone.length) * 100);
+  document.getElementById('competencyPct').textContent = pct + '%';
+  document.getElementById('competencyDone').textContent = done + ' / ' + competencyDone.length;
+  document.getElementById('competencyStatus').textContent = pct >= 80 ? 'Ready' : 'Level 1';
+}
+
+function markSampleCompetency() {
+  competencyDone = competencyDone.map((_, index) => index < 8);
+  renderCompetencyList();
+  showToast('Sample Level 1 competency progress added');
+}
+
+function resetCompetency() {
+  competencyDone = Array(levelOneCompetencies.length).fill(false);
+  renderCompetencyList();
+  showToast('Competency assessment reset');
 }
 
 // ══════════════════════════════════════════
