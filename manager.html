@@ -303,7 +303,8 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-nurse-row.selected { border-color: #e0717d; background: #fff4f5; }
 .admin-nurse-select { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; cursor: pointer; padding: 5px; }
 .admin-row-title { color: #1a2233; font-size: 13px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.admin-row-sub { color: #8a9ab4; font-size: 10px; margin-top: 2px; }
+.admin-row-sub { color: #8a9ab4; font-size: 10px; margin-top: 2px; line-height: 1.35; }
+.admin-row-competency-line { color: #981b2d; font-size: 10px; font-weight: 850; margin-top: 3px; }
 .admin-competency-badge,
 .admin-acuity-badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
 .admin-competency-badge { color: #981b2d; background: #fff1f3; border: 1px solid #efb6bf; }
@@ -324,6 +325,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-bed-icon { font-size: 24px; line-height: 1; margin-bottom: 7px; }
 .admin-bed-number { font-size: 14px; font-weight: 850; }
 .admin-bed-owner { font-size: 9px; margin-top: 4px; line-height: 1.3; }
+.admin-bed-acuity-line { font-size: 10px; color: #981b2d; font-weight: 900; line-height: 1.25; margin-top: 6px; }
 .admin-bed-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .pin-editor { position: fixed; inset: 0; z-index: 1500; background: rgba(13,35,61,0.5); display: none; align-items: center; justify-content: center; padding: 18px; }
 .pin-editor.show { display: flex; }
@@ -1997,6 +1999,7 @@ function renderAdminNurseList() {
         <button class="admin-nurse-select" onclick="selectAdminNurse('${escapeJsArg(nurse.id)}')">
           <div class="admin-row-title">${escapeHtml(nurse.name)} <span class="admin-competency-badge ${competency.cls}">${escapeHtml(competency.label)}</span></div>
           <div class="admin-row-sub">${assignedCount} bed${assignedCount !== 1 ? 's' : ''} · PIN ${nurse.pin ? 'set' : 'not set'}</div>
+          <div class="admin-row-competency-line">Competency: ${escapeHtml(competency.label)}</div>
         </button>
         <button class="nurse-settings-btn" onclick="openPinEditor('${escapeJsArg(nurse.id)}')" title="PIN settings">⚙</button>
       </div>
@@ -2034,6 +2037,7 @@ function renderAdminRoomList() {
           <div class="admin-bed-icon">🛏</div>
           <div class="admin-bed-number">${escapeHtml(room.name)}</div>
           <div class="admin-bed-owner">${escapeHtml(owner)}</div>
+          <div class="admin-bed-acuity-line">Acuity: ${escapeHtml(acuity.label)}</div>
           <div class="admin-acuity-badge ${acuity.cls}">${escapeHtml(acuity.label)}</div>
         </button>
       `;
