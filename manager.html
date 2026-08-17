@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Nurse Woyz Admin Dashboard</title>
-<meta name="theme-color" content="#003b71">
+<meta name="theme-color" content="#b11226">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Nurse Woyz">
@@ -23,14 +23,14 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 /* MANAGER LOGIN */
 #screen-manager-login { align-items: center; justify-content: center; padding: 40px 28px; background: linear-gradient(180deg,#ffffff 0%,#f5f8fc 100%); color: #162033; }
 .manager-card { width: min(380px, 100%); background: #fff; border: 1px solid #d7e1ef; border-radius: 18px; padding: 22px; box-shadow: 0 14px 42px rgba(20,40,70,0.12); }
-.manager-title { color: #003b71; font-size: 24px; font-weight: 850; text-align: center; }
+.manager-title { color: #b11226; font-size: 24px; font-weight: 850; text-align: center; }
 .manager-sub { color: #6b7c93; font-size: 12px; text-align: center; margin: 5px 0 22px; }
 .manager-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .manager-field label { color: #61738a; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; }
 .manager-field input { border: 1px solid #c9d8ea; border-radius: 11px; padding: 13px 14px; font: inherit; color: #162033; outline: none; }
-.manager-login-btn { width: 100%; background: #005ea8; border: none; border-radius: 12px; padding: 14px; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 6px; }
+.manager-login-btn { width: 100%; background: #c1121f; border: none; border-radius: 12px; padding: 14px; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 6px; }
 .manager-demo-note { color: #8a9ab4; font-size: 11px; text-align: center; margin-top: 12px; line-height: 1.45; }
-.sync-pill { display: inline-flex; align-items: center; gap: 6px; background: #eef6ff; border: 1px solid #b8d7f0; color: #005ea8; border-radius: 999px; padding: 5px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
+.sync-pill { display: inline-flex; align-items: center; gap: 6px; background: #fff4f5; border: 1px solid #f2a7b0; color: #c1121f; border-radius: 999px; padding: 5px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
 .sync-pill.offline { background: #fff7e8; border-color: #f3d59b; color: #8a4b00; }
 .sync-dot { width: 7px; height: 7px; background: #147a4a; border-radius: 50%; }
 .sync-pill.offline .sync-dot { background: #d97706; }
@@ -166,17 +166,17 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .notes-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
 .note-card { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 11px 14px; }
 .nc-time { font-size: 10px; color: #e63946; margin-bottom: 4px; }
-.nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #005ea8; background: #e8f2fb; border: 1px solid #bfd8ee; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
+.nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #c1121f; background: #fff0f2; border: 1px solid #f3b3bb; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
-.note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #005ea8; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
 .note-edit-btn.cancel-edit { color: #61738a; }
 .note-edit-box { width: 100%; min-height: 110px; border: 1px solid #c9d8ea; border-radius: 10px; padding: 10px 11px; color: #162033; background: #fff; font: inherit; font-size: 13px; line-height: 1.45; resize: vertical; margin-top: 8px; }
 .notes-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
-.copy-bed-btn { background: #fff; border: 1.5px solid #c8d4e4; border-radius: 10px; padding: 9px 12px; color: #005ea8; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.copy-bed-btn { background: #fff; border: 1.5px solid #c8d4e4; border-radius: 10px; padding: 9px 12px; color: #c1121f; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
 /* SUMMARY */
 #screen-summary { background: #0f1117; padding: 20px 18px; }
@@ -195,21 +195,21 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 
 /* DASHBOARD */
 #screen-dashboard { background: #f0f2f5; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.d-topnav { background: #003366; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.d-topnav { background: #8f0f1f; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .d-logo { display: flex; align-items: center; gap: 10px; }
 .d-logo-icon { width: 30px; height: 30px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .d-logo-text { font-size: 15px; font-weight: 700; color: #fff; }
-.d-logo-sub { font-size: 10px; color: #7fa8d4; }
-.d-nav-ctx { font-size: 12px; color: #7fa8d4; margin-left: 16px; }
+.d-logo-sub { font-size: 10px; color: #ffd1d7; }
+.d-nav-ctx { font-size: 12px; color: #ffd1d7; margin-left: 16px; }
 .d-nav-ctx strong { color: #fff; }
 .d-nav-right { display: flex; align-items: center; gap: 12px; }
 .d-shift-badge { background: #00563f; color: #6ee7b7; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 4px; border: 1px solid #00784f; display: flex; align-items: center; gap: 6px; }
 .d-live { width: 6px; height: 6px; border-radius: 50%; background: #6ee7b7; animation: blink 1.4s infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
-.d-user { color: #c8dcef; font-size: 12px; display: flex; align-items: center; gap: 8px; }
-.d-avatar { width: 28px; height: 28px; border-radius: 50%; background: #1a4d80; display: flex; align-items: center; justify-content: center; color: #7fa8d4; font-size: 11px; font-weight: 700; }
-.d-logout { background: transparent; border: 1px solid #1a4d80; border-radius: 5px; padding: 5px 12px; color: #7fa8d4; font-size: 11px; cursor: pointer; font-family: inherit; }
-.d-admin-btn { background: #fff; border: 1px solid #fff; border-radius: 6px; padding: 7px 13px; color: #003b71; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.d-user { color: #ffe4e8; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.d-avatar { width: 28px; height: 28px; border-radius: 50%; background: #a3162a; display: flex; align-items: center; justify-content: center; color: #ffd1d7; font-size: 11px; font-weight: 700; }
+.d-logout { background: transparent; border: 1px solid #a3162a; border-radius: 5px; padding: 5px 12px; color: #ffd1d7; font-size: 11px; cursor: pointer; font-family: inherit; }
+.d-admin-btn { background: #fff; border: 1px solid #fff; border-radius: 6px; padding: 7px 13px; color: #b11226; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .d-main { display: flex; flex: 1; overflow: hidden; min-height: calc(100vh - 100px); }
 .d-sidebar { width: 230px; background: #fff; border-right: 1px solid #dce3ec; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; padding: 12px 14px; }
 .d-sb-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
@@ -220,32 +220,32 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-bed-info { flex: 1; min-width: 0; }
 .d-bed-topline { display: flex; align-items: center; gap: 6px; }
 .dbr-num { font-size: 13px; font-weight: 600; color: #1a2233; }
-.d-bed-row.active .dbr-num { color: #003366; }
+.d-bed-row.active .dbr-num { color: #8f0f1f; }
 .dbr-patient { color: #25364d; font-size: 10px; font-weight: 700; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dbr-patient-meta { color: #61738a; font-size: 9px; margin-top: 2px; line-height: 1.35; }
 .dbr-sub { font-size: 10px; color: #8a9ab4; margin-top: 1px; }
 .dbr-badge { font-size: 10px; font-weight: 600; color: #5a6a82; background: #edf1f7; padding: 2px 8px; border-radius: 10px; }
-.d-bed-row.active .dbr-badge { background: #003366; color: #fff; }
+.d-bed-row.active .dbr-badge { background: #8f0f1f; color: #fff; }
 .bed-settings-btn { flex: 0 0 auto; width: 28px; height: 28px; border: 1px solid #d4deea; border-radius: 7px; background: #fff; color: #61738a; cursor: pointer; font-size: 12px; }
-.bed-settings-btn:hover { border-color: #78aed8; color: #005ea8; }
+.bed-settings-btn:hover { border-color: #e0717d; color: #c1121f; }
 .d-content { flex: 1; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; }
 .d-ch { background: #fff; padding: 14px 22px; border-bottom: 1px solid #dce3ec; display: flex; justify-content: space-between; align-items: center; }
-.d-ch-title { font-size: 20px; font-weight: 700; color: #003366; }
+.d-ch-title { font-size: 20px; font-weight: 700; color: #8f0f1f; }
 .d-ch-meta { font-size: 11px; color: #8a9ab4; margin-top: 2px; }
-.d-btn-primary { background: #003366; border: none; border-radius: 5px; padding: 9px 18px; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.d-btn-primary { background: #8f0f1f; border: none; border-radius: 5px; padding: 9px 18px; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .d-btn-secondary { background: #fff; border: 1px solid #c8d4e4; border-radius: 5px; padding: 9px 14px; color: #4a5a6e; font-size: 12px; cursor: pointer; font-family: inherit; }
 .d-stats { display: flex; gap: 12px; padding: 14px 22px; }
 .d-stat { background: #fff; border: 1px solid #dce3ec; border-radius: 8px; padding: 12px 16px; flex: 1; }
-.dst-val { font-size: 22px; font-weight: 700; color: #003366; }
+.dst-val { font-size: 22px; font-weight: 700; color: #8f0f1f; }
 .dst-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; margin-top: 2px; }
 .d-tl-wrap { padding: 14px 22px; flex: 1; }
 .d-tl-lbl { font-size: 11px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
 .d-tl-items { display: flex; flex-direction: column; gap: 8px; }
 .ward-bed-overview { display: flex; flex-direction: column; gap: 9px; }
 .ward-bed-summary { width: 100%; border: 1px solid #dce3ec; border-left: 4px solid #8a9ab4; border-radius: 10px; background: #fff; padding: 13px 15px; display: grid; grid-template-columns: minmax(90px,120px) 1fr auto; align-items: center; gap: 14px; text-align: left; cursor: pointer; color: #162033; font-family: inherit; scroll-margin-top: 78px; }
-.ward-bed-summary:hover { border-color: #8dbbe0; border-left-color: #005ea8; box-shadow: 0 5px 16px rgba(20,40,70,0.07); }
-.ward-bed-summary.focused { border-color: #69a9dc; border-left-color: #005ea8; background: #eef7ff; box-shadow: 0 0 0 2px rgba(0,94,168,0.08); }
-.ward-bed-summary-number { color: #003b71; font-size: 15px; font-weight: 850; }
+.ward-bed-summary:hover { border-color: #e0717d; border-left-color: #c1121f; box-shadow: 0 5px 16px rgba(20,40,70,0.07); }
+.ward-bed-summary.focused { border-color: #e0717d; border-left-color: #c1121f; background: #fff4f5; box-shadow: 0 0 0 2px rgba(193,18,31,0.08); }
+.ward-bed-summary-number { color: #b11226; font-size: 15px; font-weight: 850; }
 .ward-bed-summary-note { min-width: 0; color: #40536c; font-size: 12px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ward-bed-summary-note.empty { color: #91a0b5; font-style: italic; }
 .ward-bed-summary-meta { color: #8a9ab4; font-size: 10px; white-space: nowrap; text-align: right; }
@@ -254,7 +254,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-item { background: #fff; border: 1px solid #dce3ec; border-left: 3px solid #1a7a4a; border-radius: 8px; padding: 13px 16px; display: flex; gap: 14px; }
 .d-tl-item.new-item { animation: slideIn 0.4s ease; }
 @keyframes slideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-.d-tl-time { font-size: 12px; font-weight: 700; color: #003366; min-width: 46px; padding-top: 2px; }
+.d-tl-time { font-size: 12px; font-weight: 700; color: #8f0f1f; min-width: 46px; padding-top: 2px; }
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
 .d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; }
@@ -268,7 +268,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-rp-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 .d-rp-head .d-rp-lbl { margin-bottom: 0; }
 .transfer-expand-btn { width: 30px; height: 30px; border: 1px solid #c8d4e4; border-radius: 8px; background: #fff; color: #40536c; cursor: pointer; font-size: 14px; }
-.transfer-expand-btn:hover { border-color: #78aed8; color: #005ea8; }
+.transfer-expand-btn:hover { border-color: #e0717d; color: #c1121f; }
 .d-act-row { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f0f2f5; }
 .d-act-row:last-child { border-bottom: none; }
 .d-act-bar { width: 3px; border-radius: 2px; background: #1a7a4a; flex-shrink: 0; }
@@ -284,23 +284,23 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-drawer { position: absolute; inset: 0 auto 0 0; width: min(920px, 94vw); background: #f5f8fc; color: #162033; box-shadow: 18px 0 50px rgba(16,42,72,0.2); transform: translateX(-102%); transition: transform 0.25s ease; display: flex; flex-direction: column; }
 .admin-drawer-backdrop.show .admin-drawer { transform: translateX(0); }
 .admin-drawer-head { background: #fff; border-bottom: 1px solid #dce3ec; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
-.admin-drawer-title { color: #003b71; font-size: 22px; font-weight: 850; }
+.admin-drawer-title { color: #b11226; font-size: 22px; font-weight: 850; }
 .admin-drawer-sub { color: #718198; font-size: 12px; margin-top: 3px; }
 .admin-drawer-close { width: 38px; height: 38px; border-radius: 10px; border: 1px solid #c8d4e4; background: #fff; color: #40536c; cursor: pointer; font-size: 18px; }
 .admin-drawer-body { display: grid; grid-template-columns: 260px 1fr; min-height: 0; flex: 1; overflow: hidden; }
 .admin-nurse-pane { background: #fff; border-right: 1px solid #dce3ec; padding: 16px; overflow-y: auto; }
 .admin-bed-pane { padding: 18px; overflow-y: auto; }
-.admin-pane-title { color: #003b71; font-size: 13px; font-weight: 850; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
+.admin-pane-title { color: #b11226; font-size: 13px; font-weight: 850; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
 .admin-form { display: flex; gap: 8px; margin-bottom: 10px; }
 .admin-form input { border: 1px solid #c9d8ea; border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 12px; color: #162033; background: #fff; min-width: 0; }
 .admin-form input { flex: 1; }
-.admin-form button, .admin-mini-btn { border: 1px solid #003366; background: #003366; color: #fff; border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.admin-form button, .admin-mini-btn { border: 1px solid #8f0f1f; background: #8f0f1f; color: #fff; border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .admin-mini-btn.secondary { background: #fff; color: #4a5a6e; border-color: #c8d4e4; }
 .admin-mini-btn.danger { background: #fff; color: #c0392b; border-color: #e0c4c4; }
 .admin-list { display: flex; flex-direction: column; gap: 7px; }
 .admin-list-empty { color: #91a0b5; font-size: 12px; padding: 10px; text-align: center; border: 1px dashed #d2dbe8; border-radius: 9px; background: #fff; }
 .admin-nurse-row { display: flex; align-items: center; gap: 7px; border: 1px solid #e1e8f2; border-radius: 10px; padding: 7px; background: #fff; }
-.admin-nurse-row.selected { border-color: #69a9dc; background: #eef7ff; }
+.admin-nurse-row.selected { border-color: #e0717d; background: #fff4f5; }
 .admin-nurse-select { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; cursor: pointer; padding: 5px; }
 .admin-row-title { color: #1a2233; font-size: 13px; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-row-sub { color: #8a9ab4; font-size: 10px; margin-top: 2px; }
@@ -309,7 +309,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-bed-guidance { color: #61738a; font-size: 12px; line-height: 1.45; margin-top: 4px; }
 .admin-bed-grid { display: grid; grid-template-columns: repeat(5, minmax(92px,1fr)); gap: 10px; }
 .admin-bed-tile { border: 1px solid #d3deeb; border-radius: 12px; background: #fff; padding: 12px 8px; text-align: center; cursor: pointer; color: #25364d; min-height: 92px; }
-.admin-bed-tile:hover { border-color: #78aed8; }
+.admin-bed-tile:hover { border-color: #e0717d; }
 .admin-bed-tile.selected { background: #e8f5ef; border-color: #62b489; color: #0d6b43; }
 .admin-bed-tile.occupied { background: #f5f7fa; color: #8a9ab4; cursor: not-allowed; }
 .admin-bed-icon { font-size: 24px; line-height: 1; margin-bottom: 7px; }
@@ -319,13 +319,13 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .pin-editor { position: fixed; inset: 0; z-index: 1500; background: rgba(13,35,61,0.5); display: none; align-items: center; justify-content: center; padding: 18px; }
 .pin-editor.show { display: flex; }
 .pin-editor-card { width: min(360px,100%); background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 60px rgba(16,42,72,0.25); }
-.pin-editor-title { color: #003b71; font-size: 19px; font-weight: 850; }
+.pin-editor-title { color: #b11226; font-size: 19px; font-weight: 850; }
 .pin-editor-sub { color: #718198; font-size: 12px; margin: 5px 0 14px; }
 .pin-editor input { width: 100%; border: 1px solid #c9d8ea; border-radius: 10px; padding: 13px; font: inherit; font-size: 20px; letter-spacing: 8px; text-align: center; }
 .patient-editor { position: fixed; inset: 0; z-index: 1500; background: rgba(13,35,61,0.5); display: none; align-items: center; justify-content: center; padding: 18px; }
 .patient-editor.show { display: flex; }
 .patient-editor-card { width: min(440px,100%); background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 60px rgba(16,42,72,0.25); color: #162033; }
-.patient-editor-title { color: #003b71; font-size: 19px; font-weight: 850; }
+.patient-editor-title { color: #b11226; font-size: 19px; font-weight: 850; }
 .patient-editor-sub { color: #718198; font-size: 12px; margin: 5px 0 16px; }
 .patient-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .patient-field { display: flex; flex-direction: column; gap: 6px; }
@@ -336,14 +336,14 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 /* TRANSFER COMMAND DEMO */
 #screen-command { background: #f0f2f5; color: #162033; padding-bottom: 58px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .cmd-wrap { width: min(980px, 100%); margin: 0 auto; padding: 18px; display: grid; gap: 14px; }
-.cmd-hero { background: #003366; color: #fff; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+.cmd-hero { background: #8f0f1f; color: #fff; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; gap: 14px; align-items: center; }
 .cmd-title { font-size: 23px; font-weight: 850; letter-spacing: -0.02em; }
-.cmd-sub { font-size: 13px; color: #b8d7f0; margin-top: 3px; line-height: 1.45; }
+.cmd-sub { font-size: 13px; color: #f2a7b0; margin-top: 3px; line-height: 1.45; }
 .cmd-card { background: #fff; border: 1px solid #dce3ec; border-radius: 16px; padding: 16px; box-shadow: 0 10px 32px rgba(20,40,70,0.08); }
 .cmd-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
 .cmd-login-card { border: 1px solid #d7e1ef; border-radius: 14px; padding: 16px; background: #f8fbff; cursor: pointer; }
-.cmd-login-card:hover { border-color: #89bee8; background: #eef7ff; }
-.cmd-role { font-size: 18px; font-weight: 850; color: #003b71; }
+.cmd-login-card:hover { border-color: #e0717d; background: #fff4f5; }
+.cmd-role { font-size: 18px; font-weight: 850; color: #b11226; }
 .cmd-pin { color: #61738a; font-size: 12px; margin-top: 4px; }
 .cmd-form { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
 .cmd-field { display: flex; flex-direction: column; gap: 6px; }
@@ -352,21 +352,21 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .cmd-field select, .cmd-field input, .cmd-field textarea { border: 1px solid #c9d8ea; border-radius: 10px; padding: 11px 12px; color: #162033; background: #fff; font: inherit; }
 .cmd-field textarea { min-height: 72px; resize: vertical; }
 .request-list { display: flex; flex-direction: column; gap: 9px; }
-.request-card { background: #fff; border: 1px solid #dce3ec; border-left: 4px solid #005ea8; border-radius: 12px; padding: 12px 14px; }
+.request-card { background: #fff; border: 1px solid #dce3ec; border-left: 4px solid #c1121f; border-radius: 12px; padding: 12px 14px; }
 .request-card.urgent { border-left-color: #c0392b; background: #fffafa; }
 .request-card.done { border-left-color: #147a4a; opacity: 0.85; }
 .request-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
-.request-title { font-weight: 850; color: #003b71; }
+.request-title { font-weight: 850; color: #b11226; }
 .request-meta { color: #6b7c93; font-size: 11px; margin-top: 3px; }
 .request-msg { font-size: 13px; line-height: 1.45; margin-top: 8px; color: #25364d; }
-.request-status { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 850; text-transform: uppercase; background: #eef6ff; color: #005ea8; white-space: nowrap; }
+.request-status { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 850; text-transform: uppercase; background: #fff4f5; color: #c1121f; white-space: nowrap; }
 .request-status.done { background: #e8f5ef; color: #147a4a; }
 .request-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
-.request-actions button { border: 1px solid #c8d4e4; background: #fff; color: #003b71; border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; }
+.request-actions button { border: 1px solid #c8d4e4; background: #fff; color: #b11226; border-radius: 8px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; }
 .nurse-alerts { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 16px; }
-.nurse-alert { border: 1px solid #b8d7f0; border-left: 4px solid #005ea8; background: #eef7ff; border-radius: 12px; padding: 11px 13px; color: #162033; }
+.nurse-alert { border: 1px solid #f2a7b0; border-left: 4px solid #c1121f; background: #fff4f5; border-radius: 12px; padding: 11px 13px; color: #162033; }
 .nurse-alert.urgent { border-color: #efb3b3; border-left-color: #c0392b; background: #fff4f4; }
-.nurse-alert-title { font-size: 13px; font-weight: 850; color: #003b71; }
+.nurse-alert-title { font-size: 13px; font-weight: 850; color: #b11226; }
 .nurse-alert-text { font-size: 12px; color: #40536c; margin-top: 4px; line-height: 1.4; }
 .mode-btn.command-active { background: #0f766e; border-color: #0f766e; color: #fff; }
 
@@ -392,13 +392,13 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .mode-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #12141e; border-top: 1px solid #2a2d3a; padding: 8px 16px; display: flex; gap: 8px; z-index: 100; }
 .mode-btn { flex: 1; background: #0f1117; border: 1px solid #2a2d3a; border-radius: 8px; padding: 9px; color: #666; font-size: 11px; font-weight: 600; text-align: center; cursor: pointer; font-family: inherit; }
 .mode-btn.active { background: #e63946; border-color: #e63946; color: #fff; }
-.mode-btn.dash-active { background: #003366; border-color: #003366; color: #fff; }
+.mode-btn.dash-active { background: #8f0f1f; border-color: #8f0f1f; color: #fff; }
 
 /* EPIC-STYLE LIGHT THEME OVERRIDES */
 body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -apple-system, BlinkMacSystemFont, sans-serif; }
 #screen-login, #screen-beds, #screen-mic, #screen-summary { background: linear-gradient(180deg,#ffffff 0%,#f5f8fc 100%); color: #162033; }
-.logo-icon { background: linear-gradient(135deg,#005ea8,#0086c9); box-shadow: 0 10px 26px rgba(0,94,168,0.22); }
-.logo-title, .nurse-name, .bed-heading, .sum-title { color: #003b71; }
+.logo-icon { background: linear-gradient(135deg,#c1121f,#e63946); box-shadow: 0 10px 26px rgba(193,18,31,0.22); }
+.logo-title, .nurse-name, .bed-heading, .sum-title { color: #b11226; }
 .logo-sub, .nurse-greet, .bed-subtext, .demo-note, .sum-meta, .sum-note { color: #6b7c93; }
 .staff-display, .num-btn, .back-chip, .tbox, .note-card, .st-item, .end-shift-btn, .ctrl-btn {
   background: #ffffff;
@@ -408,25 +408,25 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 }
 .num-btn:active, .bed-btn:active, .mic-btn:active { transform: scale(0.98); }
 .pin-dot { background: #d7e1ef; }
-.pin-dot.filled { background: #006eb6; }
+.pin-dot.filled { background: #c1121f; }
 .enter-btn, .mic-btn, .d-btn-primary {
-  background: linear-gradient(135deg,#005ea8,#0086c9);
-  box-shadow: 0 10px 24px rgba(0,94,168,0.22);
+  background: linear-gradient(135deg,#c1121f,#e63946);
+  box-shadow: 0 10px 24px rgba(193,18,31,0.22);
 }
 .mic-btn.recording {
-  background: linear-gradient(135deg,#006eb6,#004b8d);
-  box-shadow: 0 12px 34px rgba(0,94,168,0.34);
+  background: linear-gradient(135deg,#c1121f,#8f0f1f);
+  box-shadow: 0 12px 34px rgba(193,18,31,0.34);
 }
 .mic-btn.paused {
   background: linear-gradient(135deg,#f59e0b,#d97706);
   box-shadow: 0 12px 34px rgba(217,119,6,0.24);
 }
 @keyframes micPulse {
-  0%,100%{ box-shadow: 0 10px 28px rgba(0,94,168,0.24); }
-  50%{ box-shadow: 0 14px 42px rgba(0,94,168,0.36); }
+  0%,100%{ box-shadow: 0 10px 28px rgba(193,18,31,0.24); }
+  50%{ box-shadow: 0 14px 42px rgba(193,18,31,0.36); }
 }
 .mic-status { color: #61738a; }
-.mic-status.recording { color: #006eb6; }
+.mic-status.recording { color: #c1121f; }
 .mic-status.processing { color: #b7791f; }
 .mic-status.done { color: #147a4a; }
 .ctrl-btn.save, .sum-copy {
@@ -435,9 +435,9 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   color: #147a4a;
 }
 .ctrl-btn.handover {
-  background: #eef6ff;
-  border-color: #b8d7f0;
-  color: #005ea8;
+  background: #fff4f5;
+  border-color: #f2a7b0;
+  color: #c1121f;
 }
 .ctrl-btn:disabled { opacity: 0.45; }
 .shift-pill { background: #e8f5ef; color: #147a4a; border-color: #b7e1ca; }
@@ -450,29 +450,29 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   box-shadow: 0 2px 8px rgba(20,40,70,0.05);
 }
 .bed-btn.occ { border-color: #9dc8ee; background: #f5fbff; }
-.bed-btn.occ .b-st { color: #006eb6; }
-.bed-btn.occ .b-dot { background: #006eb6; }
+.bed-btn.occ .b-st { color: #c1121f; }
+.bed-btn.occ .b-dot { background: #c1121f; }
 .bed-btn.has-notes { border-color: #88d2aa; background: #f2fbf6; }
 .bed-btn.has-notes .b-st, .bed-btn.has-notes .b-count { color: #147a4a; }
 .bed-btn.vac { background: #f1f4f8; color: #8493a7; }
 .bed-btn.vac .b-st { color: #8493a7; }
-.tbox-label.en, .nc-time, .sti-bed { color: #006eb6; }
+.tbox-label.en, .nc-time, .sti-bed { color: #c1121f; }
 .tbox-text, .nc-text, .sti-text { color: #24364d; }
 .tbox-text.placeholder { color: #8a9ab4; }
 .processing-indicator { color: #b7791f; }
 .notes-list { max-height: 240px; }
 .toast { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; box-shadow: 0 8px 24px rgba(20,40,70,0.12); }
 .toast.error { background: #fff0f0; border-color: #f3c0c0; color: #c0392b; }
-.settings-fab { background: #ffffff; color: #006eb6; border-color: #c9d8ea; box-shadow: 0 8px 24px rgba(20,40,70,0.14); }
+.settings-fab { background: #ffffff; color: #c1121f; border-color: #c9d8ea; box-shadow: 0 8px 24px rgba(20,40,70,0.14); }
 .settings-modal { background: rgba(22,32,51,0.35); }
 .settings-card { background: #ffffff; border-color: #d7e1ef; }
-.settings-title { color: #003b71; }
+.settings-title { color: #b11226; }
 .settings-label, .settings-help { color: #61738a; }
 .settings-input { background: #ffffff; border-color: #c9d8ea; color: #162033; }
-.settings-save { background: #005ea8; border-color: #005ea8; color: #ffffff; }
+.settings-save { background: #c1121f; border-color: #c1121f; color: #ffffff; }
 .mode-bar { background: rgba(255,255,255,0.96); border-top-color: #d7e1ef; box-shadow: 0 -8px 24px rgba(20,40,70,0.08); }
 .mode-btn { background: #f6f9fc; border-color: #d7e1ef; color: #61738a; }
-.mode-btn.active, .mode-btn.dash-active { background: #005ea8; border-color: #005ea8; color: #fff; }
+.mode-btn.active, .mode-btn.dash-active { background: #c1121f; border-color: #c1121f; color: #fff; }
 .sum-logout, .d-btn-danger { background: #fff; border-color: #f0c6c6; color: #c0392b; }
 .role-page .mode-bar { display: none !important; }
 .role-page #screen-login,
@@ -518,55 +518,80 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 }
 
 /* Nursing governance prototype */
-.gov-btn { background:#fff; border:1px solid rgba(255,255,255,0.38); border-radius:7px; padding:6px 12px; color:#003b71; font-size:11px; font-weight:850; cursor:pointer; font-family:inherit; }
+.gov-btn { background:#fff; border:1px solid rgba(255,255,255,0.38); border-radius:7px; padding:6px 12px; color:#b11226; font-size:11px; font-weight:850; cursor:pointer; font-family:inherit; }
 .gov-modal { position:fixed; inset:0; z-index:2100; background:rgba(8,18,32,.62); display:none; align-items:stretch; justify-content:center; padding:22px; }
 .gov-modal.show { display:flex; }
 .gov-shell { width:min(1320px,100%); background:#f5f8fc; border-radius:22px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 28px 90px rgba(0,0,0,.35); }
-.gov-top { background:#003b71; color:#fff; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.gov-top { background:#b11226; color:#fff; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
 .gov-title { font-size:24px; font-weight:900; letter-spacing:-.4px; }
-.gov-sub { color:#a9c6e5; font-size:12px; margin-top:3px; }
+.gov-sub { color:#ffd1d7; font-size:12px; margin-top:3px; }
 .gov-close { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.28); border-radius:10px; padding:9px 13px; cursor:pointer; font-weight:850; }
 .gov-body { overflow:auto; padding:18px; }
 .gov-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
 .gov-tab { border:1px solid #c9d8ea; border-radius:999px; background:#fff; color:#52657d; padding:9px 13px; font-size:12px; font-weight:850; cursor:pointer; }
-.gov-tab.active { background:#003b71; border-color:#003b71; color:#fff; }
+.gov-tab.active { background:#b11226; border-color:#b11226; color:#fff; }
 .gov-panel { display:none; }
 .gov-panel.active { display:block; }
 .gov-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:14px; }
 .gov-card { background:#fff; border:1px solid #d7e1ef; border-radius:16px; padding:16px; box-shadow:0 10px 26px rgba(16,42,72,.06); }
-.gov-card h3 { margin:0 0 8px; color:#003b71; font-size:18px; }
+.gov-card h3 { margin:0 0 8px; color:#b11226; font-size:18px; }
 .gov-muted { color:#61738a; font-size:12px; line-height:1.45; }
 .gov-mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }
 .gov-field label { display:block; color:#61738a; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
 .gov-field input, .gov-field select, .gov-field textarea { width:100%; border:1px solid #c9d8ea; border-radius:10px; padding:9px 10px; font:inherit; font-size:12px; color:#162033; background:#fff; }
 .rhpass-mode { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-.rhpass-mode button { border:1px solid #c9d8ea; border-radius:12px; background:#fff; color:#003b71; padding:11px; font-weight:900; cursor:pointer; }
-.rhpass-mode button.active { background:#003b71; color:#fff; border-color:#003b71; }
+.rhpass-mode button { border:1px solid #c9d8ea; border-radius:12px; background:#fff; color:#b11226; padding:11px; font-weight:900; cursor:pointer; }
+.rhpass-mode button.active { background:#b11226; color:#fff; border-color:#b11226; }
 .rhpass-score { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:10px 0 14px; }
 .score-tile { border:1px solid #d7e1ef; border-radius:14px; padding:12px; background:linear-gradient(145deg,#fff,#f8fbff); }
-.score-value { font-size:28px; color:#003b71; font-weight:950; letter-spacing:-1px; }
+.score-value { font-size:28px; color:#b11226; font-weight:950; letter-spacing:-1px; }
 .score-label { color:#718198; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.5px; }
 .rhpass-list { display:grid; gap:8px; max-height:480px; overflow:auto; padding-right:4px; }
 .rhpass-item { border:1px solid #d7e1ef; border-radius:12px; padding:11px; background:#fff; }
 .rhpass-item-title { font-size:13px; color:#162033; font-weight:850; margin-bottom:7px; }
 .rhpass-options { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
 .rhpass-options button { border:1px solid #d7e1ef; border-radius:9px; padding:7px; background:#f8fbff; color:#52657d; font-size:11px; font-weight:850; cursor:pointer; }
-.rhpass-options button.active { background:#e8f2fb; border-color:#69a9dc; color:#003b71; }
+.rhpass-options button.active { background:#fff0f2; border-color:#e0717d; color:#b11226; }
 .yn-row { display:flex; gap:7px; align-items:center; }
 .yn-row button { flex:0 0 58px; }
 .hierarchy { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
 .role-card { border:1px solid #d7e1ef; border-radius:14px; background:#fff; padding:12px; }
-.role-title { color:#003b71; font-weight:900; font-size:13px; }
+.role-title { color:#b11226; font-weight:900; font-size:13px; }
 .role-meta { color:#61738a; font-size:11px; margin-top:4px; line-height:1.35; }
 .level-table { width:100%; border-collapse:collapse; font-size:12px; }
-.level-table th { background:#e8f2fb; color:#003b71; text-align:left; padding:9px; }
+.level-table th { background:#fff0f2; color:#b11226; text-align:left; padding:9px; }
 .level-table td { border-bottom:1px solid #e4ebf3; padding:9px; vertical-align:top; }
 .competency-pill { display:inline-flex; border:1px solid #d7e1ef; border-radius:999px; padding:6px 9px; margin:4px; background:#fff; color:#52657d; font-size:11px; font-weight:800; }
 .coming-card { opacity:.62; background:#f8fbff; border-style:dashed; }
 .gov-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-.gov-action { border:0; border-radius:10px; background:#003b71; color:#fff; padding:10px 12px; font:inherit; font-size:12px; font-weight:850; cursor:pointer; }
+.gov-action { border:0; border-radius:10px; background:#b11226; color:#fff; padding:10px 12px; font:inherit; font-size:12px; font-weight:850; cursor:pointer; }
 .gov-action.secondary { background:#e8eef4; color:#162033; }
+.assignment-board { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+.assignment-list { display:grid; gap:10px; }
+.assignment-card { border:1px solid #d7e1ef; border-radius:14px; padding:12px; background:#f8fbff; }
+.assignment-title { font-weight:900; color:#b11226; font-size:15px; margin-bottom:4px; }
+.assignment-meta { color:#53647d; font-size:12px; font-weight:700; line-height:1.45; }
+.assignment-risk { display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:5px 8px; margin-top:8px; background:#fff4f5; color:#b11226; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.05em; }
+.assignment-risk.warn { background:#fff4df; color:#9a5a00; }
+.assignment-risk.ok { background:#e8f8ef; color:#087a3a; }
+.assignment-suggestion { border:1px solid #c9d7e9; border-left:6px solid #b11226; border-radius:14px; padding:12px; background:#fff; margin-top:10px; }
+.assignment-suggestion.approved { border-left-color:#087a3a; background:#f4fff8; }
+.assignment-suggestion.override { border-left-color:#b33a3a; background:#fff8f8; }
+.assignment-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
+.assignment-score { font-size:24px; font-weight:950; color:#b11226; }
+.assignment-select { width:100%; border:1px solid #cfdbea; border-radius:10px; padding:10px; font:inherit; font-weight:800; background:#fff; color:#162033; margin-top:8px; }
+.assignment-note { border:1px dashed #b8c8dc; border-radius:14px; padding:12px; background:#fbfdff; color:#53647d; font-size:13px; line-height:1.5; margin-top:12px; }
+.assignment-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+.flow-step { border:1px solid #f1c5cb; border-radius:14px; padding:12px; background:#fff7f8; }
+.flow-number { width:26px; height:26px; border-radius:50%; background:#b11226; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:950; margin-bottom:8px; }
+.flow-title { color:#b11226; font-weight:950; font-size:13px; margin-bottom:3px; }
+.flow-copy { color:#61738a; font-size:11px; line-height:1.35; font-weight:700; }
+.pool-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+.pool-pill { border:1px solid #f1c5cb; border-radius:14px; padding:10px; background:#fff; }
+.pool-pill strong { display:block; color:#b11226; font-size:16px; }
+.pool-pill span { color:#61738a; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.45px; }
 @media(max-width:980px){.gov-grid,.hierarchy{grid-template-columns:1fr}.gov-mini-grid,.rhpass-score{grid-template-columns:1fr 1fr}.rhpass-options{grid-template-columns:1fr}.gov-modal{padding:8px}.gov-shell{border-radius:14px}}
+@media(max-width:980px){.assignment-board,.assignment-flow{grid-template-columns:1fr}.pool-summary{grid-template-columns:1fr 1fr}.assignment-row{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -688,6 +713,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
         <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">RHPASS Patient Acuity</button>
         <button class="gov-tab" data-gov-tab="hierarchy" onclick="showGovTab('hierarchy')">Nursing Hierarchy Login</button>
         <button class="gov-tab" data-gov-tab="competency" onclick="showGovTab('competency')">Competency Assessment</button>
+        <button class="gov-tab" data-gov-tab="assignment" onclick="showGovTab('assignment')">Smart Assignment</button>
       </div>
 
       <section class="gov-panel active" id="gov-rhpass">
@@ -797,6 +823,78 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
           <div class="role-card coming-card"><div class="role-title">Level 3</div><div class="role-meta">Competent nurse competency module coming soon.</div></div>
           <div class="role-card coming-card"><div class="role-title">Level 4</div><div class="role-meta">Proficient nurse competency module coming soon.</div></div>
           <div class="role-card coming-card"><div class="role-title">Level 5</div><div class="role-meta">Expert nurse / mentor competency module coming soon.</div></div>
+        </div>
+      </section>
+
+      <section class="gov-panel" id="gov-assignment">
+        <div class="gov-card" style="margin-bottom:14px;">
+          <h3>Hospital-Scale Workforce Workflow</h3>
+          <p class="gov-muted">Demo model for a hospital with 1400 nurses: register all nurses, complete competency assessment, create area-wise nurse pools, then run supervised automatic assignment within the selected pool.</p>
+          <div class="assignment-flow">
+            <div class="flow-step"><div class="flow-number">1</div><div class="flow-title">Register Nurses</div><div class="flow-copy">All 1400 nurses receive a digital profile with hospital ID, designation, unit, and eligibility.</div></div>
+            <div class="flow-step"><div class="flow-number">2</div><div class="flow-title">Assess Competency</div><div class="flow-copy">Level 1 to Level 5 grades define privilege, supervision need, and clinical capability.</div></div>
+            <div class="flow-step"><div class="flow-number">3</div><div class="flow-title">Create Pools</div><div class="flow-copy">ICU, wards, OT, Cath Lab, emergency, and specialty areas maintain their own nurse pools.</div></div>
+            <div class="flow-step"><div class="flow-number">4</div><div class="flow-title">Assign & Approve</div><div class="flow-copy">Algorithm suggests matches from the selected pool; supervisor verifies or overrides.</div></div>
+          </div>
+        </div>
+        <div class="gov-grid">
+          <div class="gov-card">
+            <h3>Supervised Nurse-Patient Assignment</h3>
+            <p class="gov-muted">Prototype algorithm compares patient acuity with nurse competency. It suggests assignments, but the admin must approve, change, or override every decision.</p>
+            <div class="gov-field" style="margin-top:12px;">
+              <label>Hospital area / nurse pool</label>
+              <select id="assignmentPool" onchange="resetSmartAssignments()">
+                <option value="ward3">Ward 3 - Medical</option>
+                <option value="icu">Medical ICU</option>
+                <option value="cathrecovery">Cath Lab Recovery</option>
+              </select>
+            </div>
+            <div class="rhpass-score">
+              <div class="score-tile"><div class="score-value">1400</div><div class="score-label">Registered nurses</div></div>
+              <div class="score-tile"><div class="score-value" id="assignmentNurseCount">0</div><div class="score-label">Pool nurses</div></div>
+              <div class="score-tile"><div class="score-value" id="assignmentApprovedCount">0</div><div class="score-label">Approved</div></div>
+            </div>
+            <div class="pool-summary">
+              <div class="pool-pill"><strong id="assignmentPatientCount">0</strong><span>Pool patients</span></div>
+              <div class="pool-pill"><strong id="assignmentAssessedCount">0</strong><span>Competency assessed</span></div>
+              <div class="pool-pill"><strong id="assignmentPoolLabel">Ward 3</strong><span>Selected pool</span></div>
+            </div>
+            <div class="gov-actions">
+              <button class="gov-action" onclick="generateSmartAssignments()">Generate Suggestions</button>
+              <button class="gov-action secondary" onclick="resetSmartAssignments()">Reset Demo</button>
+              <button class="gov-action secondary" onclick="copyAssignmentSummary()">Copy Assignment Plan</button>
+            </div>
+            <div class="assignment-note">
+              Matching rule used for demo: the supervisor selects the hospital area first. Only patients and nurses from that area's assigned nurse pool are considered. ICU 1:1 or ICU high acuity prefers Level 5 or Level 4 nurses; ward Acuity 4 prefers Level 4+, Acuity 3 prefers Level 3+, Acuity 2 prefers Level 2+, and Acuity 1 can be handled by Level 1+ with supervision rules.
+            </div>
+          </div>
+          <div class="gov-card">
+            <h3>Admin Oversight Logic</h3>
+            <table class="level-table">
+              <thead><tr><th>Patient need</th><th>Minimum nurse level</th><th>Admin action</th></tr></thead>
+              <tbody>
+                <tr><td>ICU 1:1 / very high acuity</td><td>Level 5 preferred</td><td>Approve senior nurse or override with reason</td></tr>
+                <tr><td>ICU high acuity / Ward Acuity 4</td><td>Level 4+</td><td>Approve or assign senior supervision</td></tr>
+                <tr><td>Ward Acuity 3</td><td>Level 3+</td><td>Approve competent nurse</td></tr>
+                <tr><td>Ward Acuity 2</td><td>Level 2+</td><td>Approve with routine support</td></tr>
+                <tr><td>Ward Acuity 1</td><td>Level 1+</td><td>Suitable for supervised novice exposure</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="assignment-board">
+          <div class="gov-card">
+            <h3>Patients With Acuity</h3>
+            <div class="assignment-list" id="assignmentPatients"></div>
+          </div>
+          <div class="gov-card">
+            <h3>Nurses With Competency</h3>
+            <div class="assignment-list" id="assignmentNurses"></div>
+          </div>
+        </div>
+        <div class="gov-card" style="margin-top:14px;">
+          <h3>Suggested Assignments For Admin Review</h3>
+          <div id="assignmentSuggestions"></div>
         </div>
       </section>
     </div>
@@ -2820,10 +2918,62 @@ const levelOneCompetencies = [
   'ICU capstone: IV cannulation, invasive line sampling and central line care'
 ];
 
+const hospitalNurseScale = {
+  total: 1400,
+  assessed: 1138,
+  pools: {
+    ward3: { label: 'Ward 3 - Medical', registered: 42, assessed: 35 },
+    icu: { label: 'Medical ICU', registered: 68, assessed: 63 },
+    cathrecovery: { label: 'Cath Lab Recovery', registered: 24, assessed: 21 }
+  }
+};
+
+const smartAssignmentPatients = [
+  { id: 'p101', pool: 'ward3', name: 'Michelle Teoh', uhid: 'UHID-240101', bed: 'Bed 101', area: 'Ward 3 - Medical', score: 48, acuity: 'Acuity 4', ratio: '1:2', requiredLevel: 4 },
+  { id: 'p103', pool: 'ward3', name: 'Mary Thomas', uhid: 'UHID-240103', bed: 'Bed 103', area: 'Ward 3 - Medical', score: 37, acuity: 'Acuity 3', ratio: '1:3', requiredLevel: 3 },
+  { id: 'p104', pool: 'ward3', name: 'Abdul Rahman', uhid: 'UHID-240104', bed: 'Bed 104', area: 'Ward 3 - Medical', score: 24, acuity: 'Acuity 2', ratio: '1:5', requiredLevel: 2 },
+  { id: 'p105', pool: 'ward3', name: 'Leela Varghese', uhid: 'UHID-240105', bed: 'Bed 105', area: 'Ward 3 - Medical', score: 15, acuity: 'Acuity 1', ratio: '1:6', requiredLevel: 1 },
+  { id: 'p201', pool: 'icu', name: 'Rajan Menon', uhid: 'UHID-240201', bed: 'ICU 02', area: 'Medical ICU', score: 28, acuity: 'High acuity', ratio: 'High acuity', requiredLevel: 5 },
+  { id: 'p202', pool: 'icu', name: 'Saramma Joseph', uhid: 'UHID-240202', bed: 'ICU 04', area: 'Medical ICU', score: 0, acuity: '1:1 care', ratio: '1:1', requiredLevel: 5 },
+  { id: 'p203', pool: 'icu', name: 'Dinesh Kumar', uhid: 'UHID-240203', bed: 'ICU 06', area: 'Medical ICU', score: 18, acuity: 'Low acuity', ratio: 'Low acuity', requiredLevel: 4 },
+  { id: 'p301', pool: 'cathrecovery', name: 'George Mathew', uhid: 'UHID-240301', bed: 'CR 01', area: 'Cath Lab Recovery', score: 34, acuity: 'Post-procedure high watch', ratio: '1:3', requiredLevel: 4 },
+  { id: 'p302', pool: 'cathrecovery', name: 'Amina Beevi', uhid: 'UHID-240302', bed: 'CR 03', area: 'Cath Lab Recovery', score: 22, acuity: 'Routine recovery', ratio: '1:5', requiredLevel: 3 }
+];
+
+const smartAssignmentNurses = [
+  { id: 'n1', pool: 'ward3', name: 'Jewel', hospitalId: 'NRS-1001', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
+  { id: 'n2', pool: 'ward3', name: 'Priya', hospitalId: 'NRS-1002', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 3, assessed: true },
+  { id: 'n3', pool: 'ward3', name: 'Anu', hospitalId: 'NRS-1003', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 1, maxLoad: 4, assessed: true },
+  { id: 'n4', pool: 'ward3', name: 'Meera', hospitalId: 'NRS-1004', level: 2, grade: 'Advanced Beginner', privilege: 'GSU', currentLoad: 0, maxLoad: 4, assessed: true },
+  { id: 'n5', pool: 'ward3', name: 'Riya', hospitalId: 'NRS-1005', level: 1, grade: 'Novice', privilege: 'NG', currentLoad: 0, maxLoad: 3, assessed: true },
+  { id: 'n6', pool: 'icu', name: 'Susan', hospitalId: 'NRS-2101', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 1, maxLoad: 2, assessed: true },
+  { id: 'n7', pool: 'icu', name: 'Lincy', hospitalId: 'NRS-2102', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
+  { id: 'n8', pool: 'icu', name: 'Neethu', hospitalId: 'NRS-2103', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 2, assessed: true },
+  { id: 'n9', pool: 'icu', name: 'Fathima', hospitalId: 'NRS-2104', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 0, maxLoad: 3, assessed: true },
+  { id: 'n10', pool: 'cathrecovery', name: 'Sherin', hospitalId: 'NRS-3101', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
+  { id: 'n11', pool: 'cathrecovery', name: 'Divya', hospitalId: 'NRS-3102', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 3, assessed: true },
+  { id: 'n12', pool: 'cathrecovery', name: 'Asha', hospitalId: 'NRS-3103', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 0, maxLoad: 3, assessed: true }
+];
+
 let rhpassMode = 'ward';
 let wardRhpassScores = Array(wardRhpassItems.length).fill(0);
 let icuRhpassScores = Array(icuRhpassItems.length).fill(false);
 let competencyDone = Array(levelOneCompetencies.length).fill(false);
+let smartAssignments = [];
+
+function getSelectedAssignmentPool() {
+  return document.getElementById('assignmentPool')?.value || 'ward3';
+}
+
+function getPoolPatients() {
+  const pool = getSelectedAssignmentPool();
+  return smartAssignmentPatients.filter(patient => patient.pool === pool);
+}
+
+function getPoolNurses() {
+  const pool = getSelectedAssignmentPool();
+  return smartAssignmentNurses.filter(nurse => nurse.pool === pool);
+}
 
 function openGovernancePanel() {
   document.getElementById('governanceModal').classList.add('show');
@@ -2846,6 +2996,7 @@ function showGovTab(tab) {
   if (tab === 'rhpass') renderRhpass();
   if (tab === 'hierarchy') renderGovernanceRoles();
   if (tab === 'competency') renderCompetencyList();
+  if (tab === 'assignment') renderSmartAssignmentPrototype();
 }
 
 function renderGovernanceRoles() {
@@ -3042,6 +3193,187 @@ function resetCompetency() {
   });
   renderCompetencyList();
   showToast('Competency assessment reset');
+}
+
+function renderSmartAssignmentPrototype() {
+  const patientList = document.getElementById('assignmentPatients');
+  const nurseList = document.getElementById('assignmentNurses');
+  if (!patientList || !nurseList) return;
+  const pool = getSelectedAssignmentPool();
+  const poolInfo = hospitalNurseScale.pools[pool] || hospitalNurseScale.pools.ward3;
+  const poolPatients = getPoolPatients();
+  const poolNurses = getPoolNurses();
+  patientList.innerHTML = poolPatients.map(patient => `
+    <div class="assignment-card">
+      <div class="assignment-row">
+        <div>
+          <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
+          <div class="assignment-meta">${escapeHtml(patient.uhid)} · ${escapeHtml(patient.area)} · RHPASS ${patient.score}</div>
+        </div>
+        <div class="assignment-score">L${patient.requiredLevel}</div>
+      </div>
+      <div class="assignment-meta">${escapeHtml(patient.acuity)} · Recommended ${escapeHtml(patient.ratio)} · Minimum nurse competency Level ${patient.requiredLevel}</div>
+      <span class="assignment-risk ${patient.requiredLevel >= 4 ? 'warn' : 'ok'}">${patient.requiredLevel >= 4 ? 'High attention' : 'Routine match'}</span>
+    </div>
+  `).join('');
+  nurseList.innerHTML = poolNurses.map(nurse => `
+    <div class="assignment-card">
+      <div class="assignment-row">
+        <div>
+          <div class="assignment-title">${escapeHtml(nurse.name)}</div>
+          <div class="assignment-meta">${escapeHtml(nurse.hospitalId)} · Level ${nurse.level} ${escapeHtml(nurse.grade)} · ${escapeHtml(nurse.privilege)}</div>
+        </div>
+        <div class="assignment-score">L${nurse.level}</div>
+      </div>
+      <div class="assignment-meta">Current load ${nurse.currentLoad}/${nurse.maxLoad}. Suggested matching considers competency, patient acuity, and workload.</div>
+    </div>
+  `).join('');
+  document.getElementById('assignmentPatientCount').textContent = poolPatients.length;
+  document.getElementById('assignmentNurseCount').textContent = poolInfo.registered;
+  document.getElementById('assignmentAssessedCount').textContent = poolInfo.assessed;
+  document.getElementById('assignmentPoolLabel').textContent = poolInfo.label.replace(' - ', ' ');
+  renderAssignmentSuggestions();
+}
+
+function generateSmartAssignments() {
+  const nurseLoads = {};
+  const poolPatients = getPoolPatients();
+  const poolNurses = getPoolNurses();
+  poolNurses.forEach(nurse => nurseLoads[nurse.id] = nurse.currentLoad);
+  smartAssignments = poolPatients
+    .slice()
+    .sort((a, b) => b.requiredLevel - a.requiredLevel)
+    .map(patient => {
+      const candidates = poolNurses
+        .filter(nurse => nurseLoads[nurse.id] < nurse.maxLoad)
+        .filter(nurse => nurse.assessed)
+        .map(nurse => ({
+          nurse,
+          safe: nurse.level >= patient.requiredLevel,
+          score: getAssignmentScore(patient, nurse, nurseLoads[nurse.id])
+        }))
+        .sort((a, b) => b.score - a.score);
+      const best = candidates.find(candidate => candidate.safe) || candidates[0];
+      if (best) nurseLoads[best.nurse.id] += 1;
+      return {
+        patientId: patient.id,
+        nurseId: best ? best.nurse.id : '',
+        status: 'suggested',
+        safe: Boolean(best?.safe),
+        reason: best ? getAssignmentReason(patient, best.nurse, best.safe) : 'No available nurse found for this patient.'
+      };
+    });
+  renderAssignmentSuggestions();
+  showToast('Smart assignment suggestions generated');
+}
+
+function getAssignmentScore(patient, nurse, load) {
+  const competencyFit = nurse.level >= patient.requiredLevel ? 80 : 25 - ((patient.requiredLevel - nurse.level) * 10);
+  const levelGapBonus = nurse.level >= patient.requiredLevel ? Math.max(0, 10 - ((nurse.level - patient.requiredLevel) * 2)) : 0;
+  const loadPenalty = load * 6;
+  const seniorReservePenalty = patient.requiredLevel <= 2 && nurse.level >= 5 ? 8 : 0;
+  return competencyFit + levelGapBonus - loadPenalty - seniorReservePenalty;
+}
+
+function getAssignmentReason(patient, nurse, safe) {
+  if (!safe) {
+    return `${nurse.name} is below the preferred Level ${patient.requiredLevel}; admin override and senior supervision are required.`;
+  }
+  if (patient.requiredLevel >= 4) {
+    return `${patient.acuity} requires senior competency. ${nurse.name} is Level ${nurse.level} ${nurse.grade}, suitable for admin approval.`;
+  }
+  return `${nurse.name}'s Level ${nurse.level} competency meets the minimum Level ${patient.requiredLevel} requirement with acceptable current workload.`;
+}
+
+function renderAssignmentSuggestions() {
+  const box = document.getElementById('assignmentSuggestions');
+  if (!box) return;
+  const pool = getSelectedAssignmentPool();
+  const poolInfo = hospitalNurseScale.pools[pool] || hospitalNurseScale.pools.ward3;
+  const poolPatients = getPoolPatients();
+  const poolNurses = getPoolNurses();
+  document.getElementById('assignmentPatientCount').textContent = poolPatients.length;
+  document.getElementById('assignmentNurseCount').textContent = poolInfo.registered;
+  document.getElementById('assignmentAssessedCount').textContent = poolInfo.assessed;
+  document.getElementById('assignmentPoolLabel').textContent = poolInfo.label.replace(' - ', ' ');
+  document.getElementById('assignmentApprovedCount').textContent = smartAssignments.filter(a => a.status === 'approved').length;
+  if (!smartAssignments.length) {
+    box.innerHTML = '<div class="assignment-note">Click Generate Suggestions to match patients only against the selected area nurse pool. No assignment is final until the admin approves it.</div>';
+    return;
+  }
+  box.innerHTML = smartAssignments.map((assignment, index) => {
+    const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
+    const nurse = poolNurses.find(item => item.id === assignment.nurseId);
+    const className = assignment.status === 'approved' ? 'approved' : assignment.status === 'override' ? 'override' : '';
+    return `
+      <div class="assignment-suggestion ${className}">
+        <div class="assignment-row">
+          <div>
+            <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
+            <div class="assignment-meta">${escapeHtml(patient.area)} · RHPASS ${patient.score} · ${escapeHtml(patient.acuity)} · Needs Level ${patient.requiredLevel}+</div>
+          </div>
+          <span class="assignment-risk ${assignment.safe ? 'ok' : 'warn'}">${assignment.safe ? 'Competency matched' : 'Needs supervision'}</span>
+        </div>
+        <div class="assignment-meta"><strong>Suggested nurse:</strong> ${nurse ? escapeHtml(nurse.name) : 'No nurse'} ${nurse ? `· Level ${nurse.level} ${escapeHtml(nurse.grade)} · ${escapeHtml(nurse.privilege)}` : ''}</div>
+        <div class="assignment-meta" style="margin-top:6px;"><strong>Reason:</strong> ${escapeHtml(assignment.reason)}</div>
+        <select class="assignment-select" onchange="changeSuggestedNurse(${index}, this.value)">
+          ${poolNurses.map(option => `<option value="${option.id}" ${option.id === assignment.nurseId ? 'selected' : ''}>${escapeHtml(option.name)} · Level ${option.level} ${escapeHtml(option.grade)} · Load ${option.currentLoad}/${option.maxLoad}</option>`).join('')}
+        </select>
+        <div class="gov-actions">
+          <button class="gov-action" onclick="approveAssignment(${index})">Approve</button>
+          <button class="gov-action secondary" onclick="overrideAssignment(${index})">Override With Supervision</button>
+          <button class="gov-action secondary" onclick="showToast('Admin can choose another nurse from the dropdown')">Change Nurse</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function changeSuggestedNurse(index, nurseId) {
+  const assignment = smartAssignments[index];
+  const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
+  const nurse = getPoolNurses().find(item => item.id === nurseId);
+  if (!nurse) return;
+  assignment.nurseId = nurseId;
+  assignment.safe = nurse.level >= patient.requiredLevel;
+  assignment.status = 'suggested';
+  assignment.reason = getAssignmentReason(patient, nurse, assignment.safe);
+  renderAssignmentSuggestions();
+}
+
+function approveAssignment(index) {
+  smartAssignments[index].status = 'approved';
+  renderAssignmentSuggestions();
+  showToast('Assignment approved by admin');
+}
+
+function overrideAssignment(index) {
+  smartAssignments[index].status = 'override';
+  smartAssignments[index].safe = false;
+  renderAssignmentSuggestions();
+  showToast('Assignment marked as supervised override');
+}
+
+function resetSmartAssignments() {
+  smartAssignments = [];
+  renderSmartAssignmentPrototype();
+  showToast('Smart assignment demo reset');
+}
+
+function copyAssignmentSummary() {
+  if (!smartAssignments.length) {
+    showToast('Generate suggestions first');
+    return;
+  }
+  const text = ['SMART NURSE-PATIENT ASSIGNMENT PLAN'];
+  const poolInfo = hospitalNurseScale.pools[getSelectedAssignmentPool()] || hospitalNurseScale.pools.ward3;
+  text.push('Selected pool: ' + poolInfo.label);
+  smartAssignments.forEach(assignment => {
+    const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
+    const nurse = getPoolNurses().find(item => item.id === assignment.nurseId);
+    text.push(`${patient.bed} | ${patient.name} | ${patient.area} RHPASS ${patient.score} ${patient.acuity} | Nurse: ${nurse ? nurse.name : '-'} Level ${nurse ? nurse.level : '-'} | Status: ${assignment.status.toUpperCase()} | ${assignment.reason}`);
+  });
+  navigator.clipboard.writeText(text.join('\n')).then(() => showToast('Assignment plan copied')).catch(() => showToast('Ready to copy'));
 }
 
 // ══════════════════════════════════════════
