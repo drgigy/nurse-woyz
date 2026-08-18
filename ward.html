@@ -183,7 +183,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
-.nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+.nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -218,7 +218,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .sti-bed { font-size: 10px; color: #e63946; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
 .sti-time { font-size: 10px; color: #555; margin-bottom: 4px; }
 .sti-raw { font-size: 10px; color: #555; font-style: italic; margin-bottom: 4px; }
-.sti-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+.sti-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
 
 /* DASHBOARD */
 #screen-dashboard { background: #f0f2f5; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -267,7 +267,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-time { font-size: 12px; font-weight: 700; color: #8f0f1f; min-width: 46px; padding-top: 2px; }
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
-.d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; }
+.d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; white-space: pre-wrap; }
 .d-tl-nurse { font-size: 10px; color: #aab4c4; margin-top: 5px; }
 .d-right { width: 240px; background: #fff; border-left: 1px solid #dce3ec; overflow-y: auto; flex-shrink: 0; padding: 13px; }
 .d-rp-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
@@ -1677,9 +1677,51 @@ function noteTypeCopyLabel(type) {
   return 'NURSING NOTE';
 }
 
+function formatStructuredNoteText(note) {
+  let text = String(note?.text || '').trim();
+  if (!text) return '';
+  if (text.includes('\n')) return text;
+  if (note?.type === 'handover') {
+    return [
+      'HANDOVER NOTE',
+      '',
+      'Patient status:',
+      text,
+      '',
+      'Pending tasks / monitoring:',
+      'Nurse to verify.',
+      '',
+      'Escalation / follow-up:',
+      'Nurse to verify.'
+    ].join('\n');
+  }
+  if (note?.type === 'careplan') {
+    const labels = [
+      'Assessment cues:',
+      'Suggested approved templates:',
+      'Nursing diagnosis/problem:',
+      'Related to:',
+      'As evidenced by:',
+      'Objective/expected outcome:',
+      'Expected outcome/goal:',
+      'Nursing interventions:',
+      'Referral:',
+      'Escalation/referral:',
+      'Patient/family education:',
+      'Evaluation:',
+      'Monitoring/evaluation:'
+    ];
+    labels.forEach(label => {
+      text = text.replaceAll(label, '\n\n' + label);
+    });
+    return text.replace(/^CARE PLAN DRAFT\s*/, 'CARE PLAN DRAFT\n\n').trim();
+  }
+  return text;
+}
+
 function getDictationSystemInstruction() {
   if (currentNoteType === 'handover') {
-    return 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.';
+    return 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note with headings. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.';
   }
   if (currentNoteType === 'careplan') {
     return 'You are a hospital nursing care-plan drafting assistant for Kerala, India. A nurse dictates bedside clinical assessment details in Malayalam, sometimes mixed with English medical terms. Convert the assessment into English and draft a structured care plan only from the approved care-plan template headings supplied by the hospital. Strict safety rule: if the nurse did not dictate a clinical detail, do not add it. Do not assume symptoms, risks, treatments, medications, frequencies, escalation criteria, referrals, or diagnoses. Do not create medical orders. Include only details explicitly dictated by the nurse or selected from the approved template areas. If information is missing or uncertain, leave it blank or write "Nurse to verify". Return JSON only.';
@@ -1689,10 +1731,10 @@ function getDictationSystemInstruction() {
 
 function getDictationUserPrompt() {
   if (currentNoteType === 'handover') {
-    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"professional handover note dictated by the nurse"}. Do not generate an automatic summary and do not include timestamps inside the note.';
+    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"HANDOVER NOTE\\n\\nPatient status:\\n- ...\\n\\nCurrent treatment / devices:\\n- Nurse to verify\\n\\nPending tasks / monitoring:\\n- ...\\n\\nEscalation / follow-up:\\n- Nurse to verify"}. Do not generate an automatic summary. Do not add details not dictated. Do not include timestamps inside the note.';
   }
   if (currentNoteType === 'careplan') {
-    return `Translate this Malayalam bedside assessment into English and generate a nurse-reviewable care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. Do not add any clinical problem, symptom, intervention, medication, monitoring frequency, referral, education point, or escalation criterion unless it was explicitly dictated by the nurse or clearly selected from the approved template areas. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. If information is missing, leave that section blank or write "Nurse to verify". Return JSON with this exact shape: {"nursingNote":"CARE PLAN DRAFT\\nAssessment cues: ...\\nSuggested approved templates: ...\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nObjective/expected outcome: ...\\nNursing interventions: ...\\nReferral: ...\\nPatient/family education: ...\\nEvaluation: Nurse to review and document goal met, partially met, or not met with reason."}. Keep it concise and editable.`;
+    return `Translate this Malayalam bedside assessment into English and generate a professional nurse-reviewable care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. Do not add any clinical problem, symptom, intervention, medication, monitoring frequency, referral, education point, escalation criterion, or diagnosis unless it was explicitly dictated by the nurse or clearly selected from the approved template areas. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. If information is missing, leave that field blank or write "Nurse to verify". Return JSON only with this exact shape: {"nursingNote":"CARE PLAN DRAFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nExpected outcome/goal: ...\\nNursing interventions:\\n- ...\\nMonitoring/evaluation:\\n- Nurse to review and document goal met, partially met, or not met with reason.\\nEscalation/referral: Nurse to verify\\nPatient/family education: Nurse to verify\\n\\nCare plan item 2:\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nExpected outcome/goal: ...\\nNursing interventions:\\n- ...\\nMonitoring/evaluation:\\n- Nurse to review and document goal met, partially met, or not met with reason.\\nEscalation/referral: Nurse to verify\\nPatient/family education: Nurse to verify"}. Create separate care plan items only for clearly relevant dictated problems. Keep it concise, structured, and editable.`;
   }
   return 'Translate this Malayalam nursing dictation into English. Return JSON with this exact shape: {"nursingNote":"2-4 short professional nursing documentation sentences"}. Do not include activity timestamps in the note.';
 }
@@ -1799,7 +1841,7 @@ function runSimulation() {
       // Use pre-built English for simulation
       currentDictationTime = getCurrentTime();
       rawTranscript = '[Simulated Malayalam dictation]';
-      englishNote = noteTypeAtStart === 'careplan' ? buildDemoCarePlan(phrase.en) : phrase.en;
+      englishNote = noteTypeAtStart === 'careplan' ? buildDemoCarePlan(phrase.en) : noteTypeAtStart === 'handover' ? buildDemoHandover(phrase.en) : phrase.en;
       setTimeout(() => {
         setMicUI('processing');
         setPreviewLoading(noteTypeAtStart === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring clinical note...');
@@ -1825,17 +1867,44 @@ function buildDemoCarePlan(assessmentText) {
   if (!matched.length) matched.push('Deficient knowledge');
   return [
     'CARE PLAN DRAFT',
-    'Assessment cues: ' + assessmentText,
-    'Suggested approved templates: ' + matched.join(', '),
+    '',
+    'Patient assessment cues:',
+    '- ' + assessmentText,
+    '',
+    'Applicable approved care-plan templates:',
+    ...matched.map(item => '- ' + item),
+    '',
+    'Care plan item 1:',
     'Nursing diagnosis/problem: Nurse to verify the applicable diagnosis from the suggested template.',
     'Related to: Based on dictated clinical condition; nurse to verify.',
     'As evidenced by: Dictated bedside assessment cues.',
-    'Objective/expected outcome: Patient remains stable and identified nursing risks are reduced.',
-    'Nursing interventions: Apply the selected hospital-approved care-plan interventions; document observations and escalate deterioration.',
-    'Referral: Inform doctor or relevant specialty team as clinically required.',
-    'Patient/family education: Explain safety precautions and reporting symptoms as applicable.',
-    'Evaluation: Nurse to review and document goal met, partially met, or not met with reason.'
-  ].join('\\n');
+    'Expected outcome/goal: Patient remains stable and identified nursing risks are reduced.',
+    'Nursing interventions:',
+    '- Apply the selected hospital-approved care-plan interventions.',
+    '- Document observations and report deterioration promptly.',
+    'Monitoring/evaluation:',
+    '- Nurse to review and document goal met, partially met, or not met with reason.',
+    'Escalation/referral: Nurse to verify.',
+    'Patient/family education: Nurse to verify and document relevant education.'
+  ].join('\n');
+}
+
+function buildDemoHandover(handoverText) {
+  return [
+    'HANDOVER NOTE',
+    '',
+    'Patient status:',
+    '- ' + handoverText,
+    '',
+    'Current treatment / devices:',
+    '- Nurse to verify.',
+    '',
+    'Pending tasks / monitoring:',
+    '- Continue monitoring as dictated and verify pending tasks.',
+    '',
+    'Escalation / follow-up:',
+    '- Inform duty doctor if symptoms worsen or as clinically indicated.'
+  ].join('\n');
 }
 
 // ══════════════════════════════════════════
@@ -1894,7 +1963,7 @@ function renderNotesList() {
           <button class="note-edit-btn cancel-edit" onclick="cancelEditNote()">Cancel</button>
         </div>
       ` : `
-        <div class="nc-text">✦ ${escapeHtml(n.text)}</div>
+        <div class="nc-text">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
         <div class="note-edit-actions">
           <button class="note-edit-btn" onclick="startEditNote('${escapeJsArg(noteId)}')">Edit</button>
         </div>
@@ -1974,7 +2043,7 @@ function showSummary() {
       <div class="sti-bed">Bed ${escapeHtml(n.bed)}</div>
       <div class="sti-time">${escapeHtml(n.time)}</div>
       <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-      <div class="sti-text">✦ ${escapeHtml(n.text)}</div>
+      <div class="sti-text">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
     </div>
   `).join('') : '<div style="font-size:13px;color:#555;padding:20px;text-align:center;">No notes recorded this shift.</div>';
   showScreen('summary');
@@ -2035,7 +2104,7 @@ function selectDashBed(bedId) {
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
         <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-        <div class="d-tl-note">✦ ${escapeHtml(n.text)}</div>
+        <div class="d-tl-note">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
     </div>`).join('')

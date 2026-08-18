@@ -170,7 +170,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
-.nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+.nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -192,7 +192,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .sti-bed { font-size: 10px; color: #e63946; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
 .sti-time { font-size: 10px; color: #555; margin-bottom: 4px; }
 .sti-raw { font-size: 10px; color: #555; font-style: italic; margin-bottom: 4px; }
-.sti-text { font-size: 12px; color: #ccc; line-height: 1.5; }
+.sti-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
 
 /* DASHBOARD */
 #screen-dashboard { background: #f0f2f5; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -262,7 +262,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-time { font-size: 12px; font-weight: 700; color: #8f0f1f; min-width: 46px; padding-top: 2px; }
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
-.d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; }
+.d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; white-space: pre-wrap; }
 .d-tl-nurse { font-size: 10px; color: #aab4c4; margin-top: 5px; }
 .d-right { width: 240px; background: #fff; border-left: 1px solid #dce3ec; overflow-y: auto; flex-shrink: 0; padding: 13px; transition: width 0.2s ease; }
 .d-main.transfer-expanded .d-content { display: none; }
@@ -1468,6 +1468,48 @@ function noteTypeCopyLabel(type) {
   return 'NURSING NOTE';
 }
 
+function formatStructuredNoteText(note) {
+  let text = String(note?.text || '').trim();
+  if (!text) return '';
+  if (text.includes('\n')) return text;
+  if (note?.type === 'handover') {
+    return [
+      'HANDOVER NOTE',
+      '',
+      'Patient status:',
+      text,
+      '',
+      'Pending tasks / monitoring:',
+      'Nurse to verify.',
+      '',
+      'Escalation / follow-up:',
+      'Nurse to verify.'
+    ].join('\n');
+  }
+  if (note?.type === 'careplan') {
+    const labels = [
+      'Assessment cues:',
+      'Suggested approved templates:',
+      'Nursing diagnosis/problem:',
+      'Related to:',
+      'As evidenced by:',
+      'Objective/expected outcome:',
+      'Expected outcome/goal:',
+      'Nursing interventions:',
+      'Referral:',
+      'Escalation/referral:',
+      'Patient/family education:',
+      'Evaluation:',
+      'Monitoring/evaluation:'
+    ];
+    labels.forEach(label => {
+      text = text.replaceAll(label, '\n\n' + label);
+    });
+    return text.replace(/^CARE PLAN DRAFT\s*/, 'CARE PLAN DRAFT\n\n').trim();
+  }
+  return text;
+}
+
 function getCarePlanStatus(bedNotes = []) {
   const carePlans = bedNotes.filter(note => note.type === 'careplan');
   if (!bedNotes.length) {
@@ -2416,7 +2458,7 @@ function renderAllBedsOverview() {
     const bedNotes = notes[room.id] || [];
     const lastNote = bedNotes.length ? bedNotes[bedNotes.length - 1] : null;
     const careStatus = getCarePlanStatus(bedNotes);
-    const noteText = lastNote?.text || 'No notes recorded yet.';
+    const noteText = lastNote ? formatStructuredNoteText(lastNote).replace(/\s+/g, ' ') : 'No notes recorded yet.';
     const noteMeta = lastNote
       ? `${escapeHtml(lastNote.time || '')} · ${bedNotes.length} note${bedNotes.length === 1 ? '' : 's'}`
       : '0 notes';
@@ -2563,7 +2605,7 @@ function renderDashboardBedDetail(bedId) {
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
         <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-        <div class="d-tl-note">✦ ${escapeHtml(n.text)}</div>
+        <div class="d-tl-note">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
     </div>`).join('')
