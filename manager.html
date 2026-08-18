@@ -2949,18 +2949,27 @@ function showGovTab(tab) {
 }
 
 function shouldOpenGovernanceFromUrl() {
-  return new URLSearchParams(window.location.search).get('governance') === '1';
+  return Boolean(getGovernanceTabFromUrl());
+}
+
+function getGovernanceTabFromUrl() {
+  const value = new URLSearchParams(window.location.search).get('governance');
+  if (value === '1' || value === 'rhpass') return 'rhpass';
+  if (value === 'hierarchy') return 'hierarchy';
+  if (value === 'competency') return 'competency';
+  return '';
 }
 
 function openGovernanceFromHomeLink() {
   if (!shouldOpenGovernanceFromUrl()) return;
+  const tab = getGovernanceTabFromUrl() || 'rhpass';
   if (managerLoggedIn) {
     showScreen('dashboard');
     openGovernancePanel();
-    showGovTab('rhpass');
+    showGovTab(tab);
   } else {
     showScreen('manager-login');
-    showToast('Login with manager / 1234 to open Nursing Governance');
+    showToast('Login with manager / 1234 to open supervisor tool');
   }
 }
 
