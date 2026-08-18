@@ -168,6 +168,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-time { font-size: 10px; color: #e63946; margin-bottom: 4px; }
 .nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #c1121f; background: #fff0f2; border: 1px solid #f3b3bb; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
+.nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
@@ -249,6 +250,10 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .ward-bed-summary-note { min-width: 0; color: #40536c; font-size: 12px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ward-bed-summary-note.empty { color: #91a0b5; font-style: italic; }
 .ward-bed-summary-meta { color: #8a9ab4; font-size: 10px; white-space: nowrap; text-align: right; }
+.ward-bed-summary-status { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
+.care-plan-status { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; border: 1px solid #dce3ec; background: #f6f9fc; color: #7b8ca3; padding: 4px 8px; font-size: 10px; font-weight: 850; white-space: nowrap; }
+.care-plan-status.has-care-plan { border-color: #b7e1ca; background: #e8f5ef; color: #075a35; }
+.care-plan-status.needs-care-plan { border-color: #f3b3bb; background: #fff0f2; color: #a6192e; }
 .dashboard-back-btn { display: none; }
 .dashboard-back-btn.show { display: inline-flex; }
 .d-tl-item { background: #fff; border: 1px solid #dce3ec; border-left: 3px solid #1a7a4a; border-radius: 8px; padding: 13px 16px; display: flex; gap: 14px; }
@@ -577,32 +582,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 .gov-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
 .gov-action { border:0; border-radius:10px; background:#b11226; color:#fff; padding:10px 12px; font:inherit; font-size:12px; font-weight:850; cursor:pointer; }
 .gov-action.secondary { background:#e8eef4; color:#162033; }
-.assignment-board { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
-.assignment-list { display:grid; gap:10px; }
-.assignment-card { border:1px solid #d7e1ef; border-radius:14px; padding:12px; background:#f8fbff; }
-.assignment-title { font-weight:900; color:#b11226; font-size:15px; margin-bottom:4px; }
-.assignment-meta { color:#53647d; font-size:12px; font-weight:700; line-height:1.45; }
-.assignment-risk { display:inline-flex; align-items:center; gap:5px; border-radius:999px; padding:5px 8px; margin-top:8px; background:#fff4f5; color:#b11226; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.05em; }
-.assignment-risk.warn { background:#fff4df; color:#9a5a00; }
-.assignment-risk.ok { background:#e8f8ef; color:#087a3a; }
-.assignment-suggestion { border:1px solid #c9d7e9; border-left:6px solid #b11226; border-radius:14px; padding:12px; background:#fff; margin-top:10px; }
-.assignment-suggestion.approved { border-left-color:#087a3a; background:#f4fff8; }
-.assignment-suggestion.override { border-left-color:#b33a3a; background:#fff8f8; }
-.assignment-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
-.assignment-score { font-size:24px; font-weight:950; color:#b11226; }
-.assignment-select { width:100%; border:1px solid #cfdbea; border-radius:10px; padding:10px; font:inherit; font-weight:800; background:#fff; color:#162033; margin-top:8px; }
-.assignment-note { border:1px dashed #b8c8dc; border-radius:14px; padding:12px; background:#fbfdff; color:#53647d; font-size:13px; line-height:1.5; margin-top:12px; }
-.assignment-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
-.flow-step { border:1px solid #f1c5cb; border-radius:14px; padding:12px; background:#fff7f8; }
-.flow-number { width:26px; height:26px; border-radius:50%; background:#b11226; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:950; margin-bottom:8px; }
-.flow-title { color:#b11226; font-weight:950; font-size:13px; margin-bottom:3px; }
-.flow-copy { color:#61738a; font-size:11px; line-height:1.35; font-weight:700; }
-.pool-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
-.pool-pill { border:1px solid #f1c5cb; border-radius:14px; padding:10px; background:#fff; }
-.pool-pill strong { display:block; color:#b11226; font-size:16px; }
-.pool-pill span { color:#61738a; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.45px; }
 @media(max-width:980px){.gov-grid,.hierarchy{grid-template-columns:1fr}.gov-mini-grid,.rhpass-score{grid-template-columns:1fr 1fr}.rhpass-options{grid-template-columns:1fr}.gov-modal{padding:8px}.gov-shell{border-radius:14px}}
-@media(max-width:980px){.assignment-board,.assignment-flow{grid-template-columns:1fr}.pool-summary{grid-template-columns:1fr 1fr}.assignment-row{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -724,7 +704,6 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
         <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">PASS Patient Acuity</button>
         <button class="gov-tab" data-gov-tab="hierarchy" onclick="showGovTab('hierarchy')">Nursing Hierarchy Login</button>
         <button class="gov-tab" data-gov-tab="competency" onclick="showGovTab('competency')">Competency Assessment</button>
-        <button class="gov-tab" data-gov-tab="assignment" onclick="showGovTab('assignment')">Smart Assignment</button>
       </div>
 
       <section class="gov-panel active" id="gov-rhpass">
@@ -837,77 +816,6 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
         </div>
       </section>
 
-      <section class="gov-panel" id="gov-assignment">
-        <div class="gov-card" style="margin-bottom:14px;">
-          <h3>Hospital-Scale Workforce Workflow</h3>
-          <p class="gov-muted">Demo model for a hospital with 1400 nurses: register all nurses, complete competency assessment, create area-wise nurse pools, then run supervised automatic assignment within the selected pool.</p>
-          <div class="assignment-flow">
-            <div class="flow-step"><div class="flow-number">1</div><div class="flow-title">Register Nurses</div><div class="flow-copy">All 1400 nurses receive a digital profile with hospital ID, designation, unit, and eligibility.</div></div>
-            <div class="flow-step"><div class="flow-number">2</div><div class="flow-title">Assess Competency</div><div class="flow-copy">Level 1 to Level 5 grades define privilege, supervision need, and clinical capability.</div></div>
-            <div class="flow-step"><div class="flow-number">3</div><div class="flow-title">Create Pools</div><div class="flow-copy">ICU, wards, OT, Cath Lab, emergency, and specialty areas maintain their own nurse pools.</div></div>
-            <div class="flow-step"><div class="flow-number">4</div><div class="flow-title">Assign & Approve</div><div class="flow-copy">Algorithm suggests matches from the selected pool; supervisor verifies or overrides.</div></div>
-          </div>
-        </div>
-        <div class="gov-grid">
-          <div class="gov-card">
-            <h3>Supervised Nurse-Patient Assignment</h3>
-            <p class="gov-muted">Prototype algorithm compares patient acuity with nurse competency. It suggests assignments, but the admin must approve, change, or override every decision.</p>
-            <div class="gov-field" style="margin-top:12px;">
-              <label>Hospital area / nurse pool</label>
-              <select id="assignmentPool" onchange="resetSmartAssignments()">
-                <option value="ward3">Ward 3 - Medical</option>
-                <option value="icu">Medical ICU</option>
-                <option value="cathrecovery">Cath Lab Recovery</option>
-              </select>
-            </div>
-            <div class="rhpass-score">
-              <div class="score-tile"><div class="score-value">1400</div><div class="score-label">Registered nurses</div></div>
-              <div class="score-tile"><div class="score-value" id="assignmentNurseCount">0</div><div class="score-label">Pool nurses</div></div>
-              <div class="score-tile"><div class="score-value" id="assignmentApprovedCount">0</div><div class="score-label">Approved</div></div>
-            </div>
-            <div class="pool-summary">
-              <div class="pool-pill"><strong id="assignmentPatientCount">0</strong><span>Pool patients</span></div>
-              <div class="pool-pill"><strong id="assignmentAssessedCount">0</strong><span>Competency assessed</span></div>
-              <div class="pool-pill"><strong id="assignmentPoolLabel">Ward 3</strong><span>Selected pool</span></div>
-            </div>
-            <div class="gov-actions">
-              <button class="gov-action" onclick="generateSmartAssignments()">Generate Suggestions</button>
-              <button class="gov-action secondary" onclick="resetSmartAssignments()">Reset Demo</button>
-              <button class="gov-action secondary" onclick="copyAssignmentSummary()">Copy Assignment Plan</button>
-            </div>
-            <div class="assignment-note">
-              Matching rule used for demo: the supervisor selects the hospital area first. Only patients and nurses from that area's assigned nurse pool are considered. ICU 1:1 or ICU high acuity prefers Level 5 or Level 4 nurses; ward Acuity 4 prefers Level 4+, Acuity 3 prefers Level 3+, Acuity 2 prefers Level 2+, and Acuity 1 can be handled by Level 1+ with supervision rules.
-            </div>
-          </div>
-          <div class="gov-card">
-            <h3>Admin Oversight Logic</h3>
-            <table class="level-table">
-              <thead><tr><th>Patient need</th><th>Minimum nurse level</th><th>Admin action</th></tr></thead>
-              <tbody>
-                <tr><td>ICU 1:1 / very high acuity</td><td>Level 5 preferred</td><td>Approve senior nurse or override with reason</td></tr>
-                <tr><td>ICU high acuity / Ward Acuity 4</td><td>Level 4+</td><td>Approve or assign senior supervision</td></tr>
-                <tr><td>Ward Acuity 3</td><td>Level 3+</td><td>Approve competent nurse</td></tr>
-                <tr><td>Ward Acuity 2</td><td>Level 2+</td><td>Approve with routine support</td></tr>
-                <tr><td>Ward Acuity 1</td><td>Level 1+</td><td>Suitable for supervised novice exposure</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="assignment-board">
-          <div class="gov-card">
-            <h3>Patients With Acuity</h3>
-            <div class="assignment-list" id="assignmentPatients"></div>
-          </div>
-          <div class="gov-card">
-            <h3>Nurses With Competency</h3>
-            <div class="assignment-list" id="assignmentNurses"></div>
-          </div>
-        </div>
-        <div class="gov-card" style="margin-top:14px;">
-          <h3>Suggested Assignments For Admin Review</h3>
-          <div id="assignmentSuggestions"></div>
-        </div>
-      </section>
     </div>
   </div>
 </div>
@@ -1391,6 +1299,36 @@ function getRoomNurse(roomId) {
   return room && room.assignedNurseName ? room.assignedNurseName : 'Unassigned';
 }
 
+function noteTypeLabel(type) {
+  if (type === 'handover') return 'Handover';
+  if (type === 'careplan') return 'Care Plan';
+  return 'Nursing Note';
+}
+
+function noteTypeClass(type) {
+  if (type === 'handover') return 'handover';
+  if (type === 'careplan') return 'careplan';
+  return '';
+}
+
+function noteTypeCopyLabel(type) {
+  if (type === 'handover') return 'HANDOVER';
+  if (type === 'careplan') return 'CARE PLAN';
+  return 'NURSING NOTE';
+}
+
+function getCarePlanStatus(bedNotes = []) {
+  const carePlans = bedNotes.filter(note => note.type === 'careplan');
+  if (!bedNotes.length) {
+    return { label: 'No care plan', className: 'needs-care-plan' };
+  }
+  if (carePlans.length) {
+    const latest = carePlans[carePlans.length - 1];
+    return { label: 'Care plan: Draft', className: 'has-care-plan', time: latest.time || '' };
+  }
+  return { label: 'Care plan needed', className: 'needs-care-plan' };
+}
+
 function setPreviewText(text, { editable = false, placeholder = false } = {}) {
   const box = document.getElementById('englishTranscript');
   if (!box) return;
@@ -1821,7 +1759,7 @@ async function saveNote() {
   addLiveActivity(currentBed, text, time);
   refreshDashboard();
   resetMicState();
-  showToast((type === 'handover' ? 'Handover' : 'Note') + ' saved for Bed ' + currentBed + ' ✓');
+  showToast(noteTypeLabel(type) + ' saved for Bed ' + currentBed + ' ✓');
 }
 
 function renderNotesList() {
@@ -1837,7 +1775,7 @@ function renderNotesList() {
     return `
     <div class="note-card">
       <div class="nc-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
       ${isEditing ? `
         <textarea class="note-edit-box" id="editNoteText_${index}">${escapeHtml(n.text)}</textarea>
         <div class="note-edit-actions">
@@ -1902,7 +1840,7 @@ function copyCurrentBedNotes() {
     return;
   }
   const text = `BED ${currentBed} — NURSING RECORD\n\n` + bedNotes
-    .map(n => `${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`)
+    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`)
     .join('\n\n');
   navigator.clipboard.writeText(text)
     .then(() => showToast('All Bed ' + currentBed + ' notes copied ✓'))
@@ -1921,7 +1859,7 @@ function showSummary() {
     <div class="st-item">
       <div class="sti-bed">Bed ${escapeHtml(n.bed)}</div>
       <div class="sti-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
       <div class="sti-text">✦ ${escapeHtml(n.text)}</div>
     </div>
   `).join('') : '<div style="font-size:13px;color:#555;padding:20px;text-align:center;">No notes recorded this shift.</div>';
@@ -1934,7 +1872,7 @@ function copyToEMR() {
   all.sort((a,b) => a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes to copy'); return; }
   const text = 'SHIFT NOTES\nNurse Priya · Ward 3 · Night Shift\n\n' +
-    all.map(n => `${n.time} | Bed ${n.bed} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+    all.map(n => `${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard ✓')).catch(() => showToast('Ready to paste'));
 }
 
@@ -2323,6 +2261,7 @@ function renderAllBedsOverview() {
   timeline.innerHTML = dashboardRooms.map(room => {
     const bedNotes = notes[room.id] || [];
     const lastNote = bedNotes.length ? bedNotes[bedNotes.length - 1] : null;
+    const careStatus = getCarePlanStatus(bedNotes);
     const noteText = lastNote?.text || 'No notes recorded yet.';
     const noteMeta = lastNote
       ? `${escapeHtml(lastNote.time || '')} · ${bedNotes.length} note${bedNotes.length === 1 ? '' : 's'}`
@@ -2330,8 +2269,11 @@ function renderAllBedsOverview() {
     return `
       <button class="ward-bed-summary ${room.id === activeDashBed ? 'focused' : ''}" id="overviewBed-${escapeHtml(room.id)}" onclick="openDashboardBedDetail('${escapeJsArg(room.id)}')">
         <span class="ward-bed-summary-number">${escapeHtml(room.name)}</span>
-        <span class="ward-bed-summary-note ${lastNote ? '' : 'empty'}">${escapeHtml(noteText)}</span>
-        <span class="ward-bed-summary-meta">${noteMeta}</span>
+        <span class="ward-bed-summary-note ${lastNote ? '' : 'empty'}">${lastNote ? `<span class="nc-kind ${noteTypeClass(lastNote.type)}">${noteTypeLabel(lastNote.type)}</span> ` : ''}${escapeHtml(noteText)}</span>
+        <span class="ward-bed-summary-status">
+          <span class="care-plan-status ${careStatus.className}">${escapeHtml(careStatus.label)}</span>
+          <span class="ward-bed-summary-meta">${noteMeta}</span>
+        </span>
       </button>
     `;
   }).join('');
@@ -2454,8 +2396,9 @@ function clearPatientDetails() {
 function renderDashboardBedDetail(bedId) {
   activeDashBed = bedId;
   const bedNotes = notes[bedId] || [];
+  const careStatus = getCarePlanStatus(bedNotes);
   document.getElementById('dashBedTitle').textContent = getRoomLabel(bedId) + ' — Timeline';
-  document.getElementById('dashBedMeta').textContent = getRoomNurse(bedId) + ' · Ward 3 · ' + bedNotes.length + ' note' + (bedNotes.length!==1?'s':'') + ' documented';
+  document.getElementById('dashBedMeta').textContent = getRoomNurse(bedId) + ' · Ward 3 · ' + bedNotes.length + ' note' + (bedNotes.length!==1?'s':'') + ' documented · ' + careStatus.label;
   document.getElementById('dashboardBackBtn').classList.add('show');
   document.getElementById('dStatNotes').textContent = bedNotes.length;
   document.getElementById('dashTlLabel').textContent = 'SHIFT TIMELINE — ' + getRoomLabel(bedId).toUpperCase();
@@ -2465,7 +2408,7 @@ function renderDashboardBedDetail(bedId) {
     <div class="d-tl-item ${i===bedNotes.length-1?'new-item':''}">
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
-        <div class="nc-kind ${n.type === 'handover' ? 'handover' : ''}">${n.type === 'handover' ? 'Handover' : 'Nursing Note'}</div>
+        <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
         <div class="d-tl-note">✦ ${escapeHtml(n.text)}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
@@ -2865,7 +2808,7 @@ function copyBedToEMR() {
   const bedNotes = notes[activeDashBed] || [];
   if (!bedNotes.length) { showToast('No notes for this bed'); return; }
   const roomLabel = getRoomLabel(activeDashBed);
-  const text = `${roomLabel.toUpperCase()} — ${getRoomNurse(activeDashBed)} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = `${roomLabel.toUpperCase()} — ${getRoomNurse(activeDashBed)} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast(roomLabel + ' copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -2874,7 +2817,7 @@ function copyAllToEMR() {
   Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n=>all.push({bed,...n})));
   all.sort((a,b)=>a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes yet this shift'); return; }
-  const text = 'FULL WARD NOTES\nWard 3 · Night Shift\n\n' + all.map(n=>`${n.time} | ${getRoomLabel(n.bed)} | ${n.type === 'handover' ? 'HANDOVER' : 'NURSING NOTE'}\n${n.text}`).join('\n\n');
+  const text = 'FULL WARD NOTES\nWard 3 · Night Shift\n\n' + all.map(n=>`${n.time} | ${getRoomLabel(n.bed)} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Full summary copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -2977,62 +2920,10 @@ const levelOneCompetencies = [
   'ICU capstone: IV cannulation, invasive line sampling and central line care'
 ];
 
-const hospitalNurseScale = {
-  total: 1400,
-  assessed: 1138,
-  pools: {
-    ward3: { label: 'Ward 3 - Medical', registered: 42, assessed: 35 },
-    icu: { label: 'Medical ICU', registered: 68, assessed: 63 },
-    cathrecovery: { label: 'Cath Lab Recovery', registered: 24, assessed: 21 }
-  }
-};
-
-const smartAssignmentPatients = [
-  { id: 'p101', pool: 'ward3', name: 'Michelle Teoh', uhid: 'UHID-240101', bed: 'Bed 101', area: 'Ward 3 - Medical', score: 48, acuity: 'Acuity 4', ratio: '1:2', requiredLevel: 4 },
-  { id: 'p103', pool: 'ward3', name: 'Mary Thomas', uhid: 'UHID-240103', bed: 'Bed 103', area: 'Ward 3 - Medical', score: 37, acuity: 'Acuity 3', ratio: '1:3', requiredLevel: 3 },
-  { id: 'p104', pool: 'ward3', name: 'Abdul Rahman', uhid: 'UHID-240104', bed: 'Bed 104', area: 'Ward 3 - Medical', score: 24, acuity: 'Acuity 2', ratio: '1:5', requiredLevel: 2 },
-  { id: 'p105', pool: 'ward3', name: 'Leela Varghese', uhid: 'UHID-240105', bed: 'Bed 105', area: 'Ward 3 - Medical', score: 15, acuity: 'Acuity 1', ratio: '1:6', requiredLevel: 1 },
-  { id: 'p201', pool: 'icu', name: 'Rajan Menon', uhid: 'UHID-240201', bed: 'ICU 02', area: 'Medical ICU', score: 28, acuity: 'High acuity', ratio: 'High acuity', requiredLevel: 5 },
-  { id: 'p202', pool: 'icu', name: 'Saramma Joseph', uhid: 'UHID-240202', bed: 'ICU 04', area: 'Medical ICU', score: 0, acuity: '1:1 care', ratio: '1:1', requiredLevel: 5 },
-  { id: 'p203', pool: 'icu', name: 'Dinesh Kumar', uhid: 'UHID-240203', bed: 'ICU 06', area: 'Medical ICU', score: 18, acuity: 'Low acuity', ratio: 'Low acuity', requiredLevel: 4 },
-  { id: 'p301', pool: 'cathrecovery', name: 'George Mathew', uhid: 'UHID-240301', bed: 'CR 01', area: 'Cath Lab Recovery', score: 34, acuity: 'Post-procedure high watch', ratio: '1:3', requiredLevel: 4 },
-  { id: 'p302', pool: 'cathrecovery', name: 'Amina Beevi', uhid: 'UHID-240302', bed: 'CR 03', area: 'Cath Lab Recovery', score: 22, acuity: 'Routine recovery', ratio: '1:5', requiredLevel: 3 }
-];
-
-const smartAssignmentNurses = [
-  { id: 'n1', pool: 'ward3', name: 'Jewel', hospitalId: 'NRS-1001', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
-  { id: 'n2', pool: 'ward3', name: 'Priya', hospitalId: 'NRS-1002', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 3, assessed: true },
-  { id: 'n3', pool: 'ward3', name: 'Anu', hospitalId: 'NRS-1003', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 1, maxLoad: 4, assessed: true },
-  { id: 'n4', pool: 'ward3', name: 'Meera', hospitalId: 'NRS-1004', level: 2, grade: 'Advanced Beginner', privilege: 'GSU', currentLoad: 0, maxLoad: 4, assessed: true },
-  { id: 'n5', pool: 'ward3', name: 'Riya', hospitalId: 'NRS-1005', level: 1, grade: 'Novice', privilege: 'NG', currentLoad: 0, maxLoad: 3, assessed: true },
-  { id: 'n6', pool: 'icu', name: 'Susan', hospitalId: 'NRS-2101', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 1, maxLoad: 2, assessed: true },
-  { id: 'n7', pool: 'icu', name: 'Lincy', hospitalId: 'NRS-2102', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
-  { id: 'n8', pool: 'icu', name: 'Neethu', hospitalId: 'NRS-2103', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 2, assessed: true },
-  { id: 'n9', pool: 'icu', name: 'Fathima', hospitalId: 'NRS-2104', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 0, maxLoad: 3, assessed: true },
-  { id: 'n10', pool: 'cathrecovery', name: 'Sherin', hospitalId: 'NRS-3101', level: 5, grade: 'Expert', privilege: 'G', currentLoad: 0, maxLoad: 2, assessed: true },
-  { id: 'n11', pool: 'cathrecovery', name: 'Divya', hospitalId: 'NRS-3102', level: 4, grade: 'Proficient', privilege: 'GS', currentLoad: 1, maxLoad: 3, assessed: true },
-  { id: 'n12', pool: 'cathrecovery', name: 'Asha', hospitalId: 'NRS-3103', level: 3, grade: 'Competent', privilege: 'GA', currentLoad: 0, maxLoad: 3, assessed: true }
-];
-
 let rhpassMode = 'ward';
 let wardRhpassScores = Array(wardRhpassItems.length).fill(0);
 let icuRhpassScores = Array(icuRhpassItems.length).fill(false);
 let competencyDone = Array(levelOneCompetencies.length).fill(false);
-let smartAssignments = [];
-
-function getSelectedAssignmentPool() {
-  return document.getElementById('assignmentPool')?.value || 'ward3';
-}
-
-function getPoolPatients() {
-  const pool = getSelectedAssignmentPool();
-  return smartAssignmentPatients.filter(patient => patient.pool === pool);
-}
-
-function getPoolNurses() {
-  const pool = getSelectedAssignmentPool();
-  return smartAssignmentNurses.filter(nurse => nurse.pool === pool);
-}
 
 function openGovernancePanel() {
   document.getElementById('governanceModal').classList.add('show');
@@ -3055,7 +2946,6 @@ function showGovTab(tab) {
   if (tab === 'rhpass') renderRhpass();
   if (tab === 'hierarchy') renderGovernanceRoles();
   if (tab === 'competency') renderCompetencyList();
-  if (tab === 'assignment') renderSmartAssignmentPrototype();
 }
 
 function shouldOpenGovernanceFromUrl() {
@@ -3067,7 +2957,7 @@ function openGovernanceFromHomeLink() {
   if (managerLoggedIn) {
     showScreen('dashboard');
     openGovernancePanel();
-    showGovTab('assignment');
+    showGovTab('rhpass');
   } else {
     showScreen('manager-login');
     showToast('Login with manager / 1234 to open Nursing Governance');
@@ -3268,187 +3158,6 @@ function resetCompetency() {
   });
   renderCompetencyList();
   showToast('Competency assessment reset');
-}
-
-function renderSmartAssignmentPrototype() {
-  const patientList = document.getElementById('assignmentPatients');
-  const nurseList = document.getElementById('assignmentNurses');
-  if (!patientList || !nurseList) return;
-  const pool = getSelectedAssignmentPool();
-  const poolInfo = hospitalNurseScale.pools[pool] || hospitalNurseScale.pools.ward3;
-  const poolPatients = getPoolPatients();
-  const poolNurses = getPoolNurses();
-  patientList.innerHTML = poolPatients.map(patient => `
-    <div class="assignment-card">
-      <div class="assignment-row">
-        <div>
-          <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
-          <div class="assignment-meta">${escapeHtml(patient.uhid)} · ${escapeHtml(patient.area)} · PASS ${patient.score}</div>
-        </div>
-        <div class="assignment-score">L${patient.requiredLevel}</div>
-      </div>
-      <div class="assignment-meta">${escapeHtml(patient.acuity)} · Recommended ${escapeHtml(patient.ratio)} · Minimum nurse competency Level ${patient.requiredLevel}</div>
-      <span class="assignment-risk ${patient.requiredLevel >= 4 ? 'warn' : 'ok'}">${patient.requiredLevel >= 4 ? 'High attention' : 'Routine match'}</span>
-    </div>
-  `).join('');
-  nurseList.innerHTML = poolNurses.map(nurse => `
-    <div class="assignment-card">
-      <div class="assignment-row">
-        <div>
-          <div class="assignment-title">${escapeHtml(nurse.name)}</div>
-          <div class="assignment-meta">${escapeHtml(nurse.hospitalId)} · Level ${nurse.level} ${escapeHtml(nurse.grade)} · ${escapeHtml(nurse.privilege)}</div>
-        </div>
-        <div class="assignment-score">L${nurse.level}</div>
-      </div>
-      <div class="assignment-meta">Current load ${nurse.currentLoad}/${nurse.maxLoad}. Suggested matching considers competency, patient acuity, and workload.</div>
-    </div>
-  `).join('');
-  document.getElementById('assignmentPatientCount').textContent = poolPatients.length;
-  document.getElementById('assignmentNurseCount').textContent = poolInfo.registered;
-  document.getElementById('assignmentAssessedCount').textContent = poolInfo.assessed;
-  document.getElementById('assignmentPoolLabel').textContent = poolInfo.label.replace(' - ', ' ');
-  renderAssignmentSuggestions();
-}
-
-function generateSmartAssignments() {
-  const nurseLoads = {};
-  const poolPatients = getPoolPatients();
-  const poolNurses = getPoolNurses();
-  poolNurses.forEach(nurse => nurseLoads[nurse.id] = nurse.currentLoad);
-  smartAssignments = poolPatients
-    .slice()
-    .sort((a, b) => b.requiredLevel - a.requiredLevel)
-    .map(patient => {
-      const candidates = poolNurses
-        .filter(nurse => nurseLoads[nurse.id] < nurse.maxLoad)
-        .filter(nurse => nurse.assessed)
-        .map(nurse => ({
-          nurse,
-          safe: nurse.level >= patient.requiredLevel,
-          score: getAssignmentScore(patient, nurse, nurseLoads[nurse.id])
-        }))
-        .sort((a, b) => b.score - a.score);
-      const best = candidates.find(candidate => candidate.safe) || candidates[0];
-      if (best) nurseLoads[best.nurse.id] += 1;
-      return {
-        patientId: patient.id,
-        nurseId: best ? best.nurse.id : '',
-        status: 'suggested',
-        safe: Boolean(best?.safe),
-        reason: best ? getAssignmentReason(patient, best.nurse, best.safe) : 'No available nurse found for this patient.'
-      };
-    });
-  renderAssignmentSuggestions();
-  showToast('Smart assignment suggestions generated');
-}
-
-function getAssignmentScore(patient, nurse, load) {
-  const competencyFit = nurse.level >= patient.requiredLevel ? 80 : 25 - ((patient.requiredLevel - nurse.level) * 10);
-  const levelGapBonus = nurse.level >= patient.requiredLevel ? Math.max(0, 10 - ((nurse.level - patient.requiredLevel) * 2)) : 0;
-  const loadPenalty = load * 6;
-  const seniorReservePenalty = patient.requiredLevel <= 2 && nurse.level >= 5 ? 8 : 0;
-  return competencyFit + levelGapBonus - loadPenalty - seniorReservePenalty;
-}
-
-function getAssignmentReason(patient, nurse, safe) {
-  if (!safe) {
-    return `${nurse.name} is below the preferred Level ${patient.requiredLevel}; admin override and senior supervision are required.`;
-  }
-  if (patient.requiredLevel >= 4) {
-    return `${patient.acuity} requires senior competency. ${nurse.name} is Level ${nurse.level} ${nurse.grade}, suitable for admin approval.`;
-  }
-  return `${nurse.name}'s Level ${nurse.level} competency meets the minimum Level ${patient.requiredLevel} requirement with acceptable current workload.`;
-}
-
-function renderAssignmentSuggestions() {
-  const box = document.getElementById('assignmentSuggestions');
-  if (!box) return;
-  const pool = getSelectedAssignmentPool();
-  const poolInfo = hospitalNurseScale.pools[pool] || hospitalNurseScale.pools.ward3;
-  const poolPatients = getPoolPatients();
-  const poolNurses = getPoolNurses();
-  document.getElementById('assignmentPatientCount').textContent = poolPatients.length;
-  document.getElementById('assignmentNurseCount').textContent = poolInfo.registered;
-  document.getElementById('assignmentAssessedCount').textContent = poolInfo.assessed;
-  document.getElementById('assignmentPoolLabel').textContent = poolInfo.label.replace(' - ', ' ');
-  document.getElementById('assignmentApprovedCount').textContent = smartAssignments.filter(a => a.status === 'approved').length;
-  if (!smartAssignments.length) {
-    box.innerHTML = '<div class="assignment-note">Click Generate Suggestions to match patients only against the selected area nurse pool. No assignment is final until the admin approves it.</div>';
-    return;
-  }
-  box.innerHTML = smartAssignments.map((assignment, index) => {
-    const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
-    const nurse = poolNurses.find(item => item.id === assignment.nurseId);
-    const className = assignment.status === 'approved' ? 'approved' : assignment.status === 'override' ? 'override' : '';
-    return `
-      <div class="assignment-suggestion ${className}">
-        <div class="assignment-row">
-          <div>
-            <div class="assignment-title">${escapeHtml(patient.bed)} · ${escapeHtml(patient.name)}</div>
-            <div class="assignment-meta">${escapeHtml(patient.area)} · PASS ${patient.score} · ${escapeHtml(patient.acuity)} · Needs Level ${patient.requiredLevel}+</div>
-          </div>
-          <span class="assignment-risk ${assignment.safe ? 'ok' : 'warn'}">${assignment.safe ? 'Competency matched' : 'Needs supervision'}</span>
-        </div>
-        <div class="assignment-meta"><strong>Suggested nurse:</strong> ${nurse ? escapeHtml(nurse.name) : 'No nurse'} ${nurse ? `· Level ${nurse.level} ${escapeHtml(nurse.grade)} · ${escapeHtml(nurse.privilege)}` : ''}</div>
-        <div class="assignment-meta" style="margin-top:6px;"><strong>Reason:</strong> ${escapeHtml(assignment.reason)}</div>
-        <select class="assignment-select" onchange="changeSuggestedNurse(${index}, this.value)">
-          ${poolNurses.map(option => `<option value="${option.id}" ${option.id === assignment.nurseId ? 'selected' : ''}>${escapeHtml(option.name)} · Level ${option.level} ${escapeHtml(option.grade)} · Load ${option.currentLoad}/${option.maxLoad}</option>`).join('')}
-        </select>
-        <div class="gov-actions">
-          <button class="gov-action" onclick="approveAssignment(${index})">Approve</button>
-          <button class="gov-action secondary" onclick="overrideAssignment(${index})">Override With Supervision</button>
-          <button class="gov-action secondary" onclick="showToast('Admin can choose another nurse from the dropdown')">Change Nurse</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function changeSuggestedNurse(index, nurseId) {
-  const assignment = smartAssignments[index];
-  const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
-  const nurse = getPoolNurses().find(item => item.id === nurseId);
-  if (!nurse) return;
-  assignment.nurseId = nurseId;
-  assignment.safe = nurse.level >= patient.requiredLevel;
-  assignment.status = 'suggested';
-  assignment.reason = getAssignmentReason(patient, nurse, assignment.safe);
-  renderAssignmentSuggestions();
-}
-
-function approveAssignment(index) {
-  smartAssignments[index].status = 'approved';
-  renderAssignmentSuggestions();
-  showToast('Assignment approved by admin');
-}
-
-function overrideAssignment(index) {
-  smartAssignments[index].status = 'override';
-  smartAssignments[index].safe = false;
-  renderAssignmentSuggestions();
-  showToast('Assignment marked as supervised override');
-}
-
-function resetSmartAssignments() {
-  smartAssignments = [];
-  renderSmartAssignmentPrototype();
-  showToast('Smart assignment demo reset');
-}
-
-function copyAssignmentSummary() {
-  if (!smartAssignments.length) {
-    showToast('Generate suggestions first');
-    return;
-  }
-  const text = ['SMART NURSE-PATIENT ASSIGNMENT PLAN'];
-  const poolInfo = hospitalNurseScale.pools[getSelectedAssignmentPool()] || hospitalNurseScale.pools.ward3;
-  text.push('Selected pool: ' + poolInfo.label);
-  smartAssignments.forEach(assignment => {
-    const patient = smartAssignmentPatients.find(item => item.id === assignment.patientId);
-    const nurse = getPoolNurses().find(item => item.id === assignment.nurseId);
-    text.push(`${patient.bed} | ${patient.name} | ${patient.area} PASS ${patient.score} ${patient.acuity} | Nurse: ${nurse ? nurse.name : '-'} Level ${nurse ? nurse.level : '-'} | Status: ${assignment.status.toUpperCase()} | ${assignment.reason}`);
-  });
-  navigator.clipboard.writeText(text.join('\n')).then(() => showToast('Assignment plan copied')).catch(() => showToast('Ready to copy'));
 }
 
 // ══════════════════════════════════════════
