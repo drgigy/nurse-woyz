@@ -3065,7 +3065,12 @@ function openGovernancePanel() {
 }
 
 function closeGovernancePanel() {
+  const openedFromHomeLink = PAGE_KIND === 'manager' && shouldOpenGovernanceFromUrl();
   document.getElementById('governanceModal').classList.remove('show');
+  if (openedFromHomeLink) {
+    window.location.href = './index.html';
+    return;
+  }
   if (PAGE_KIND === 'manager') {
     const cleanUrl = window.location.pathname + window.location.hash;
     window.history.replaceState({}, document.title, cleanUrl);
@@ -3085,7 +3090,12 @@ function openRosterPanel() {
 }
 
 function closeRosterPanel() {
+  const openedFromHomeLink = PAGE_KIND === 'manager' && shouldOpenRosterFromUrl();
   document.getElementById('rosterModal').classList.remove('show');
+  if (openedFromHomeLink) {
+    window.location.href = './index.html';
+    return;
+  }
   if (PAGE_KIND === 'manager') {
     const cleanUrl = window.location.pathname + window.location.hash;
     window.history.replaceState({}, document.title, cleanUrl);
