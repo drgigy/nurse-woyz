@@ -21,7 +21,7 @@
       padding: 22px;
     }
     main {
-      width: min(860px, 100%);
+      width: min(1040px, 100%);
     }
     .hero {
       text-align: center;
@@ -53,10 +53,27 @@
       margin: 8px auto 0;
       max-width: 620px;
     }
+    .section-title {
+      color: #a6192e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 22px 0 10px;
+    }
+    .section-note {
+      color: #61738a;
+      font-size: 13px;
+      line-height: 1.45;
+      margin: -4px 0 12px;
+    }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 14px;
+    }
+    .grid.primary {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
     a.card {
       text-decoration: none;
@@ -121,10 +138,11 @@
     <section class="hero">
       <div class="mark">NW</div>
       <h1>Nurse WOYZ</h1>
-      <p class="sub">Choose the workflow link for the demo. Ward Device is the mobile nursing workflow; supervisor tools are separated so each option is clear.</p>
+      <p class="sub">Choose the workflow needed for the demo. Nursing documentation, supervisor dashboard, transfer commands, and setup tools are separated for clarity.</p>
     </section>
 
-    <section class="grid" aria-label="Nurse Woyz workflow links">
+    <div class="section-title">Daily Workflow</div>
+    <section class="grid primary" aria-label="Daily Nurse Woyz workflow links">
       <a class="card" href="./ward.html">
         <div>
           <div class="icon">📱</div>
@@ -137,9 +155,9 @@
         <div>
           <div class="icon">🖥</div>
           <div class="title">Admin Dashboard</div>
-          <div class="desc">Desktop dashboard for ward notes, transfer requests, and live activity.</div>
+          <div class="desc">Supervisor dashboard for ward notes, transfer requests, and live activity.</div>
         </div>
-        <div class="pill">Open Manager</div>
+        <div class="pill">Open Dashboard</div>
       </a>
       <a class="card" href="./manager.html?roster=1">
         <div>
@@ -148,30 +166,6 @@
           <div class="desc">Assign nurses shift-wise for 3rd Floor Tower 3 Ward using patient acuity.</div>
         </div>
         <div class="pill">Open Roster</div>
-      </a>
-      <a class="card" href="./manager.html?governance=rhpass">
-        <div>
-          <div class="icon">📊</div>
-          <div class="title">PASS Patient Acuity</div>
-          <div class="desc">Assess ICU or ward patient acuity and estimate the nursing care requirement.</div>
-        </div>
-        <div class="pill">Open PASS</div>
-      </a>
-      <a class="card" href="./manager.html?governance=hierarchy">
-        <div>
-          <div class="icon">🏛️</div>
-          <div class="title">Nursing Hierarchy</div>
-          <div class="desc">Show role-based nursing access from superintendent to individual nurses.</div>
-        </div>
-        <div class="pill">Open Hierarchy</div>
-      </a>
-      <a class="card" href="./manager.html?governance=competency">
-        <div>
-          <div class="icon">✅</div>
-          <div class="title">Competency Assessment</div>
-          <div class="desc">Enter nurse details, complete assessment items, and assign a competency grade.</div>
-        </div>
-        <div class="pill">Open Competency</div>
       </a>
       <a class="card" href="./ot.html">
         <div>
@@ -189,21 +183,50 @@
         </div>
         <div class="pill">Open Cath Lab</div>
       </a>
+    </section>
+
+    <div class="section-title">Setup & Governance</div>
+    <p class="section-note">Use these when preparing patients, nurse profiles, acuity scoring, and competency review.</p>
+    <section class="grid" aria-label="Nurse Woyz setup and governance links">
       <a class="card" href="./qr-generator.html">
         <div>
           <div class="icon">▦</div>
           <div class="title">QR Generator</div>
-          <div class="desc">Create patient wristband QR codes for Nurse WOYZ Admin scanning.</div>
+          <div class="desc">Create patient wristband QR codes for Mobile Ward Admin scanning.</div>
         </div>
         <div class="pill">Create QR</div>
       </a>
       <a class="card" href="./nursewoyzadmin.html">
         <div>
           <div class="icon">NW</div>
-          <div class="title">Nurse WOYZ Admin</div>
-          <div class="desc">Mobile admin page for scanning patient QR, adding nurses, rooms, and assignments.</div>
+          <div class="title">Mobile Ward Admin</div>
+          <div class="desc">Mobile setup page for scanning patient QR, adding nurses, rooms, and assignments.</div>
         </div>
         <div class="pill">Open Admin</div>
+      </a>
+      <a class="card" href="./manager.html?governance=rhpass">
+        <div>
+          <div class="icon">📊</div>
+          <div class="title">PASS Patient Acuity</div>
+          <div class="desc">Assess ICU or ward patient acuity and estimate nursing care requirement.</div>
+        </div>
+        <div class="pill">Open PASS</div>
+      </a>
+      <a class="card" href="./manager.html?governance=competency">
+        <div>
+          <div class="icon">✅</div>
+          <div class="title">Competency Assessment</div>
+          <div class="desc">Enter nurse details, complete assessment items, and assign a competency grade.</div>
+        </div>
+        <div class="pill">Open Competency</div>
+      </a>
+      <a class="card" href="./manager.html?governance=hierarchy">
+        <div>
+          <div class="icon">🏛️</div>
+          <div class="title">Nursing Hierarchy</div>
+          <div class="desc">Reference view of role-based nursing access and escalation levels.</div>
+        </div>
+        <div class="pill">Open Hierarchy</div>
       </a>
     </section>
 

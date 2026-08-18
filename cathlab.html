@@ -461,8 +461,8 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <div class="screen" id="screen-manager-login">
   <div class="manager-card">
     <div class="logo-icon">🩺</div>
-    <div class="manager-title">Admin</div>
-    <div class="manager-sub">Desktop dashboard login</div>
+    <div class="manager-title">Admin Dashboard</div>
+    <div class="manager-sub">Ward supervisor desktop login</div>
     <div class="manager-field">
       <label for="managerUsername">Username</label>
       <input id="managerUsername" autocomplete="username" placeholder="manager">
@@ -472,7 +472,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <input id="managerPassword" type="password" autocomplete="current-password" placeholder="1234">
     </div>
     <button class="manager-login-btn" onclick="managerLogin()">Open Dashboard</button>
-    <div class="manager-demo-note">Prototype login: manager / 1234. Mobile users go directly to the Ward Device PIN screen.</div>
+    <div class="manager-demo-note">Use manager / 1234 for this dashboard.</div>
   </div>
 </div>
 
@@ -710,22 +710,22 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div class="cmd-hero">
       <div>
         <div class="cmd-title">OT / Cath Lab Command</div>
-        <div class="cmd-sub">Demo command app for sending patient transfer requests to the assigned ward nurse.</div>
+        <div class="cmd-sub">Command page for sending patient transfer requests to the assigned ward nurse.</div>
       </div>
       <button class="d-btn-secondary" onclick="commandLogout()">Logout</button>
       <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
     </div>
 
     <div class="cmd-card" id="commandLogin">
-      <div class="section-lbl" style="margin-top:0;">Demo staff login</div>
+      <div class="section-lbl" style="margin-top:0;">Staff access</div>
       <div class="cmd-grid">
         <div class="cmd-login-card" onclick="commandLogin(&#39;Cath Lab&#39;)">
           <div class="cmd-role">Cath Lab Staff</div>
-          <div class="cmd-pin">Demo access · Tap to open on mobile or desktop</div>
+          <div class="cmd-pin">Tap to open on mobile or desktop</div>
         </div>
         <div class="cmd-login-card" onclick="commandLogin(&#39;Operation Theatre&#39;)">
           <div class="cmd-role">OT Staff</div>
-          <div class="cmd-pin">Demo access · Tap to open on mobile or desktop</div>
+          <div class="cmd-pin">Tap to open on mobile or desktop</div>
         </div>
       </div>
     </div>
@@ -775,8 +775,8 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       </div>
       <div class="request-actions">
         <button onclick="sendTransferRequest()">Send Notification to Nurse</button>
-        <button onclick="sendDemoCathRequest()">Demo Cath Lab Request</button>
-        <button onclick="sendDemoOtRequest()">Demo OT Request</button>
+        <button onclick="sendDemoCathRequest()">Sample Cath Lab Request</button>
+        <button onclick="sendDemoOtRequest()">Sample OT Request</button>
       </div>
     </div>
 
