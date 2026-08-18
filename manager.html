@@ -332,6 +332,42 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .admin-bed-owner { font-size: 9px; margin-top: 4px; line-height: 1.3; }
 .admin-bed-acuity-line { font-size: 10px; color: #981b2d; font-weight: 900; line-height: 1.25; margin-top: 6px; }
 .admin-bed-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+.roster-modal { position: fixed; inset: 0; z-index: 2050; background: rgba(8,18,32,.58); display: none; align-items: stretch; justify-content: center; padding: 20px; }
+.roster-modal.show { display: flex; }
+.roster-shell { width: min(1380px, 100%); background: #f5f8fc; color: #162033; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 28px 90px rgba(0,0,0,.34); }
+.roster-top { background: #b11226; color: #fff; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.roster-title { font-size: 24px; font-weight: 900; letter-spacing: -.4px; }
+.roster-sub { color: #ffd1d7; font-size: 12px; margin-top: 3px; }
+.roster-close { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.28); border-radius: 10px; padding: 9px 13px; cursor: pointer; font-weight: 850; }
+.roster-body { padding: 18px; overflow: auto; display: grid; gap: 14px; }
+.roster-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; justify-content: space-between; }
+.roster-card { background: #fff; border: 1px solid #d7e1ef; border-radius: 16px; padding: 16px; box-shadow: 0 10px 26px rgba(16,42,72,.06); }
+.roster-card h3 { margin: 0 0 8px; color: #b11226; font-size: 18px; }
+.roster-field label { display: block; color: #61738a; font-size: 10px; font-weight: 850; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.roster-field select { min-width: 220px; border: 1px solid #c9d8ea; border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 13px; color: #162033; background: #fff; }
+.roster-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(360px, .7fr); gap: 14px; align-items: start; }
+.roster-patient-list { display: grid; gap: 8px; }
+.roster-patient-row { display: grid; grid-template-columns: 86px minmax(0, 1fr) 150px 220px; gap: 10px; align-items: center; border: 1px solid #d7e1ef; border-radius: 14px; background: #fff; padding: 10px; }
+.roster-room { color: #b11226; font-size: 15px; font-weight: 950; }
+.roster-patient-name { color: #162033; font-size: 14px; font-weight: 900; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roster-patient-meta { color: #61738a; font-size: 11px; font-weight: 750; line-height: 1.35; }
+.roster-acuity { display: inline-flex; justify-content: center; align-items: center; border-radius: 999px; padding: 6px 9px; font-size: 11px; font-weight: 950; text-transform: uppercase; letter-spacing: .04em; border: 1px solid #d7e1ef; color: #61738a; background: #f6f9fc; }
+.roster-acuity.a4 { color: #981b2d; background: #fff1f3; border-color: #efb6bf; }
+.roster-acuity.a3 { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
+.roster-acuity.a2 { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
+.roster-acuity.a1 { color: #52657d; background: #f6f9fc; border-color: #d7e1ef; }
+.roster-select { width: 100%; border: 1px solid #c9d8ea; border-radius: 10px; padding: 9px 10px; font: inherit; font-size: 12px; color: #162033; background: #fff; }
+.roster-summary-list { display: grid; gap: 8px; }
+.roster-nurse-card { border: 1px solid #d7e1ef; border-left: 5px solid #b11226; border-radius: 14px; padding: 12px; background: #fff; }
+.roster-nurse-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.roster-nurse-name { color: #162033; font-size: 14px; font-weight: 950; }
+.roster-nurse-level { color: #b11226; font-size: 12px; font-weight: 950; }
+.roster-nurse-load { color: #61738a; font-size: 11px; font-weight: 800; margin-top: 4px; }
+.roster-assigned { color: #40536c; font-size: 11px; line-height: 1.45; margin-top: 7px; }
+.roster-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.roster-btn { border: 0; border-radius: 10px; background: #b11226; color: #fff; padding: 10px 12px; font: inherit; font-size: 12px; font-weight: 850; cursor: pointer; }
+.roster-btn.secondary { background: #e8eef4; color: #162033; }
 .pin-editor { position: fixed; inset: 0; z-index: 1500; background: rgba(13,35,61,0.5); display: none; align-items: center; justify-content: center; padding: 18px; }
 .pin-editor.show { display: flex; }
 .pin-editor-card { width: min(360px,100%); background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 60px rgba(16,42,72,0.25); }
@@ -514,6 +550,11 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .admin-nurse-pane { border-right: 0; border-bottom: 1px solid #dce3ec; overflow: visible; }
   .admin-bed-pane { overflow: visible; }
   .admin-bed-grid { grid-template-columns: repeat(2, minmax(100px,1fr)); }
+  .roster-modal { padding: 8px; }
+  .roster-shell { border-radius: 14px; }
+  .roster-grid { grid-template-columns: 1fr; }
+  .roster-patient-row { grid-template-columns: 1fr; align-items: stretch; }
+  .roster-field select { width: 100%; min-width: 0; }
   .patient-form-grid { grid-template-columns: 1fr; }
   .patient-field.full { grid-column: auto; }
   .ward-bed-summary { grid-template-columns: 1fr; gap: 5px; }
@@ -687,6 +728,51 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <button class="admin-mini-btn danger" onclick="clearPatientDetails()">Clear</button>
       <button class="admin-mini-btn secondary" onclick="closePatientEditor()">Cancel</button>
       <button class="admin-mini-btn" onclick="savePatientDetails()">Save Patient</button>
+    </div>
+  </div>
+</div>
+
+<div class="roster-modal" id="rosterModal" onclick="rosterBackdrop(event)">
+  <div class="roster-shell" role="dialog" aria-modal="true" aria-label="Ward duty roster">
+    <div class="roster-top">
+      <div>
+        <div class="roster-title">Ward Duty Roster</div>
+        <div class="roster-sub">3rd Floor Tower 3 Ward · 30 patients · Manual shift-wise nurse assignment prototype.</div>
+      </div>
+      <button class="roster-close" onclick="closeRosterPanel()">Close</button>
+    </div>
+    <div class="roster-body">
+      <div class="roster-card">
+        <div class="roster-toolbar">
+          <div>
+            <h3>3rd Floor Tower 3 Ward</h3>
+            <div class="gov-muted">Select a shift, review patient acuity beside each name, and assign the nurse manually. The roster summary updates immediately.</div>
+          </div>
+          <div class="roster-field">
+            <label for="rosterShift">Shift</label>
+            <select id="rosterShift" onchange="changeRosterShift(this.value)">
+              <option value="morning">Morning shift</option>
+              <option value="evening">Evening shift</option>
+              <option value="night">Night shift</option>
+            </select>
+          </div>
+          <div class="roster-actions">
+            <button class="roster-btn secondary" onclick="resetRosterAssignments()">Reset Shift</button>
+            <button class="roster-btn" onclick="copyDutyRoster()">Copy Duty Roster</button>
+          </div>
+        </div>
+      </div>
+      <div class="roster-grid">
+        <div class="roster-card">
+          <h3>Patients With Acuity</h3>
+          <div class="roster-patient-list" id="rosterPatientList"></div>
+        </div>
+        <div class="roster-card">
+          <h3>Full Duty Roster</h3>
+          <div class="gov-muted" id="rosterSummaryMeta">Morning shift assignments</div>
+          <div class="roster-summary-list" id="rosterSummaryList"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -980,10 +1066,11 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       </div>
       <div class="d-nav-ctx">Rajagiri Hospital › <strong>Ward 3 — Medical</strong> › Night Shift</div>
     </div>
-    <div class="d-nav-right">
+      <div class="d-nav-right">
       <div class="sync-pill offline" data-sync-status><span class="sync-dot"></span>Local demo mode</div>
       <div class="d-shift-badge"><div class="d-live"></div> LIVE</div>
       <div class="d-user"><div class="d-avatar">WM</div> Admin</div>
+      <button class="gov-btn" onclick="openRosterPanel()">Duty Roster</button>
       <button class="gov-btn" onclick="openGovernancePanel()">Nursing Governance</button>
       <button class="d-admin-btn" onclick="openAdminDrawer()">Admin</button>
       <button class="d-logout" onclick="doLogout()">🔒 Logout</button>
@@ -1221,6 +1308,55 @@ let defaultPinChecked = false;
 let patientEditorRoomId = null;
 let transferPanelExpanded = false;
 let dashboardCenterMode = 'overview';
+let rosterShift = 'morning';
+
+const rosterNurses = [
+  { id: 'jewel', name: 'Jewel', level: 'L5 Expert', competency: 'G', max: 4 },
+  { id: 'priya', name: 'Priya', level: 'L4 Proficient', competency: 'GS', max: 5 },
+  { id: 'nisha', name: 'Nisha', level: 'L4 Proficient', competency: 'GS', max: 5 },
+  { id: 'ancy', name: 'Ancy', level: 'L3 Competent', competency: 'GA', max: 6 },
+  { id: 'anu', name: 'Anu', level: 'L3 Competent', competency: 'GA', max: 6 },
+  { id: 'meera', name: 'Meera', level: 'L2 Advanced Beginner', competency: 'GSU', max: 5 }
+];
+
+const rosterPatients = [
+  { room: 'T3-301', name: 'Michelle Teoh', age: 54, uhid: 'UHID-24301', diagnosis: 'Pneumonia observation', acuity: 4, pass: 48 },
+  { room: 'T3-302', name: 'Rajan Menon', age: 67, uhid: 'UHID-24302', diagnosis: 'Post angioplasty care', acuity: 4, pass: 46 },
+  { room: 'T3-303', name: 'Mary Thomas', age: 72, uhid: 'UHID-24303', diagnosis: 'Fever with breathlessness', acuity: 3, pass: 38 },
+  { room: 'T3-304', name: 'Abdul Rahman', age: 61, uhid: 'UHID-24304', diagnosis: 'COPD exacerbation', acuity: 3, pass: 36 },
+  { room: 'T3-305', name: 'Leela Varghese', age: 63, uhid: 'UHID-24305', diagnosis: 'Diabetes with infection', acuity: 3, pass: 35 },
+  { room: 'T3-306', name: 'George Mathew', age: 58, uhid: 'UHID-24306', diagnosis: 'Post procedure monitoring', acuity: 3, pass: 34 },
+  { room: 'T3-307', name: 'Amina Beevi', age: 49, uhid: 'UHID-24307', diagnosis: 'Anemia evaluation', acuity: 2, pass: 27 },
+  { room: 'T3-308', name: 'Dinesh Kumar', age: 45, uhid: 'UHID-24308', diagnosis: 'Dengue fever recovery', acuity: 2, pass: 26 },
+  { room: 'T3-309', name: 'Saramma Joseph', age: 74, uhid: 'UHID-24309', diagnosis: 'UTI with weakness', acuity: 2, pass: 25 },
+  { room: 'T3-310', name: 'Paul Jose', age: 52, uhid: 'UHID-24310', diagnosis: 'Cellulitis', acuity: 2, pass: 24 },
+  { room: 'T3-311', name: 'Fathima Ali', age: 59, uhid: 'UHID-24311', diagnosis: 'Hypertension monitoring', acuity: 2, pass: 23 },
+  { room: 'T3-312', name: 'Binu Varghese', age: 38, uhid: 'UHID-24312', diagnosis: 'Acute gastritis', acuity: 1, pass: 15 },
+  { room: 'T3-313', name: 'Elsy Mathew', age: 66, uhid: 'UHID-24313', diagnosis: 'Post fall observation', acuity: 3, pass: 37 },
+  { room: 'T3-314', name: 'Anil Kumar', age: 57, uhid: 'UHID-24314', diagnosis: 'Chest pain evaluation', acuity: 4, pass: 45 },
+  { room: 'T3-315', name: 'Reena George', age: 42, uhid: 'UHID-24315', diagnosis: 'Asthma recovery', acuity: 2, pass: 28 },
+  { room: 'T3-316', name: 'Jose Philip', age: 71, uhid: 'UHID-24316', diagnosis: 'Stroke rehabilitation', acuity: 3, pass: 39 },
+  { room: 'T3-317', name: 'Latha Nair', age: 50, uhid: 'UHID-24317', diagnosis: 'Post operative day 2', acuity: 2, pass: 29 },
+  { room: 'T3-318', name: 'Suresh Babu', age: 64, uhid: 'UHID-24318', diagnosis: 'Renal failure monitoring', acuity: 4, pass: 49 },
+  { room: 'T3-319', name: 'Bindu Thomas', age: 46, uhid: 'UHID-24319', diagnosis: 'Migraine observation', acuity: 1, pass: 14 },
+  { room: 'T3-320', name: 'Antony Paul', age: 69, uhid: 'UHID-24320', diagnosis: 'Sepsis step-down care', acuity: 4, pass: 52 },
+  { room: 'T3-321', name: 'Shyla Joseph', age: 55, uhid: 'UHID-24321', diagnosis: 'Liver disease monitoring', acuity: 3, pass: 40 },
+  { room: 'T3-322', name: 'Ravi Menon', age: 60, uhid: 'UHID-24322', diagnosis: 'Post cath recovery', acuity: 3, pass: 33 },
+  { room: 'T3-323', name: 'Mini Francis', age: 35, uhid: 'UHID-24323', diagnosis: 'Fever evaluation', acuity: 1, pass: 16 },
+  { room: 'T3-324', name: 'Jacob Kurian', age: 76, uhid: 'UHID-24324', diagnosis: 'Heart failure observation', acuity: 4, pass: 47 },
+  { room: 'T3-325', name: 'Neena Alex', age: 41, uhid: 'UHID-24325', diagnosis: 'Post transfusion care', acuity: 2, pass: 22 },
+  { room: 'T3-326', name: 'Harish Nair', age: 48, uhid: 'UHID-24326', diagnosis: 'Pancreatitis recovery', acuity: 3, pass: 41 },
+  { room: 'T3-327', name: 'Sara John', age: 62, uhid: 'UHID-24327', diagnosis: 'Electrolyte correction', acuity: 2, pass: 24 },
+  { room: 'T3-328', name: 'Thomas Chacko', age: 70, uhid: 'UHID-24328', diagnosis: 'Delirium observation', acuity: 3, pass: 42 },
+  { room: 'T3-329', name: 'Roshni Das', age: 29, uhid: 'UHID-24329', diagnosis: 'Viral fever recovery', acuity: 1, pass: 15 },
+  { room: 'T3-330', name: 'Mathew Daniel', age: 73, uhid: 'UHID-24330', diagnosis: 'Respiratory distress watch', acuity: 4, pass: 50 }
+];
+
+let rosterAssignments = {
+  morning: {},
+  evening: {},
+  night: {}
+};
 
 function isMobileWardDevice() {
   return window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
@@ -2927,10 +3063,146 @@ function openGovernancePanel() {
 
 function closeGovernancePanel() {
   document.getElementById('governanceModal').classList.remove('show');
+  if (PAGE_KIND === 'manager') {
+    const cleanUrl = window.location.pathname + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+    showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
+    if (managerLoggedIn) showAllBedsOverview();
+  }
 }
 
 function governanceBackdrop(event) {
   if (event.target.id === 'governanceModal') closeGovernancePanel();
+}
+
+function openRosterPanel() {
+  ensureRosterAssignments();
+  document.getElementById('rosterModal').classList.add('show');
+  renderRoster();
+}
+
+function closeRosterPanel() {
+  document.getElementById('rosterModal').classList.remove('show');
+  showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
+  if (managerLoggedIn) showAllBedsOverview();
+}
+
+function rosterBackdrop(event) {
+  if (event.target.id === 'rosterModal') closeRosterPanel();
+}
+
+function changeRosterShift(shift) {
+  rosterShift = ['morning', 'evening', 'night'].includes(shift) ? shift : 'morning';
+  ensureRosterAssignments();
+  renderRoster();
+}
+
+function ensureRosterAssignments() {
+  const shiftOffsets = { morning: 0, evening: 2, night: 4 };
+  Object.keys(rosterAssignments).forEach(shift => {
+    if (Object.keys(rosterAssignments[shift]).length) return;
+    const offset = shiftOffsets[shift] || 0;
+    rosterPatients.forEach((patient, index) => {
+      const preferred = getPreferredRosterNurses(patient);
+      const nurse = preferred[(index + offset) % preferred.length] || rosterNurses[index % rosterNurses.length];
+      rosterAssignments[shift][patient.room] = nurse.id;
+    });
+  });
+}
+
+function getPreferredRosterNurses(patient) {
+  const minLevel = patient.acuity >= 4 ? 4 : patient.acuity === 3 ? 3 : patient.acuity === 2 ? 2 : 1;
+  const preferred = rosterNurses.filter(nurse => Number(nurse.level.slice(1, 2)) >= minLevel);
+  return preferred.length ? preferred : rosterNurses;
+}
+
+function getRosterAcuityClass(acuity) {
+  return 'a' + acuity;
+}
+
+function getRosterAcuityLabel(patient) {
+  return 'Acuity ' + patient.acuity + ' · PASS ' + patient.pass;
+}
+
+function getRosterNurse(nurseId) {
+  return rosterNurses.find(nurse => nurse.id === nurseId) || rosterNurses[0];
+}
+
+function renderRoster() {
+  const shiftSelect = document.getElementById('rosterShift');
+  if (shiftSelect) shiftSelect.value = rosterShift;
+  renderRosterPatients();
+  renderRosterSummary();
+}
+
+function renderRosterPatients() {
+  const list = document.getElementById('rosterPatientList');
+  if (!list) return;
+  const nurseOptions = rosterNurses.map(nurse => `<option value="${escapeJsArg(nurse.id)}">${escapeHtml(nurse.name)} · ${escapeHtml(nurse.level)} · ${escapeHtml(nurse.competency)}</option>`).join('');
+  list.innerHTML = rosterPatients.map(patient => {
+    const selectedNurse = rosterAssignments[rosterShift][patient.room] || '';
+    return `
+      <div class="roster-patient-row">
+        <div class="roster-room">${escapeHtml(patient.room)}</div>
+        <div>
+          <div class="roster-patient-name">${escapeHtml(patient.name)}</div>
+          <div class="roster-patient-meta">${escapeHtml(patient.uhid)} · Age ${patient.age} · ${escapeHtml(patient.diagnosis)}</div>
+        </div>
+        <div><span class="roster-acuity ${getRosterAcuityClass(patient.acuity)}">${escapeHtml(getRosterAcuityLabel(patient))}</span></div>
+        <select class="roster-select" onchange="assignRosterNurse('${escapeJsArg(patient.room)}', this.value)">
+          ${nurseOptions}
+        </select>
+      </div>
+    `.replace(`value="${escapeJsArg(selectedNurse)}"`, `value="${escapeJsArg(selectedNurse)}" selected`);
+  }).join('');
+}
+
+function assignRosterNurse(room, nurseId) {
+  rosterAssignments[rosterShift][room] = nurseId;
+  renderRosterSummary();
+}
+
+function renderRosterSummary() {
+  const meta = document.getElementById('rosterSummaryMeta');
+  const list = document.getElementById('rosterSummaryList');
+  if (!list) return;
+  const shiftLabel = document.getElementById('rosterShift')?.selectedOptions?.[0]?.textContent || 'Morning shift';
+  if (meta) meta.textContent = shiftLabel + ' assignments · 3rd Floor Tower 3 Ward';
+  const rows = rosterNurses.map(nurse => {
+    const assigned = rosterPatients.filter(patient => rosterAssignments[rosterShift][patient.room] === nurse.id);
+    const highAcuity = assigned.filter(patient => patient.acuity >= 4).length;
+    return `
+      <div class="roster-nurse-card">
+        <div class="roster-nurse-head">
+          <div class="roster-nurse-name">${escapeHtml(nurse.name)}</div>
+          <div class="roster-nurse-level">${escapeHtml(nurse.level)} · ${escapeHtml(nurse.competency)}</div>
+        </div>
+        <div class="roster-nurse-load">${assigned.length}/${nurse.max} patients · ${highAcuity} high-acuity</div>
+        <div class="roster-assigned">${assigned.length ? assigned.map(patient => `${patient.room} ${patient.name} (${getRosterAcuityLabel(patient)})`).join('<br>') : 'No patients assigned in this shift.'}</div>
+      </div>
+    `;
+  });
+  list.innerHTML = rows.join('');
+}
+
+function resetRosterAssignments() {
+  rosterAssignments[rosterShift] = {};
+  ensureRosterAssignments();
+  renderRoster();
+  showToast('Duty roster reset for selected shift');
+}
+
+function copyDutyRoster() {
+  ensureRosterAssignments();
+  const shiftLabel = document.getElementById('rosterShift')?.selectedOptions?.[0]?.textContent || 'Morning shift';
+  const lines = ['3RD FLOOR TOWER 3 WARD DUTY ROSTER', shiftLabel, ''];
+  rosterNurses.forEach(nurse => {
+    const assigned = rosterPatients.filter(patient => rosterAssignments[rosterShift][patient.room] === nurse.id);
+    lines.push(`${nurse.name} | ${nurse.level} | ${nurse.competency} | ${assigned.length}/${nurse.max} patients`);
+    assigned.forEach(patient => lines.push(`- ${patient.room} | ${patient.name} | ${patient.uhid} | Age ${patient.age} | ${getRosterAcuityLabel(patient)}`));
+    lines.push('');
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('Duty roster copied')).catch(() => showToast('Ready to copy'));
 }
 
 function showGovTab(tab) {
