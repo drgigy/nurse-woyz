@@ -546,10 +546,11 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 .gov-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
 .gov-tab { border:1px solid #c9d8ea; border-radius:999px; background:#fff; color:#52657d; padding:9px 13px; font-size:12px; font-weight:850; cursor:pointer; }
 .gov-tab.active { background:#b11226; border-color:#b11226; color:#fff; }
-.gov-panel { display:none; }
-.gov-panel.active { display:block; }
-.gov-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:14px; }
-.gov-card { background:#fff; border:1px solid #d7e1ef; border-radius:16px; padding:16px; box-shadow:0 10px 26px rgba(16,42,72,.06); }
+	.gov-panel { display:none; }
+	.gov-panel.active { display:block; }
+	.gov-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:14px; }
+	.gov-reference { margin-top:14px; }
+	.gov-card { background:#fff; border:1px solid #d7e1ef; border-radius:16px; padding:16px; box-shadow:0 10px 26px rgba(16,42,72,.06); }
 .gov-card h3 { margin:0 0 8px; color:#b11226; font-size:18px; }
 .gov-muted { color:#61738a; font-size:12px; line-height:1.45; }
 .gov-mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }
@@ -694,21 +695,14 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div class="gov-shell" role="dialog" aria-modal="true" aria-label="Nursing governance">
     <div class="gov-top">
       <div>
-        <div class="gov-title">Nursing Governance & Patient Acuity</div>
-        <div class="gov-sub">Prototype extension for hierarchy login, PASS ICU/Ward scoring, and Level 1 competency assessment.</div>
+        <div class="gov-title" id="governanceTitle">PASS Patient Acuity</div>
+        <div class="gov-sub" id="governanceSub">Assess ICU or ward patient acuity and estimate nursing care requirement.</div>
       </div>
       <button class="gov-close" onclick="closeGovernancePanel()">Close</button>
     </div>
     <div class="gov-body">
-      <div class="gov-tabs">
-        <button class="gov-tab active" data-gov-tab="rhpass" onclick="showGovTab('rhpass')">PASS Patient Acuity</button>
-        <button class="gov-tab" data-gov-tab="hierarchy" onclick="showGovTab('hierarchy')">Nursing Hierarchy Login</button>
-        <button class="gov-tab" data-gov-tab="competency" onclick="showGovTab('competency')">Competency Assessment</button>
-      </div>
-
       <section class="gov-panel active" id="gov-rhpass">
-        <div class="gov-grid">
-          <div class="gov-card">
+        <div class="gov-card">
             <h3>Patient PASS Assessment</h3>
             <div class="gov-muted">Select ICU or Ward depending on patient location. This prototype can later be linked to each patient record from the dashboard.</div>
             <div class="gov-mini-grid">
@@ -727,27 +721,26 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
               <div class="score-tile"><div class="score-value" id="rhpassRatio">—</div><div class="score-label">Recommended N:P</div></div>
             </div>
             <div class="rhpass-list" id="rhpassList"></div>
-          </div>
-          <div class="gov-card">
-            <h3>PASS Rules Added</h3>
-            <p class="gov-muted">ICU scoring uses Modified TISS style weighted interventions. Ward scoring uses 15 parameters with 4 levels each.</p>
-            <table class="level-table" style="margin-top:12px;">
-              <thead><tr><th>Area</th><th>Rule</th><th>Staffing interpretation</th></tr></thead>
-              <tbody>
-                <tr><td><strong>ICU</strong></td><td>Immunocompromised / infectious / condition requiring 1:1 care</td><td>Stop and assign 1:1 care</td></tr>
-                <tr><td><strong>ICU</strong></td><td>Score ≥ 22</td><td>High acuity</td></tr>
-                <tr><td><strong>ICU</strong></td><td>Score &lt; 22</td><td>Low acuity</td></tr>
-                <tr><td><strong>Ward</strong></td><td>15</td><td>Acuity 1 · 1:6</td></tr>
-                <tr><td><strong>Ward</strong></td><td>16–29</td><td>Acuity 2 · 1:5</td></tr>
-                <tr><td><strong>Ward</strong></td><td>30–44</td><td>Acuity 3 · 1:3</td></tr>
-                <tr><td><strong>Ward</strong></td><td>45–60</td><td>Acuity 4 · 1:2</td></tr>
-              </tbody>
-            </table>
             <div class="gov-actions">
               <button class="gov-action" onclick="copyRhpassSummary()">Copy PASS Summary</button>
               <button class="gov-action secondary" onclick="resetRhpass()">Reset Score</button>
             </div>
-          </div>
+        </div>
+        <div class="gov-card gov-reference">
+          <h3>Reference: PASS Rules</h3>
+          <p class="gov-muted">ICU scoring uses Modified TISS style weighted interventions. Ward scoring uses 15 parameters with 4 levels each.</p>
+          <table class="level-table" style="margin-top:12px;">
+            <thead><tr><th>Area</th><th>Rule</th><th>Staffing interpretation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>ICU</strong></td><td>Immunocompromised / infectious / condition requiring 1:1 care</td><td>Stop and assign 1:1 care</td></tr>
+              <tr><td><strong>ICU</strong></td><td>Score ≥ 22</td><td>High acuity</td></tr>
+              <tr><td><strong>ICU</strong></td><td>Score &lt; 22</td><td>Low acuity</td></tr>
+              <tr><td><strong>Ward</strong></td><td>15</td><td>Acuity 1 · 1:6</td></tr>
+              <tr><td><strong>Ward</strong></td><td>16-29</td><td>Acuity 2 · 1:5</td></tr>
+              <tr><td><strong>Ward</strong></td><td>30-44</td><td>Acuity 3 · 1:3</td></tr>
+              <tr><td><strong>Ward</strong></td><td>45-60</td><td>Acuity 4 · 1:2</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -760,30 +753,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       </section>
 
       <section class="gov-panel" id="gov-competency">
-        <div class="gov-grid">
-          <div class="gov-card">
-            <h3>Competency Levels</h3>
-            <table class="level-table">
-              <thead><tr><th>Level</th><th>Score</th><th>Rating</th><th>Privilege</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Level 5 · Expert</strong></td><td>96–100%</td><td>Independent (5)</td><td>G · Granted; may perform independently</td></tr>
-                <tr><td><strong>Level 4 · Proficient</strong></td><td>86–95%</td><td>Supervised (4)</td><td>GS · Granted under supervision</td></tr>
-                <tr><td><strong>Level 3 · Competent</strong></td><td>61–85%</td><td>Assisted (3)</td><td>GA · Granted under assistance</td></tr>
-                <tr><td><strong>Level 2 · Advanced Beginner</strong></td><td>41–60%</td><td>Supported (2)</td><td>GSU · Granted with support</td></tr>
-                <tr><td><strong>Level 1 · Novice</strong></td><td>Below 40%</td><td>Dependent (1)</td><td>NG · Not granted</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="gov-card">
-            <h3>Competency Categories</h3>
-            <span class="competency-pill">General competencies</span>
-            <span class="competency-pill">Routine competencies</span>
-            <span class="competency-pill">Routine-complex competencies</span>
-            <span class="competency-pill">Non-routine complex competencies</span>
-            <p class="gov-muted" style="margin-top:12px;">These categories determine the resulting Level 1–5 classification and privilege status.</p>
-          </div>
-        </div>
-        <div class="gov-card" style="margin-top:14px;">
+        <div class="gov-card">
           <h3>Level 1 Nurse Competency Record</h3>
           <p class="gov-muted">Enter the nurse profile first, then complete the assessment items. The system assigns a competency grade from the completed score.</p>
           <div class="gov-mini-grid" style="margin-top:14px;">
@@ -813,6 +783,29 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
           <div class="role-card coming-card"><div class="role-title">Level 3</div><div class="role-meta">Competent nurse competency module coming soon.</div></div>
           <div class="role-card coming-card"><div class="role-title">Level 4</div><div class="role-meta">Proficient nurse competency module coming soon.</div></div>
           <div class="role-card coming-card"><div class="role-title">Level 5</div><div class="role-meta">Expert nurse / mentor competency module coming soon.</div></div>
+        </div>
+        <div class="gov-grid gov-reference">
+          <div class="gov-card">
+            <h3>Reference: Competency Levels</h3>
+            <table class="level-table">
+              <thead><tr><th>Level</th><th>Score</th><th>Rating</th><th>Privilege</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Level 5 · Expert</strong></td><td>96-100%</td><td>Independent (5)</td><td>G · Granted; may perform independently</td></tr>
+                <tr><td><strong>Level 4 · Proficient</strong></td><td>86-95%</td><td>Supervised (4)</td><td>GS · Granted under supervision</td></tr>
+                <tr><td><strong>Level 3 · Competent</strong></td><td>61-85%</td><td>Assisted (3)</td><td>GA · Granted under assistance</td></tr>
+                <tr><td><strong>Level 2 · Advanced Beginner</strong></td><td>41-60%</td><td>Supported (2)</td><td>GSU · Granted with support</td></tr>
+                <tr><td><strong>Level 1 · Novice</strong></td><td>Below 40%</td><td>Dependent (1)</td><td>NG · Not granted</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="gov-card">
+            <h3>Reference: Competency Categories</h3>
+            <span class="competency-pill">General competencies</span>
+            <span class="competency-pill">Routine competencies</span>
+            <span class="competency-pill">Routine-complex competencies</span>
+            <span class="competency-pill">Non-routine complex competencies</span>
+            <p class="gov-muted" style="margin-top:12px;">These categories determine the resulting Level 1-5 classification and privilege status.</p>
+          </div>
         </div>
       </section>
 
@@ -2941,11 +2934,22 @@ function governanceBackdrop(event) {
 }
 
 function showGovTab(tab) {
+  const titles = {
+    rhpass: ['PASS Patient Acuity', 'Assess ICU or ward patient acuity and estimate nursing care requirement.'],
+    hierarchy: ['Nursing Hierarchy Login', 'Role-based nursing access from nursing leadership to individual nurses.'],
+    competency: ['Competency Assessment', 'Enter nurse profile details, complete assessment items, and assign a competency grade.']
+  };
+  const selected = titles[tab] ? tab : 'rhpass';
+  const heading = titles[selected];
+  const titleEl = document.getElementById('governanceTitle');
+  const subEl = document.getElementById('governanceSub');
+  if (titleEl) titleEl.textContent = heading[0];
+  if (subEl) subEl.textContent = heading[1];
   document.querySelectorAll('.gov-tab').forEach(btn => btn.classList.toggle('active', btn.dataset.govTab === tab));
-  document.querySelectorAll('.gov-panel').forEach(panel => panel.classList.toggle('active', panel.id === 'gov-' + tab));
-  if (tab === 'rhpass') renderRhpass();
-  if (tab === 'hierarchy') renderGovernanceRoles();
-  if (tab === 'competency') renderCompetencyList();
+  document.querySelectorAll('.gov-panel').forEach(panel => panel.classList.toggle('active', panel.id === 'gov-' + selected));
+  if (selected === 'rhpass') renderRhpass();
+  if (selected === 'hierarchy') renderGovernanceRoles();
+  if (selected === 'competency') renderCompetencyList();
 }
 
 function shouldOpenGovernanceFromUrl() {
