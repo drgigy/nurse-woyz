@@ -1407,8 +1407,29 @@ function seedLocalWardSetup() {
   rooms = rooms.filter(Boolean);
 }
 
+function inferredDashboardRooms() {
+  const ids = new Set();
+  for (let roomNumber = 101; roomNumber <= 120; roomNumber += 1) {
+    ids.add(String(roomNumber));
+  }
+  Object.keys(notes || {}).forEach(id => ids.add(String(id)));
+  transferRequests.forEach(request => {
+    const id = request.bedId || request.bed || request.room || '';
+    const match = String(id).match(/\d+/);
+    if (match) ids.add(match[0]);
+  });
+  return Array.from(ids)
+    .sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }))
+    .map(id => ({
+      id,
+      name: 'Bed ' + id,
+      active: true,
+      assignedNurseName: 'Not assigned'
+    }));
+}
+
 function getDashboardRooms() {
-  return rooms;
+  return rooms.length ? rooms : inferredDashboardRooms();
 }
 
 function getActiveDashboardRooms() {
