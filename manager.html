@@ -1509,7 +1509,10 @@ function managerLogin() {
     managerLoggedIn = true;
     localStorage.setItem('nurse_woyz_manager_logged_in', 'yes');
     showScreen('dashboard');
-    if (shouldOpenGovernanceFromUrl()) {
+    if (shouldOpenRosterFromUrl()) {
+      openRosterFromHomeLink();
+      showToast('Duty roster opened');
+    } else if (shouldOpenGovernanceFromUrl()) {
       openGovernancePanel();
       showToast('Nursing governance opened');
     } else {
@@ -3083,12 +3086,31 @@ function openRosterPanel() {
 
 function closeRosterPanel() {
   document.getElementById('rosterModal').classList.remove('show');
+  if (PAGE_KIND === 'manager') {
+    const cleanUrl = window.location.pathname + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
   showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
   if (managerLoggedIn) showAllBedsOverview();
 }
 
 function rosterBackdrop(event) {
   if (event.target.id === 'rosterModal') closeRosterPanel();
+}
+
+function shouldOpenRosterFromUrl() {
+  return new URLSearchParams(window.location.search).get('roster') === '1';
+}
+
+function openRosterFromHomeLink() {
+  if (!shouldOpenRosterFromUrl()) return;
+  if (managerLoggedIn) {
+    showScreen('dashboard');
+    openRosterPanel();
+  } else {
+    showScreen('manager-login');
+    showToast('Login with manager / 1234 to open Duty Roster');
+  }
 }
 
 function changeRosterShift(shift) {
@@ -3500,6 +3522,7 @@ function initApp() {
   else if (PAGE_KIND === 'manager') showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
   else if (['ot','cathlab'].includes(PAGE_KIND)) showScreen('command');
   else showScreen(deviceMode === 'mobile' ? 'login' : (managerLoggedIn ? 'dashboard' : 'manager-login'));
+  openRosterFromHomeLink();
   openGovernanceFromHomeLink();
 }
 
