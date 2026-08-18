@@ -184,6 +184,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
+.structured-note-heading { color: #8f0f1f; font-weight: 900; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -268,6 +269,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
 .d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; white-space: pre-wrap; }
+.d-tl-note .structured-note-heading { color: #8f0f1f; font-weight: 900; }
 .d-tl-nurse { font-size: 10px; color: #aab4c4; margin-top: 5px; }
 .d-right { width: 240px; background: #fff; border-left: 1px solid #dce3ec; overflow-y: auto; flex-shrink: 0; padding: 13px; }
 .d-rp-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
@@ -1719,6 +1721,45 @@ function formatStructuredNoteText(note) {
   return text;
 }
 
+function formatStructuredNoteHtml(note) {
+  const headings = [
+    'CARE PLAN DRAFT',
+    'HANDOVER NOTE',
+    'Patient assessment cues:',
+    'Assessment cues:',
+    'Applicable approved care-plan templates:',
+    'Suggested approved templates:',
+    'Care plan item 1:',
+    'Care plan item 2:',
+    'Care plan item 3:',
+    'Care plan item 4:',
+    'Care plan item 5:',
+    'Nursing diagnosis/problem:',
+    'Related to:',
+    'As evidenced by:',
+    'Objective/expected outcome:',
+    'Expected outcome/goal:',
+    'Nursing interventions:',
+    'Current treatment / devices:',
+    'Pending tasks / monitoring:',
+    'Monitoring/evaluation:',
+    'Referral:',
+    'Escalation/referral:',
+    'Escalation / follow-up:',
+    'Patient/family education:',
+    'Evaluation:',
+    'Patient status:'
+  ];
+  let html = escapeHtml(formatStructuredNoteText(note));
+  headings
+    .sort((a, b) => b.length - a.length)
+    .forEach((heading) => {
+      const escapedHeading = escapeHtml(heading);
+      html = html.replaceAll(escapedHeading, `<strong class="structured-note-heading">${escapedHeading}</strong>`);
+    });
+  return html;
+}
+
 function getDictationSystemInstruction() {
   if (currentNoteType === 'handover') {
     return 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note with headings. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.';
@@ -1963,7 +2004,7 @@ function renderNotesList() {
           <button class="note-edit-btn cancel-edit" onclick="cancelEditNote()">Cancel</button>
         </div>
       ` : `
-        <div class="nc-text">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
+        <div class="nc-text">✦ ${formatStructuredNoteHtml(n)}</div>
         <div class="note-edit-actions">
           <button class="note-edit-btn" onclick="startEditNote('${escapeJsArg(noteId)}')">Edit</button>
         </div>
@@ -2043,7 +2084,7 @@ function showSummary() {
       <div class="sti-bed">Bed ${escapeHtml(n.bed)}</div>
       <div class="sti-time">${escapeHtml(n.time)}</div>
       <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-      <div class="sti-text">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
+      <div class="sti-text">✦ ${formatStructuredNoteHtml(n)}</div>
     </div>
   `).join('') : '<div style="font-size:13px;color:#555;padding:20px;text-align:center;">No notes recorded this shift.</div>';
   showScreen('summary');
@@ -2104,7 +2145,7 @@ function selectDashBed(bedId) {
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
         <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-        <div class="d-tl-note">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
+        <div class="d-tl-note">✦ ${formatStructuredNoteHtml(n)}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
     </div>`).join('')

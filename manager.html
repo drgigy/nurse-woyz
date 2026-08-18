@@ -171,6 +171,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
+.structured-note-heading { color: #8f0f1f; font-weight: 900; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -263,6 +264,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
 .d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; white-space: pre-wrap; }
+.d-tl-note .structured-note-heading { color: #8f0f1f; font-weight: 900; }
 .d-tl-nurse { font-size: 10px; color: #aab4c4; margin-top: 5px; }
 .d-right { width: 240px; background: #fff; border-left: 1px solid #dce3ec; overflow-y: auto; flex-shrink: 0; padding: 13px; transition: width 0.2s ease; }
 .d-main.transfer-expanded .d-content { display: none; }
@@ -1510,6 +1512,45 @@ function formatStructuredNoteText(note) {
   return text;
 }
 
+function formatStructuredNoteHtml(note) {
+  const headings = [
+    'CARE PLAN DRAFT',
+    'HANDOVER NOTE',
+    'Patient assessment cues:',
+    'Assessment cues:',
+    'Applicable approved care-plan templates:',
+    'Suggested approved templates:',
+    'Care plan item 1:',
+    'Care plan item 2:',
+    'Care plan item 3:',
+    'Care plan item 4:',
+    'Care plan item 5:',
+    'Nursing diagnosis/problem:',
+    'Related to:',
+    'As evidenced by:',
+    'Objective/expected outcome:',
+    'Expected outcome/goal:',
+    'Nursing interventions:',
+    'Current treatment / devices:',
+    'Pending tasks / monitoring:',
+    'Monitoring/evaluation:',
+    'Referral:',
+    'Escalation/referral:',
+    'Escalation / follow-up:',
+    'Patient/family education:',
+    'Evaluation:',
+    'Patient status:'
+  ];
+  let html = escapeHtml(formatStructuredNoteText(note));
+  headings
+    .sort((a, b) => b.length - a.length)
+    .forEach((heading) => {
+      const escapedHeading = escapeHtml(heading);
+      html = html.replaceAll(escapedHeading, `<strong class="structured-note-heading">${escapedHeading}</strong>`);
+    });
+  return html;
+}
+
 function getCarePlanStatus(bedNotes = []) {
   const carePlans = bedNotes.filter(note => note.type === 'careplan');
   if (!bedNotes.length) {
@@ -2605,7 +2646,7 @@ function renderDashboardBedDetail(bedId) {
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
         <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
-        <div class="d-tl-note">✦ ${escapeHtml(formatStructuredNoteText(n))}</div>
+        <div class="d-tl-note">✦ ${formatStructuredNoteHtml(n)}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
     </div>`).join('')
