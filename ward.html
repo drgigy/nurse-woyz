@@ -633,13 +633,13 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   </div>
   <div class="nurse-alerts" id="nurseNotificationList"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
   <div class="ward-entry-actions">
-    <div class="ward-entry-card primary" onclick="openQrScanner()">
+    <div class="ward-entry-card primary" onclick="showQrDisabledForDemo()">
       <div class="ward-entry-title">Scan QR</div>
-      <div class="ward-entry-sub">Demo mode: opens the assigned patient directly.</div>
+      <div class="ward-entry-sub">Disabled for laptop demo. Use Rooms to open and dictate.</div>
     </div>
     <div class="ward-entry-card" onclick="showAssignedRooms()">
       <div class="ward-entry-title">Rooms</div>
-      <div class="ward-entry-sub">Open assigned rooms for review, copy, and edit existing notes.</div>
+      <div class="ward-entry-sub">Open any assigned room and dictate the nursing note.</div>
     </div>
   </div>
   <div class="rooms-panel" id="roomsPanel">
@@ -1206,7 +1206,7 @@ function renderBedGrid() {
       <div class="b-num">${escapeHtml(room.name.replace(/^Bed\s*/i, ''))}</div>
       <div class="b-st">${reqCount > 0 ? reqCount+' request'+(reqCount>1?'s':'') : count > 0 ? count+' note'+(count>1?'s':'') : 'Assigned'}</div>
     `;
-    div.onclick = () => openBed(room.id, 'review');
+    div.onclick = () => openBed(room.id, 'record');
     grid.appendChild(div);
   });
 }
@@ -1214,6 +1214,12 @@ function renderBedGrid() {
 function showAssignedRooms() {
   roomsPanelVisible = true;
   renderBedGrid();
+}
+
+function showQrDisabledForDemo() {
+  roomsPanelVisible = true;
+  renderBedGrid();
+  showToast('QR scan is disabled for laptop demo. Select a room to dictate.');
 }
 
 function openBed(bedId, mode = 'review') {
