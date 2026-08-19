@@ -729,6 +729,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <div class="notes-toolbar">
     <div class="section-lbl" style="margin:0;">Patient timeline</div>
     <div class="notes-actions">
+      <button class="copy-bed-btn handover-toolbar-btn" onclick="printCurrentBedNotes()">Print Bed Notes</button>
       <button class="ctrl-btn careplan handover-toolbar-btn" id="btnCarePlan" onclick="startCarePlanDictation()">Care Plan</button>
       <button class="ctrl-btn handover handover-toolbar-btn" id="btnHandover" onclick="startHandoverDictation()">Dictate Handover</button>
     </div>
@@ -2068,6 +2069,97 @@ function copyCurrentBedNotes() {
   navigator.clipboard.writeText(text)
     .then(() => showToast('All Bed ' + currentBed + ' notes copied ✓'))
     .catch(() => showToast('Unable to copy notes', true));
+}
+
+function printCurrentBedNotes() {
+  const bedNotes = notes[currentBed] || [];
+  if (!bedNotes.length) {
+    showToast('No notes to print for this bed');
+    return;
+  }
+  const printedAt = new Date();
+  const details = getBedPrintDetails(currentBed);
+  const notesHtml = bedNotes.map(note => `
+    <article class="note-row">
+      <div class="note-meta">
+        <strong>${escapeHtml(note.time)}</strong>
+        <span>${escapeHtml(noteTypeCopyLabel(note.type))}</span>
+      </div>
+      <div class="note-text">${formatStructuredNoteHtml(note)}</div>
+    </article>
+  `).join('');
+  const win = window.open('', '_blank', 'width=900,height=700');
+  if (!win) {
+    showToast('Allow pop-ups to print the bed record', true);
+    return;
+  }
+  win.document.write(`<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${escapeHtml(details.roomLabel)} Nursing Record</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #f7f9fc; }
+    .page { width: min(920px, 100%); margin: 0 auto; padding: 30px; background: #fff; }
+    .top { border-bottom: 4px solid #a6192e; padding-bottom: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; gap: 18px; }
+    h1 { margin: 0; color: #a6192e; font-size: 30px; }
+    .subtitle { color: #61738a; margin-top: 6px; font-size: 14px; }
+    .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .meta-card { border: 1px solid #d7e1ef; border-radius: 12px; padding: 12px 14px; }
+    .label { color: #61738a; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .value { margin-top: 4px; font-size: 16px; font-weight: 800; }
+    .bed-section { border: 1px solid #d7e1ef; border-radius: 14px; overflow: hidden; margin: 16px 0; break-inside: avoid; }
+    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 13px 16px; }
+    h2 { margin: 0 0 4px; color: #8f0f1f; font-size: 20px; }
+    .bed-head div { color: #4d6078; font-size: 13px; font-weight: 700; }
+    .note-row { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 14px 16px; border-bottom: 1px solid #edf2f7; }
+    .note-row:last-child { border-bottom: 0; }
+    .note-meta strong { color: #8f0f1f; display: block; font-size: 15px; }
+    .note-meta span { display: inline-block; margin-top: 6px; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 4px 8px; font-size: 10px; font-weight: 900; letter-spacing: 0.06em; }
+    .note-text { white-space: pre-wrap; line-height: 1.55; font-size: 14px; }
+    .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+    .sign { margin-top: 34px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+    .sign div { border-top: 1px solid #9aa8ba; padding-top: 8px; color: #61738a; font-size: 12px; }
+    @media print {
+      body { background: #fff; }
+      .page { width: 100%; padding: 14mm; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <div>
+        <h1>Nursing Record</h1>
+        <div class="subtitle">${escapeHtml(details.roomLabel)} · Generated from Nurse WOYZ bedside dictation notes</div>
+      </div>
+      <button class="no-print" onclick="window.print()" style="height:40px;border:0;border-radius:10px;background:#a6192e;color:#fff;font-weight:800;padding:0 16px;">Print</button>
+    </header>
+    <section class="meta">
+      <div class="meta-card"><div class="label">Nurse</div><div class="value">${escapeHtml(currentNurseName())}</div></div>
+      <div class="meta-card"><div class="label">Patient</div><div class="value">${escapeHtml(details.patientBits)}</div></div>
+      <div class="meta-card"><div class="label">Printed</div><div class="value">${escapeHtml(printedAt.toLocaleString())}</div></div>
+      <div class="meta-card"><div class="label">Total Entries</div><div class="value">${bedNotes.length}</div></div>
+    </section>
+    <section class="bed-section">
+      <div class="bed-head">
+        <h2>${escapeHtml(details.roomLabel)}</h2>
+        <div>${escapeHtml(details.patientBits)}</div>
+      </div>
+      ${notesHtml}
+    </section>
+    <section class="sign">
+      <div>Nurse signature</div>
+      <div>Supervisor review</div>
+    </section>
+  </main>
+  <script>window.addEventListener('load', () => setTimeout(() => window.print(), 250));<\/script>
+</body>
+</html>`);
+  win.document.close();
+  showToast('Bed print record opened');
 }
 
 function getAssignedShiftNotes() {
