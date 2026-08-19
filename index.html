@@ -78,7 +78,8 @@
     .grid.compact {
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
-    a.card {
+    a.card,
+    .card {
       text-decoration: none;
       background: #fff;
       border: 1px solid #d7e1ef;
@@ -122,6 +123,16 @@
       padding: 5px 9px;
       font-size: 11px;
       font-weight: 800;
+    }
+    .card.soon {
+      border-style: dashed;
+      background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
+      opacity: 0.88;
+    }
+    .card.soon .pill {
+      color: #7a1222;
+      background: #f7e7ea;
+      border-color: #e8b8c0;
     }
     .compact a.card {
       min-height: 94px;
@@ -268,6 +279,22 @@
         </div>
         <div class="pill">Open Hierarchy</div>
       </a>
+      <div class="card soon" aria-label="Nurse Register launching soon">
+        <div>
+          <div class="icon">👩‍⚕️</div>
+          <div class="title">Nurse Register</div>
+          <div class="desc">Complete nurse pool with profile details, competency grade, training status, and certification records.</div>
+        </div>
+        <div class="pill">Launching soon</div>
+      </div>
+      <div class="card soon" aria-label="Pool Creator launching soon">
+        <div>
+          <div class="icon">🧩</div>
+          <div class="title">Pool Creator</div>
+          <div class="desc">Create nursing pools for ICU, wards, OT, Cath Lab, emergency, and other clinical areas.</div>
+        </div>
+        <div class="pill">Launching soon</div>
+      </div>
     </section>
 
     <footer>Demo site only. Do not enter real patient information.</footer>
