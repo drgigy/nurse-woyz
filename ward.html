@@ -1702,6 +1702,11 @@ function formatStructuredNoteText(note) {
   }
   if (note?.type === 'careplan') {
     const labels = [
+      'NURSING CARE PLAN - SHIFT',
+      'Active Problem / Nursing Concern:',
+      'Goal for This Shift:',
+      'Nursing Actions / Monitoring:',
+      'Current Status:',
       'Assessment cues:',
       'Suggested approved templates:',
       'Nursing diagnosis/problem:',
@@ -1727,7 +1732,17 @@ function formatStructuredNoteText(note) {
 function formatStructuredNoteHtml(note) {
   const headings = [
     'CARE PLAN DRAFT',
+    'NURSING CARE PLAN - SHIFT',
+    'NURSING SHIFT HANDOVER - SHIFT',
     'HANDOVER NOTE',
+    'Active Problem / Nursing Concern:',
+    'Goal for This Shift:',
+    'Nursing Actions / Monitoring:',
+    'Current Status:',
+    'Relevant Assessment:',
+    'Events/Changes This Shift:',
+    'WATCH:',
+    'NEXT SHIFT / PENDING:',
     'Patient assessment cues:',
     'Assessment cues:',
     'Applicable approved care-plan templates:',
@@ -1765,20 +1780,20 @@ function formatStructuredNoteHtml(note) {
 
 function getDictationSystemInstruction() {
   if (currentNoteType === 'handover') {
-    return 'You are a clinical nursing handover documentation assistant for a hospital in Kerala, India. A nurse speaks a handover in Malayalam, sometimes mixed with English medical terms. Convert the audio into a clear professional English handover note with headings. Preserve all spoken clinical details and pending tasks. Do not invent or automatically summarize information beyond what the nurse dictated. Do not add timestamps inside the note. Return JSON only.';
+    return 'You are an AI Nursing Documentation Assistant for shift handover. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into concise professional English nursing handover documentation for continuity of care. Use only information stated by the nurse or already available in the current patient context. Never assume, infer, fabricate, or convert unassessed items into normal findings. Prioritize active problems, changes during the shift, nursing interventions, patient response, current risks, pending actions, and what the next nurse must watch. Do not create medical orders, treatment recommendations, or textbook explanations. Make deterioration, abnormal findings, escalation, and unresolved concerns prominent. If there is no meaningful dictated clinical information, return an empty nursingNote. Do not add timestamps inside the note. Return JSON only.';
   }
   if (currentNoteType === 'careplan') {
-    return 'You are a hospital nursing care-plan drafting assistant for Kerala, India. A nurse dictates bedside clinical assessment details in Malayalam, sometimes mixed with English medical terms. Convert the assessment into English and draft a structured care plan only from the approved care-plan template headings supplied by the hospital. Strict safety rule: if the nurse did not dictate a clinical detail, do not add it. Do not assume symptoms, risks, treatments, medications, frequencies, escalation criteria, referrals, or diagnoses. Do not create medical orders. Include only details explicitly dictated by the nurse or selected from the approved template areas. If information is missing or uncertain, leave it blank or write "Nurse to verify". Return JSON only.';
+    return 'You are an AI Nursing Documentation Assistant for shift nursing care plans. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into a short problem-oriented English nursing care plan for this shift. Use only information stated by the nurse or already available in the current patient context. Never assume, infer, fabricate, or convert unassessed items into normal findings. Use hospital-approved template areas only when supported by the dictation. Do not generate elaborate textbook nursing diagnoses, generic interventions, medical orders, or unnecessary explanations. Include only active or relevant problems for this shift. If there is no meaningful dictated clinical information, return an empty nursingNote. Return JSON only.';
   }
   return 'You are a clinical nursing documentation assistant for a hospital in Kerala, India. A nurse speaks in Malayalam, sometimes mixed with English medical terms. Convert the dictated audio into clear professional English nursing documentation. Keep it factual. Do not add diagnoses or details not spoken. Do not create separate event timestamps. Return JSON only.';
 }
 
 function getDictationUserPrompt() {
   if (currentNoteType === 'handover') {
-    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"HANDOVER NOTE\\n\\nPatient status:\\n- ...\\n\\nCurrent treatment / devices:\\n- Nurse to verify\\n\\nPending tasks / monitoring:\\n- ...\\n\\nEscalation / follow-up:\\n- Nurse to verify"}. Do not generate an automatic summary. Do not add details not dictated. Do not include timestamps inside the note.';
+    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\n\\nCurrent Status:\\n- ...\\n\\nRelevant Assessment:\\n- ...\\n\\nEvents/Changes This Shift:\\n- ...\\n\\nWATCH:\\n- ...\\n\\nNEXT SHIFT / PENDING:\\n- ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
   }
   if (currentNoteType === 'careplan') {
-    return `Translate this Malayalam bedside assessment into English and generate a professional nurse-reviewable care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. Do not add any clinical problem, symptom, intervention, medication, monitoring frequency, referral, education point, escalation criterion, or diagnosis unless it was explicitly dictated by the nurse or clearly selected from the approved template areas. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. If information is missing, leave that field blank or write "Nurse to verify". Return JSON only with this exact shape: {"nursingNote":"CARE PLAN DRAFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nExpected outcome/goal: ...\\nNursing interventions:\\n- ...\\nMonitoring/evaluation:\\n- Nurse to review and document goal met, partially met, or not met with reason.\\nEscalation/referral: Nurse to verify\\nPatient/family education: Nurse to verify\\n\\nCare plan item 2:\\nNursing diagnosis/problem: ...\\nRelated to: ...\\nAs evidenced by: ...\\nExpected outcome/goal: ...\\nNursing interventions:\\n- ...\\nMonitoring/evaluation:\\n- Nurse to review and document goal met, partially met, or not met with reason.\\nEscalation/referral: Nurse to verify\\nPatient/family education: Nurse to verify"}. Create separate care plan items only for clearly relevant dictated problems. Keep it concise, structured, and editable.`;
+    return `Translate this Malayalam bedside assessment into English and generate a concise, professional, nurse-reviewable shift care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact shape: {"nursingNote":"NURSING CARE PLAN - SHIFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated\\n\\nCare plan item 2:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated"}. Create only the care plan items clearly supported by the nurse dictation or patient context. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a required detail is missing, omit it or write "Nurse to verify".`;
   }
   return 'Translate this Malayalam nursing dictation into English. Return JSON with this exact shape: {"nursingNote":"2-4 short professional nursing documentation sentences"}. Do not include activity timestamps in the note.';
 }
