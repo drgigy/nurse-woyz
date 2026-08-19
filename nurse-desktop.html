@@ -184,7 +184,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
-.structured-note-heading { color: #8f0f1f; font-weight: 900; }
+.structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; font-size: 1.03em; margin: 14px 0 5px; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -270,7 +270,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .d-tl-body { flex: 1; }
 .d-tl-raw { font-size: 10px; color: #aab4c4; font-style: italic; margin-bottom: 4px; }
 .d-tl-note { font-size: 13px; color: #1a2233; line-height: 1.6; font-weight: 500; white-space: pre-wrap; }
-.d-tl-note .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+.d-tl-note .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 10px 0 4px; }
 .d-tl-nurse { font-size: 10px; color: #aab4c4; margin-top: 5px; }
 .d-right { width: 240px; background: #fff; border-left: 1px solid #dce3ec; overflow-y: auto; flex-shrink: 0; padding: 13px; }
 .d-rp-lbl { font-size: 10px; font-weight: 700; color: #8a9ab4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
@@ -1838,15 +1838,15 @@ function formatStructuredNoteText(note) {
   if (text.includes('\n')) return text;
   if (note?.type === 'handover') {
     return [
-      'HANDOVER NOTE',
+      'NURSING SHIFT HANDOVER - SHIFT',
       '',
-      'Patient status:',
+      'Current Status:',
       text,
       '',
-      'Pending tasks / monitoring:',
+      'WATCH:',
       'Nurse to verify.',
       '',
-      'Escalation / follow-up:',
+      'NEXT SHIFT / PENDING:',
       'Nurse to verify.'
     ].join('\n');
   }
@@ -1857,6 +1857,7 @@ function formatStructuredNoteText(note) {
       'Goal for This Shift:',
       'Nursing Actions / Monitoring:',
       'Current Status:',
+      'Identification:',
       'Assessment cues:',
       'Suggested approved templates:',
       'Nursing diagnosis/problem:',
@@ -1889,6 +1890,7 @@ function formatStructuredNoteHtml(note) {
     'Goal for This Shift:',
     'Nursing Actions / Monitoring:',
     'Current Status:',
+    'Identification:',
     'Relevant Assessment:',
     'Events/Changes This Shift:',
     'WATCH:',
@@ -1940,7 +1942,7 @@ function getDictationSystemInstruction() {
 
 function getDictationUserPrompt() {
   if (currentNoteType === 'handover') {
-    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\n\\nCurrent Status:\\n- ...\\n\\nRelevant Assessment:\\n- ...\\n\\nEvents/Changes This Shift:\\n- ...\\n\\nWATCH:\\n- ...\\n\\nNEXT SHIFT / PENDING:\\n- ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
+    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\n\\nIdentification:\\n- ...\\n\\nCurrent Status:\\n- ...\\n\\nRelevant Assessment:\\n- ...\\n\\nEvents/Changes This Shift:\\n- ...\\n\\nWATCH:\\n- ...\\n\\nNEXT SHIFT / PENDING:\\n- ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
   }
   if (currentNoteType === 'careplan') {
     return `Translate this Malayalam bedside assessment into English and generate a concise, professional, nurse-reviewable shift care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact shape: {"nursingNote":"NURSING CARE PLAN - SHIFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated\\n\\nCare plan item 2:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated"}. Create only the care plan items clearly supported by the nurse dictation or patient context. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a required detail is missing, omit it or write "Nurse to verify".`;
@@ -2075,7 +2077,7 @@ function buildDemoCarePlan(assessmentText) {
   if (lower.includes('dry') || lower.includes('infection')) matched.push('Ineffective protection');
   if (!matched.length) matched.push('Deficient knowledge');
   return [
-    'CARE PLAN DRAFT',
+    'NURSING CARE PLAN - SHIFT',
     '',
     'Patient assessment cues:',
     '- ' + assessmentText,
@@ -2084,35 +2086,36 @@ function buildDemoCarePlan(assessmentText) {
     ...matched.map(item => '- ' + item),
     '',
     'Care plan item 1:',
-    'Nursing diagnosis/problem: Nurse to verify the applicable diagnosis from the suggested template.',
-    'Related to: Based on dictated clinical condition; nurse to verify.',
-    'As evidenced by: Dictated bedside assessment cues.',
-    'Expected outcome/goal: Patient remains stable and identified nursing risks are reduced.',
-    'Nursing interventions:',
+    'Active Problem / Nursing Concern: Nurse to verify the applicable problem from the suggested template.',
+    'Goal for This Shift: Patient remains stable and identified nursing risks are reduced.',
+    'Nursing Actions / Monitoring:',
     '- Apply the selected hospital-approved care-plan interventions.',
     '- Document observations and report deterioration promptly.',
-    'Monitoring/evaluation:',
-    '- Nurse to review and document goal met, partially met, or not met with reason.',
-    'Escalation/referral: Nurse to verify.',
-    'Patient/family education: Nurse to verify and document relevant education.'
+    'Current Status: Ongoing'
   ].join('\n');
 }
 
 function buildDemoHandover(handoverText) {
   return [
-    'HANDOVER NOTE',
+    'NURSING SHIFT HANDOVER - SHIFT',
     '',
-    'Patient status:',
+    'Identification:',
+    '- Nurse to verify patient identifiers and diagnosis.',
+    '',
+    'Current Status:',
     '- ' + handoverText,
     '',
-    'Current treatment / devices:',
+    'Relevant Assessment:',
     '- Nurse to verify.',
     '',
-    'Pending tasks / monitoring:',
+    'Events/Changes This Shift:',
+    '- Document significant events if dictated.',
+    '',
+    'WATCH:',
     '- Continue monitoring as dictated and verify pending tasks.',
     '',
-    'Escalation / follow-up:',
-    '- Inform duty doctor if symptoms worsen or as clinically indicated.'
+    'NEXT SHIFT / PENDING:',
+    '- Nurse to verify pending investigations, medications, monitoring, or reviews.'
   ].join('\n');
 }
 
@@ -2284,7 +2287,7 @@ function printCurrentBedNotes() {
     .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 13px; margin-right: 8px; }
     .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: 0.06em; }
     .note-text { white-space: pre-wrap; line-height: 1.38; font-size: 11.5px; margin-top: 8px; }
-    .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 8px 0 3px; }
     .sign { margin-top: 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
     .sign div { border-top: 1px solid #9aa8ba; padding-top: 8px; color: #61738a; font-size: 12px; }
     @page { size: A4 landscape; margin: 8mm; }
@@ -2447,7 +2450,7 @@ function printShiftNotes() {
     .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 13px; margin-right: 8px; }
     .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: 0.06em; }
     .note-text { white-space: pre-wrap; line-height: 1.38; font-size: 11.5px; margin-top: 8px; }
-    .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 8px 0 3px; }
     .sign { margin-top: 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
     .sign div { border-top: 1px solid #9aa8ba; padding-top: 8px; color: #61738a; font-size: 12px; }
     @page { size: A4 landscape; margin: 8mm; }
