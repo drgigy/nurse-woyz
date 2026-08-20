@@ -1167,10 +1167,10 @@ let qrScanner = null;
 let qrScanBusy = false;
 const pageParams = new URLSearchParams(window.location.search);
 const legacyDocumentationTool = (pageParams.get('tool') || '').toLowerCase();
-if (legacyDocumentationTool === 'careplan') {
+if (['careplan', 'care-plan', 'care_plan', 'care', 'careplans', 'care-plans'].includes(legacyDocumentationTool)) {
   window.location.replace('./care-plan.html');
 }
-if (legacyDocumentationTool === 'handover') {
+if (['handover', 'handover-note', 'handover-notes', 'handover_note', 'handover_notes'].includes(legacyDocumentationTool)) {
   window.location.replace('./handover-notes.html');
 }
 let pendingUrlBedId = pageParams.get('bed') || '';
