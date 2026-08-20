@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a6192e">
+  <title>Nurse WOYZ Care Plan Library</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+  <script src="./access-control.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #fff4f5 0%, #ffffff 42%, #f8fafc 100%);
+      color: #162033;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    .topbar {
+      background: #a6192e;
+      color: #fff;
+      padding: 18px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.14);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 38px); letter-spacing: -0.04em; }
+    .subtitle { margin: 4px 0 0; color: #ffd5dc; font-size: 14px; line-height: 1.4; }
+    .home-link {
+      color: #a6192e;
+      background: #fff;
+      border: 1px solid rgba(255,255,255,0.5);
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    main {
+      width: min(1280px, calc(100% - 28px));
+      margin: 18px auto 36px;
+      display: grid;
+      grid-template-columns: minmax(250px, 330px) 1fr;
+      gap: 16px;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #d7e1ef;
+      border-radius: 22px;
+      box-shadow: 0 16px 42px rgba(20, 40, 70, 0.08);
+      padding: 18px;
+    }
+    .section-title {
+      color: #a6192e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+    .template-list { display: grid; gap: 9px; }
+    .template-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid #d7e1ef;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      color: #24344b;
+      font: inherit;
+      cursor: pointer;
+    }
+    .template-btn.active {
+      border-color: #e5b7be;
+      background: #fff4f6;
+      color: #a6192e;
+      font-weight: 850;
+    }
+    .muted { color: #64748b; font-size: 13px; line-height: 1.5; }
+    .workspace {
+      display: grid;
+      gap: 16px;
+    }
+    .hero-card {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .care-plan-title {
+      color: #a6192e;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip {
+      border: 1px solid #e5b7be;
+      color: #981b2d;
+      background: #fff2f4;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .sample {
+      background: #fbfdff;
+      border: 1px solid #d7e1ef;
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .sample h2 {
+      color: #a6192e;
+      margin: 0 0 12px;
+      font-size: 22px;
+    }
+    .care-block {
+      border: 1px solid #d7e1ef;
+      border-left: 5px solid #a6192e;
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .care-block h3 {
+      margin: 0 0 10px;
+      color: #a6192e;
+      font-size: 18px;
+    }
+    .field {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px dashed #d7e1ef;
+      line-height: 1.5;
+    }
+    .field:first-of-type { border-top: 0; }
+    .label { color: #64748b; font-weight: 850; }
+    .prompt-card textarea {
+      width: 100%;
+      min-height: 160px;
+      resize: vertical;
+      border: 1px solid #d7e1ef;
+      border-radius: 16px;
+      padding: 14px;
+      color: #162033;
+      font: inherit;
+      line-height: 1.5;
+      background: #fbfdff;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    button.action {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: #fff;
+      background: #a6192e;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    button.secondary {
+      color: #a6192e;
+      background: #fff2f4;
+      border: 1px solid #e5b7be;
+    }
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .mini-card {
+      border: 1px solid #d7e1ef;
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+    .mini-card strong { color: #a6192e; display: block; margin-bottom: 6px; }
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: #10233f;
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: 0.16s ease;
+      pointer-events: none;
+      font-weight: 800;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      main, .hero-card, .reference-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .field { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">NW</div>
+      <div>
+        <h1>Care Plan Reference Library</h1>
+        <p class="subtitle">Template planning area for hospital-approved nursing care plans. This is not the nurse dictation module.</p>
+      </div>
+    </div>
+    <a class="home-link" href="./index.html">Back to Home</a>
+  </header>
+
+  <main>
+    <aside class="panel">
+      <div class="section-title">Care Plan Templates</div>
+      <p class="muted">Select a template to preview the structure that the dictation app should follow when a nurse dictates relevant clinical cues.</p>
+      <div class="template-list" id="templateList"></div>
+    </aside>
+
+    <section class="workspace">
+      <div class="hero-card">
+        <div class="panel">
+          <p class="section-title">Selected Template</p>
+          <h2 class="care-plan-title" id="selectedTitle">Risk for Falls</h2>
+          <p class="muted" id="selectedDescription"></p>
+          <div class="chips" id="selectedChips"></div>
+        </div>
+        <div class="panel">
+          <p class="section-title">How Nurses Dictate</p>
+          <p class="muted">The nurse should speak naturally in Malayalam. They do not need to follow every heading. The AI should extract only supported information and arrange it into this template.</p>
+          <div class="chips">
+            <span class="chip">No invented findings</span>
+            <span class="chip">Use hospital templates</span>
+            <span class="chip">Nurse verifies final plan</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sample panel">
+        <h2>Standard Care Plan Format</h2>
+        <div class="care-block">
+          <h3 id="sampleProblem">Active Problem / Nursing Concern</h3>
+          <div class="field"><div class="label">Assessment cues</div><div id="sampleCues"></div></div>
+          <div class="field"><div class="label">Goal for this shift</div><div id="sampleGoal"></div></div>
+          <div class="field"><div class="label">Nursing actions / monitoring</div><div id="sampleActions"></div></div>
+          <div class="field"><div class="label">Escalation / referral</div><div id="sampleEscalation"></div></div>
+          <div class="field"><div class="label">Patient/family education</div><div id="sampleEducation"></div></div>
+          <div class="field"><div class="label">Evaluation</div><div>Nurse to document goal met, partially met, or not met with reason.</div></div>
+        </div>
+      </div>
+
+      <div class="panel prompt-card">
+        <p class="section-title">Reusable AI Prompt Skeleton</p>
+        <textarea id="promptText" readonly></textarea>
+        <div class="actions">
+          <button class="action" onclick="copyPrompt()">Copy Prompt Skeleton</button>
+          <button class="action secondary" onclick="copyTemplate()">Copy Selected Template</button>
+        </div>
+      </div>
+
+      <div class="reference-grid">
+        <div class="mini-card"><strong>Library role</strong><span class="muted">Store and refine hospital-approved care-plan templates before they are used inside nurse dictation.</span></div>
+        <div class="mini-card"><strong>Dictation role</strong><span class="muted">The nurse dictates patient cues. The AI maps them to applicable templates and leaves missing details for nurse verification.</span></div>
+        <div class="mini-card"><strong>Supervisor role</strong><span class="muted">Review whether the generated care plan follows the approved format before clinical use.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const templates = [
+      {
+        title: 'Risk for Falls',
+        description: 'For patients with unsteady gait, altered sensorium, weakness, sedation, previous falls, or need for assistance while mobilizing.',
+        chips: ['Fall prevention', 'Mobility support', 'Safety monitoring'],
+        cues: ['Unsteady gait or difficulty walking', 'Drowsiness or altered sensorium', 'Needs assistance for toileting or transfer'],
+        goal: 'Patient remains free from fall or injury during the shift.',
+        actions: ['Keep call bell and essential items within reach', 'Assist during mobilization and toileting', 'Maintain bed in low position with brakes locked', 'Monitor sensorium, weakness, and medication-related sedation'],
+        escalation: 'Inform duty doctor or supervisor if sensorium worsens, fall occurs, or mobility suddenly deteriorates.',
+        education: 'Explain need to call the nurse before getting out of bed.'
+      },
+      {
+        title: 'Risk for Impaired Skin Integrity',
+        description: 'For patients who are bedbound, incontinent, edematous, poorly nourished, immobilized, or at risk of pressure injury.',
+        chips: ['Pressure injury prevention', 'Skin checks', 'Repositioning'],
+        cues: ['Bedbound or restricted mobility', 'Moisture or incontinence risk', 'Pressure areas or redness noted'],
+        goal: 'Skin remains intact with no new pressure injury during the shift.',
+        actions: ['Inspect pressure points every shift', 'Reposition as per unit protocol', 'Keep skin clean and dry', 'Use pressure-relieving devices as ordered or available'],
+        escalation: 'Report redness, blistering, skin breakdown, or wound discharge.',
+        education: 'Teach patient and bystander the need for position change and skin care.'
+      },
+      {
+        title: 'Impaired Physical Mobility',
+        description: 'For patients with weakness, pain, neurological deficit, post-procedure limitation, or difficulty performing safe movement.',
+        chips: ['Mobility', 'Rehabilitation', 'Safety'],
+        cues: ['Difficulty walking or transferring', 'Limb weakness or reduced movement', 'Needs support for activities'],
+        goal: 'Patient mobilizes safely within ordered limits and avoids injury.',
+        actions: ['Assess mobility level before transfer', 'Provide assistance and walking aid if applicable', 'Encourage active or passive exercises as appropriate', 'Coordinate physiotherapy when advised'],
+        escalation: 'Escalate new weakness, sudden pain, fall, or inability to mobilize as previously.',
+        education: 'Explain safe transfer technique and need for assistance.'
+      },
+      {
+        title: 'Self-care Deficit',
+        description: 'For patients unable to independently perform bathing, feeding, toileting, grooming, or oral care.',
+        chips: ['ADL support', 'Hygiene', 'Nutrition'],
+        cues: ['Needs help for feeding or hygiene', 'Uses bedpan or catheter', 'Weakness limiting self-care'],
+        goal: 'Essential activities of daily living are completed safely with appropriate assistance.',
+        actions: ['Assist with hygiene, toileting, feeding, and comfort care', 'Maintain privacy and dignity', 'Document level of assistance required', 'Encourage independence where safe'],
+        escalation: 'Report worsening weakness, swallowing difficulty, aspiration risk, or inability to complete essential care.',
+        education: 'Guide patient and bystander on safe participation in care.'
+      },
+      {
+        title: 'Hyperthermia',
+        description: 'For patients with fever, chills, infection concern, high temperature trend, or fever-related distress.',
+        chips: ['Fever monitoring', 'Hydration', 'Infection vigilance'],
+        cues: ['Fever or chills present', 'Temperature rising', 'Antibiotics or investigations ordered'],
+        goal: 'Temperature is monitored and patient remains clinically stable during the shift.',
+        actions: ['Monitor temperature and vitals as per unit protocol', 'Administer prescribed medications', 'Encourage fluids if not restricted', 'Observe for chills, rigors, altered sensorium, or deterioration'],
+        escalation: 'Inform doctor for persistent high fever, hypotension, altered sensorium, respiratory distress, or clinical worsening.',
+        education: 'Explain fever monitoring and when to alert staff.'
+      },
+      {
+        title: 'Ineffective Breathing Pattern',
+        description: 'For patients with breathlessness, tachypnea, oxygen requirement, respiratory distress, or reduced saturation.',
+        chips: ['Respiratory care', 'Oxygen monitoring', 'Early escalation'],
+        cues: ['Breathlessness or cough', 'Respiratory distress', 'Oxygen support or low saturation'],
+        goal: 'Patient maintains comfortable breathing and target oxygen saturation as ordered.',
+        actions: ['Monitor respiratory rate, SpO2, work of breathing, and oxygen device', 'Position patient for comfort', 'Administer oxygen and nebulization only as ordered', 'Keep emergency escalation pathway ready if distress worsens'],
+        escalation: 'Urgently inform doctor for increasing breathlessness, falling saturation, cyanosis, altered sensorium, or exhaustion.',
+        education: 'Advise patient to report worsening breathlessness immediately.'
+      },
+      {
+        title: 'Acute Pain',
+        description: 'For patients with new or ongoing pain requiring assessment, analgesia monitoring, comfort care, and escalation if severe.',
+        chips: ['Pain score', 'Comfort', 'Analgesia response'],
+        cues: ['Pain reported by patient', 'Pain limiting movement or sleep', 'Analgesic given or due'],
+        goal: 'Pain is assessed, relieved as far as possible, and response is documented.',
+        actions: ['Assess pain site, score, character, and triggers', 'Administer prescribed analgesic', 'Reassess pain after intervention', 'Provide positioning and comfort measures'],
+        escalation: 'Inform doctor for severe, new, worsening, chest, abdominal, neurological, or uncontrolled pain.',
+        education: 'Encourage patient to report pain early and describe response to medication.'
+      }
+    ];
+
+    let selectedIndex = 0;
+
+    function escapeHtml(value) {
+      return String(value || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+    }
+
+    function renderTemplates() {
+      const list = document.getElementById('templateList');
+      list.innerHTML = templates.map((template, index) => `
+        <button class="template-btn ${index === selectedIndex ? 'active' : ''}" onclick="selectTemplate(${index})">
+          ${escapeHtml(template.title)}
+        </button>
+      `).join('');
+    }
+
+    function renderSelected() {
+      const template = templates[selectedIndex];
+      document.getElementById('selectedTitle').textContent = template.title;
+      document.getElementById('selectedDescription').textContent = template.description;
+      document.getElementById('selectedChips').innerHTML = template.chips.map(chip => `<span class="chip">${escapeHtml(chip)}</span>`).join('');
+      document.getElementById('sampleProblem').textContent = template.title;
+      document.getElementById('sampleCues').innerHTML = template.cues.map(item => `- ${escapeHtml(item)}`).join('<br>');
+      document.getElementById('sampleGoal').textContent = template.goal;
+      document.getElementById('sampleActions').innerHTML = template.actions.map(item => `- ${escapeHtml(item)}`).join('<br>');
+      document.getElementById('sampleEscalation').textContent = template.escalation;
+      document.getElementById('sampleEducation').textContent = template.education;
+      document.getElementById('promptText').value = buildPrompt(template);
+    }
+
+    function selectTemplate(index) {
+      selectedIndex = index;
+      renderTemplates();
+      renderSelected();
+    }
+
+    function buildPrompt(template) {
+      return [
+        'Translate Malayalam bedside assessment into English and generate a concise nurse-reviewable care plan.',
+        '',
+        'Use only hospital-approved templates. Do not invent findings. If the nurse does not dictate meaningful clinical information, return an empty care plan.',
+        '',
+        'Selected template: ' + template.title,
+        'Assessment cues supported by this template:',
+        ...template.cues.map(item => '- ' + item),
+        '',
+        'Output headings:',
+        'NURSING CARE PLAN - SHIFT',
+        'Patient assessment cues',
+        'Applicable approved care-plan templates',
+        'Care plan item',
+        'Active Problem / Nursing Concern',
+        'Goal for This Shift',
+        'Nursing Actions / Monitoring',
+        'Escalation / Referral',
+        'Patient / Family Education',
+        'Evaluation'
+      ].join('\n');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function copyText(text, message) {
+      navigator.clipboard.writeText(text).then(() => showToast(message)).catch(() => showToast('Text ready to copy'));
+    }
+
+    function copyPrompt() {
+      copyText(document.getElementById('promptText').value, 'Prompt skeleton copied');
+    }
+
+    function copyTemplate() {
+      const template = templates[selectedIndex];
+      const text = `${template.title}\n\nAssessment cues:\n${template.cues.map(item => '- ' + item).join('\n')}\n\nGoal:\n${template.goal}\n\nNursing actions:\n${template.actions.map(item => '- ' + item).join('\n')}\n\nEscalation:\n${template.escalation}\n\nEducation:\n${template.education}`;
+      copyText(text, 'Template copied');
+    }
+
+    renderTemplates();
+    renderSelected();
+  </script>
+</body>
+</html>

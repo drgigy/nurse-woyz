@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a6192e">
+  <title>Nurse WOYZ Handover Notes</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+  <script src="./access-control.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #fff4f5 0%, #ffffff 44%, #f8fafc 100%);
+      color: #162033;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    .topbar {
+      background: #a6192e;
+      color: #fff;
+      padding: 18px 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 38px); letter-spacing: -0.04em; }
+    .subtitle { margin: 4px 0 0; color: #ffd5dc; font-size: 14px; line-height: 1.4; }
+    .home-link {
+      color: #a6192e;
+      background: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    main {
+      width: min(1180px, calc(100% - 28px));
+      margin: 18px auto 36px;
+      display: grid;
+      gap: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #d7e1ef;
+      border-radius: 22px;
+      box-shadow: 0 16px 42px rgba(20, 40, 70, 0.08);
+      padding: 18px;
+    }
+    .section-title {
+      color: #a6192e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+    .muted { color: #64748b; font-size: 14px; line-height: 1.55; }
+    .handover {
+      border: 1px solid #d7e1ef;
+      border-left: 5px solid #a6192e;
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 18px;
+    }
+    .handover h2 {
+      margin: 0 0 14px;
+      color: #a6192e;
+      font-size: 26px;
+      letter-spacing: -0.03em;
+    }
+    .block {
+      border-top: 1px dashed #d7e1ef;
+      padding-top: 13px;
+      margin-top: 13px;
+    }
+    .block:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+    .block h3 {
+      margin: 0 0 8px;
+      color: #981b2d;
+      font-size: 18px;
+    }
+    ul { margin: 0; padding-left: 20px; line-height: 1.55; }
+    li { margin: 4px 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip {
+      border: 1px solid #e5b7be;
+      color: #981b2d;
+      background: #fff2f4;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      resize: vertical;
+      border: 1px solid #d7e1ef;
+      border-radius: 16px;
+      padding: 14px;
+      color: #162033;
+      font: inherit;
+      line-height: 1.5;
+      background: #fbfdff;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #a6192e;
+      color: #fff;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    button.secondary {
+      color: #a6192e;
+      background: #fff2f4;
+      border: 1px solid #e5b7be;
+    }
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: #10233f;
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: 0.16s ease;
+      pointer-events: none;
+      font-weight: 800;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">NW</div>
+      <div>
+        <h1>Handover Notes Format</h1>
+        <p class="subtitle">Reference format for shift handover notes generated from Malayalam nurse dictation.</p>
+      </div>
+    </div>
+    <a class="home-link" href="./index.html">Back to Home</a>
+  </header>
+
+  <main>
+    <section class="grid">
+      <div class="panel">
+        <p class="section-title">Dictation Principle</p>
+        <p class="muted">The nurse should speak naturally. The system should not force a rigid form during dictation. It should listen for clinically useful handover cues and then arrange them under standard headings.</p>
+        <div class="chips">
+          <span class="chip">No automatic fabrication</span>
+          <span class="chip">Abnormal findings first</span>
+          <span class="chip">Pending work visible</span>
+          <span class="chip">Next nurse focused</span>
+        </div>
+      </div>
+
+      <div class="handover">
+        <h2>Nursing Shift Handover - Sample Format</h2>
+        <div class="block">
+          <h3>Identification</h3>
+          <ul>
+            <li>Patient name, room/bed, age, gender, UHID if available.</li>
+            <li>Primary reason for admission or current working problem if dictated.</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h3>Current Status</h3>
+          <ul>
+            <li>Present condition, sensorium, comfort, mobility, feeding, urine/stool, oxygen or device support.</li>
+            <li>Only mention normal findings if the nurse specifically states them.</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h3>Events / Changes This Shift</h3>
+          <ul>
+            <li>Fever, pain, breathlessness, deterioration, investigations sent, doctor informed, medication administered.</li>
+            <li>Patient response after nursing care or treatment if dictated.</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h3>WATCH</h3>
+          <ul>
+            <li>Risks or red flags the next nurse must monitor.</li>
+            <li>Escalation concerns such as altered sensorium, fall risk, respiratory distress, bleeding, urine output, or worsening pain.</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h3>NEXT SHIFT / PENDING</h3>
+          <ul>
+            <li>Pending investigations, reports, medications, procedures, review, transfer, or follow-up tasks.</li>
+            <li>What must be handed over clearly to avoid missed care.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p class="section-title">Reusable AI Prompt Skeleton</p>
+      <textarea id="promptText" readonly>Translate this nurse-dictated Malayalam handover into professional English nursing handover documentation.
+
+Use this structure:
+NURSING SHIFT HANDOVER - SHIFT
+
+Identification:
+- ...
+
+Current Status:
+- ...
+
+Events / Changes This Shift:
+- ...
+
+WATCH:
+- ...
+
+NEXT SHIFT / PENDING:
+- ...
+
+Rules:
+- Use only what the nurse dictated or what is already available in the patient context.
+- Do not invent normal findings, diagnoses, treatment orders, or recommendations.
+- Keep abnormal findings, deterioration, risks, escalation, and pending tasks prominent.
+- If no meaningful clinical information is dictated, return an empty handover note.</textarea>
+      <div class="actions">
+        <button onclick="copyPrompt()">Copy Prompt Skeleton</button>
+        <button class="secondary" onclick="window.print()">Print Reference</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    function copyPrompt() {
+      navigator.clipboard.writeText(document.getElementById('promptText').value)
+        .then(() => showToast('Prompt skeleton copied'))
+        .catch(() => showToast('Text ready to copy'));
+    }
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+  </script>
+</body>
+</html>
