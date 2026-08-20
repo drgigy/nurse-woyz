@@ -1165,7 +1165,11 @@ let localSaveIds = new Set();
 let editingNoteId = null;
 let qrScanner = null;
 let qrScanBusy = false;
-let pendingUrlBedId = new URLSearchParams(window.location.search).get('bed') || '';
+const pageParams = new URLSearchParams(window.location.search);
+let pendingUrlBedId = pageParams.get('bed') || '';
+let pendingDocTool = (pageParams.get('tool') || '').toLowerCase();
+if (!['careplan', 'handover'].includes(pendingDocTool)) pendingDocTool = '';
+let preferredDocumentationTool = '';
 let nurses = [];
 let rooms = [];
 let patients = [];
@@ -1315,7 +1319,12 @@ function doLogin() {
   if (pendingUrlBedId) {
     const bedId = pendingUrlBedId;
     pendingUrlBedId = '';
-    setTimeout(() => openBedFromQr(bedId), 350);
+    setTimeout(() => {
+      openBedFromQr(bedId);
+      primeDocumentationModeIfOpen();
+    }, 350);
+  } else {
+    openDocumentationToolIfRequested();
   }
 }
 function doLogout() {
@@ -1539,6 +1548,88 @@ function openDemoQrPatient() {
   showToast('Demo QR bypassed. Recording mode opened for ' + (patientRoom.name || 'Room ' + patientRoom.id) + '.');
 }
 
+function ensureDocumentationDemoData() {
+  if (nurses.length && rooms.length) return;
+  const demoNurseId = 'demo-jewel';
+  if (!nurses.length) {
+    nurses = [
+      { id: demoNurseId, name: 'Jewel', pin: '2222', active: true, competencyLevel: 5, hospitalId: 'NRS-DEMO' }
+    ];
+  }
+  if (!rooms.length) {
+    rooms = [
+      { id: '101', name: 'Room 101', roomNumber: '101', active: true, assignedNurseId: demoNurseId, patientName: 'Michelle Teoh', patientAge: '54', patientSex: 'F', patientUhid: 'UHID1001' },
+      { id: '102', name: 'Room 102', roomNumber: '102', active: true, assignedNurseId: demoNurseId, patientName: 'Rajan Menon', patientAge: '62', patientSex: 'M', patientUhid: 'UHID1002' },
+      { id: '103', name: 'Room 103', roomNumber: '103', active: true, assignedNurseId: demoNurseId, patientName: 'Mary Thomas', patientAge: '72', patientSex: 'F', patientUhid: 'UHID1003' },
+      { id: '104', name: 'Room 104', roomNumber: '104', active: true, assignedNurseId: demoNurseId, patientName: 'Abdul Rahman', patientAge: '60', patientSex: 'M', patientUhid: 'UHID1004' }
+    ];
+  }
+  if (!patients.length) {
+    patients = rooms.map(room => ({
+      id: 'patient-' + room.id,
+      name: room.patientName,
+      age: room.patientAge,
+      gender: room.patientSex,
+      uhid: room.patientUhid,
+      assignedNurseId: room.assignedNurseId,
+      assignedRoomId: room.id,
+      assignedRoomName: room.name
+    }));
+  }
+}
+
+function selectDocumentationDemoNurse() {
+  if (activeNurse) return true;
+  ensureDocumentationDemoData();
+  activeNurse = nurses.find(nurse => nurse.active !== false && rooms.some(room => room.active !== false && room.assignedNurseId === nurse.id))
+    || nurses.find(nurse => nurse.active !== false)
+    || nurses[0]
+    || null;
+  if (!activeNurse) return false;
+  updateNurseIdentity();
+  renderBedGrid();
+  renderNurseNotifications();
+  return true;
+}
+
+function primeDocumentationModeIfOpen() {
+  if (!pendingDocTool || !currentBed || currentBedMode !== 'record') return;
+  const tool = pendingDocTool;
+  pendingDocTool = '';
+  preferredDocumentationTool = tool;
+  currentNoteType = tool;
+  setMicUI('idle');
+  document.getElementById('draftPanel')?.classList.add('show');
+  setPreviewText(
+    tool === 'careplan'
+      ? 'Care plan mode is ready. Tap to dictate the patient assessment cues in Malayalam. The output will follow the approved care-plan structure.'
+      : 'Handover mode is ready. Tap to dictate the shift handover in Malayalam. The output will be structured with clear handover headings.',
+    { placeholder: true }
+  );
+  showToast(tool === 'careplan' ? 'Care plan optimizer ready' : 'Handover optimizer ready');
+}
+
+function openDocumentationToolIfRequested() {
+  if (PAGE_KIND !== 'nurse-desktop' || !pendingDocTool) return;
+  if (!selectDocumentationDemoNurse()) {
+    showScreen('login');
+    showToast('No demo nurse is available for this tool', true);
+    return;
+  }
+  const assigned = assignedRooms();
+  const patientRoom = assigned.find(room => {
+    const patient = patients.find(item => item.assignedRoomId === room.id || item.assignedRoomName === room.name || item.assignedRoomName === room.roomNumber);
+    return patient || room.patientName || room.patientUhid;
+  }) || assigned[0];
+  if (!patientRoom) {
+    showScreen('beds');
+    showToast('No assigned patient room is available for this tool', true);
+    return;
+  }
+  openBed(patientRoom.id, 'record');
+  primeDocumentationModeIfOpen();
+}
+
 async function openQrScanner() {
   openDemoQrPatient();
   return;
@@ -1674,7 +1765,8 @@ function toggleMic() {
   }
   if (isRecording || isPaused) { stopRecording(); }
   else {
-    currentNoteType = 'note';
+    currentNoteType = preferredDocumentationTool || 'note';
+    preferredDocumentationTool = '';
     startRecording();
   }
 }
@@ -3014,7 +3106,10 @@ function initApp() {
   setupDepartmentPage();
   refreshDashboard();
   initFirebaseSync();
-  if (PAGE_KIND === 'ward' || PAGE_KIND === 'nurse-desktop') showScreen('login');
+  if (PAGE_KIND === 'nurse-desktop' && pendingDocTool) {
+    showScreen('login');
+    setTimeout(openDocumentationToolIfRequested, 800);
+  } else if (PAGE_KIND === 'ward' || PAGE_KIND === 'nurse-desktop') showScreen('login');
   else if (PAGE_KIND === 'manager') showScreen(managerLoggedIn ? 'dashboard' : 'manager-login');
   else if (['ot','cathlab'].includes(PAGE_KIND)) showScreen('command');
   else showScreen(deviceMode === 'mobile' ? 'login' : (managerLoggedIn ? 'dashboard' : 'manager-login'));

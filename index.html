@@ -79,6 +79,10 @@
     .grid.compact {
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
+    .grid.doc-tools {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 2px;
+    }
     a.card,
     .card {
       text-decoration: none;
@@ -154,6 +158,14 @@
       font-size: 10px;
       padding: 4px 8px;
     }
+    .doc-tools a.card {
+      min-height: 104px;
+      background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
+      border-color: #e7c0c7;
+    }
+    .doc-tools .desc {
+      max-width: 520px;
+    }
     footer {
       text-align: center;
       color: #8a9ab4;
@@ -170,7 +182,8 @@
       body { padding: 14px; }
       .grid,
       .grid.primary,
-      .grid.compact { grid-template-columns: 1fr; }
+      .grid.compact,
+      .grid.doc-tools { grid-template-columns: 1fr; }
       a.card,
       .compact a.card { min-height: 104px; }
       .compact .desc { display: block; }
@@ -234,6 +247,27 @@
           <div class="desc">Cath Lab command page for transfer notifications to the assigned nurse.</div>
         </div>
         <div class="pill">Open Cath Lab</div>
+      </a>
+    </section>
+
+    <div class="section-title">Documentation Optimizer</div>
+    <p class="section-note">Open the same nurse dictation workflow directly in care-plan or handover mode for prompt tuning and demo review.</p>
+    <section class="grid doc-tools" aria-label="Care plan and handover optimization links">
+      <a class="card" href="./nurse-desktop.html?tool=careplan">
+        <div>
+          <div class="icon">🧾</div>
+          <div class="title">Care Plan</div>
+          <div class="desc">Open a demo patient room with the care-plan dictation mode ready. Uses the same mobile nurse workflow and care-plan prompt.</div>
+        </div>
+        <div class="pill">Optimize Care Plan</div>
+      </a>
+      <a class="card" href="./nurse-desktop.html?tool=handover">
+        <div>
+          <div class="icon">📝</div>
+          <div class="title">Handover Notes</div>
+          <div class="desc">Open a demo patient room with handover dictation ready, so the format can be refined without entering the mobile device each time.</div>
+        </div>
+        <div class="pill">Optimize Handover</div>
       </a>
     </section>
 
