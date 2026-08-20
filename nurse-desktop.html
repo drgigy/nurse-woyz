@@ -1166,6 +1166,13 @@ let editingNoteId = null;
 let qrScanner = null;
 let qrScanBusy = false;
 const pageParams = new URLSearchParams(window.location.search);
+const legacyDocumentationTool = (pageParams.get('tool') || '').toLowerCase();
+if (legacyDocumentationTool === 'careplan') {
+  window.location.replace('./care-plan.html');
+}
+if (legacyDocumentationTool === 'handover') {
+  window.location.replace('./handover-notes.html');
+}
 let pendingUrlBedId = pageParams.get('bed') || '';
 let nurses = [];
 let rooms = [];
