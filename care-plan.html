@@ -226,8 +226,8 @@
 
   <main>
     <aside class="panel">
-      <div class="section-title">Care Plan Templates</div>
-      <p class="muted">Select a template to preview the structure that the dictation app should follow when a nurse dictates relevant clinical cues.</p>
+      <div class="section-title">Care Plan & EMR Templates</div>
+      <p class="muted">Select a template to preview the structure that the dictation app should follow. EMR downloads have been cleaned into generic Nurse WOYZ templates with patient and hospital identifiers removed.</p>
       <div class="template-list" id="templateList"></div>
     </aside>
 
@@ -255,6 +255,7 @@
         <div class="care-block">
           <h3 id="sampleProblem">Active Problem / Nursing Concern</h3>
           <div class="field"><div class="label">Assessment cues</div><div id="sampleCues"></div></div>
+          <div class="field"><div class="label">EMR fields to capture</div><div id="sampleFields"></div></div>
           <div class="field"><div class="label">Goal for this shift</div><div id="sampleGoal"></div></div>
           <div class="field"><div class="label">Nursing actions / monitoring</div><div id="sampleActions"></div></div>
           <div class="field"><div class="label">Escalation / referral</div><div id="sampleEscalation"></div></div>
@@ -288,6 +289,7 @@
         title: 'Risk for Falls',
         description: 'For patients with unsteady gait, altered sensorium, weakness, sedation, previous falls, or need for assistance while mobilizing.',
         chips: ['Fall prevention', 'Mobility support', 'Safety monitoring'],
+        fields: ['Reason for assessment or reassessment', 'Fall risk factors present', 'Mobility and transfer assistance level', 'Mental status and sedation risk', 'Toileting need and call-bell access', 'Fall prevention interventions started'],
         cues: ['Unsteady gait or difficulty walking', 'Drowsiness or altered sensorium', 'Needs assistance for toileting or transfer'],
         goal: 'Patient remains free from fall or injury during the shift.',
         actions: ['Keep call bell and essential items within reach', 'Assist during mobilization and toileting', 'Maintain bed in low position with brakes locked', 'Monitor sensorium, weakness, and medication-related sedation'],
@@ -298,6 +300,7 @@
         title: 'Risk for Impaired Skin Integrity',
         description: 'For patients who are bedbound, incontinent, edematous, poorly nourished, immobilized, or at risk of pressure injury.',
         chips: ['Pressure injury prevention', 'Skin checks', 'Repositioning'],
+        fields: ['Braden or pressure injury risk category', 'Skin inspection findings', 'Moisture or incontinence risk', 'Nutrition and hydration concern', 'Repositioning plan', 'Pressure-relieving device used'],
         cues: ['Bedbound or restricted mobility', 'Moisture or incontinence risk', 'Pressure areas or redness noted'],
         goal: 'Skin remains intact with no new pressure injury during the shift.',
         actions: ['Inspect pressure points every shift', 'Reposition as per unit protocol', 'Keep skin clean and dry', 'Use pressure-relieving devices as ordered or available'],
@@ -308,6 +311,7 @@
         title: 'Impaired Physical Mobility',
         description: 'For patients with weakness, pain, neurological deficit, post-procedure limitation, or difficulty performing safe movement.',
         chips: ['Mobility', 'Rehabilitation', 'Safety'],
+        fields: ['Baseline mobility', 'Current limitation', 'Assistance required', 'Walking aid or support used', 'Physiotherapy or mobilization advice', 'Safety precautions'],
         cues: ['Difficulty walking or transferring', 'Limb weakness or reduced movement', 'Needs support for activities'],
         goal: 'Patient mobilizes safely within ordered limits and avoids injury.',
         actions: ['Assess mobility level before transfer', 'Provide assistance and walking aid if applicable', 'Encourage active or passive exercises as appropriate', 'Coordinate physiotherapy when advised'],
@@ -318,6 +322,7 @@
         title: 'Self-care Deficit',
         description: 'For patients unable to independently perform bathing, feeding, toileting, grooming, or oral care.',
         chips: ['ADL support', 'Hygiene', 'Nutrition'],
+        fields: ['Feeding support', 'Bathing and hygiene support', 'Toileting support', 'Oral care', 'Catheter or bedpan use', 'Bystander participation'],
         cues: ['Needs help for feeding or hygiene', 'Uses bedpan or catheter', 'Weakness limiting self-care'],
         goal: 'Essential activities of daily living are completed safely with appropriate assistance.',
         actions: ['Assist with hygiene, toileting, feeding, and comfort care', 'Maintain privacy and dignity', 'Document level of assistance required', 'Encourage independence where safe'],
@@ -328,6 +333,7 @@
         title: 'Hyperthermia',
         description: 'For patients with fever, chills, infection concern, high temperature trend, or fever-related distress.',
         chips: ['Fever monitoring', 'Hydration', 'Infection vigilance'],
+        fields: ['Temperature trend', 'Associated symptoms', 'Cultures or investigations sent', 'Antibiotics or antipyretics given', 'Hydration status', 'Response after intervention'],
         cues: ['Fever or chills present', 'Temperature rising', 'Antibiotics or investigations ordered'],
         goal: 'Temperature is monitored and patient remains clinically stable during the shift.',
         actions: ['Monitor temperature and vitals as per unit protocol', 'Administer prescribed medications', 'Encourage fluids if not restricted', 'Observe for chills, rigors, altered sensorium, or deterioration'],
@@ -338,6 +344,7 @@
         title: 'Ineffective Breathing Pattern',
         description: 'For patients with breathlessness, tachypnea, oxygen requirement, respiratory distress, or reduced saturation.',
         chips: ['Respiratory care', 'Oxygen monitoring', 'Early escalation'],
+        fields: ['Respiratory rate and work of breathing', 'SpO2 and oxygen device', 'Cough or secretions', 'Positioning', 'Nebulization or respiratory therapy ordered', 'Escalation trigger'],
         cues: ['Breathlessness or cough', 'Respiratory distress', 'Oxygen support or low saturation'],
         goal: 'Patient maintains comfortable breathing and target oxygen saturation as ordered.',
         actions: ['Monitor respiratory rate, SpO2, work of breathing, and oxygen device', 'Position patient for comfort', 'Administer oxygen and nebulization only as ordered', 'Keep emergency escalation pathway ready if distress worsens'],
@@ -348,11 +355,78 @@
         title: 'Acute Pain',
         description: 'For patients with new or ongoing pain requiring assessment, analgesia monitoring, comfort care, and escalation if severe.',
         chips: ['Pain score', 'Comfort', 'Analgesia response'],
+        fields: ['Pain site', 'Pain score', 'Character and trigger', 'Medication given', 'Non-drug comfort measures', 'Reassessment response'],
         cues: ['Pain reported by patient', 'Pain limiting movement or sleep', 'Analgesic given or due'],
         goal: 'Pain is assessed, relieved as far as possible, and response is documented.',
         actions: ['Assess pain site, score, character, and triggers', 'Administer prescribed analgesic', 'Reassess pain after intervention', 'Provide positioning and comfort measures'],
         escalation: 'Inform doctor for severe, new, worsening, chest, abdominal, neurological, or uncontrolled pain.',
         education: 'Encourage patient to report pain early and describe response to medication.'
+      },
+      {
+        title: 'PASS Ward Patient Acuity',
+        description: 'Clean ward-acuity template for estimating patient dependency and nursing workload in a ward setting.',
+        chips: ['PASS ward', 'Acuity', 'Nursing dependency'],
+        fields: ['Reason for assessment or reassessment', 'Mobility and fall risk', 'Feeding and nutrition support', 'Elimination and catheter care', 'Respiratory support', 'Lines, drains, tubes, wounds, and devices', 'Monitoring frequency', 'Total score and acuity category'],
+        cues: ['Patient requires increased observation or assistance', 'Device care, catheter care, oxygen care, or wound care is needed', 'Dependency level affects nurse workload'],
+        goal: 'Patient acuity and nursing dependency are documented consistently for safe prioritization.',
+        actions: ['Record the dependency factors dictated by the nurse', 'Map the patient to ward acuity category after nurse verification', 'Highlight tasks requiring frequent monitoring', 'Use the acuity result for supervisor review and staffing awareness'],
+        escalation: 'Escalate to the supervisor if acuity increases or staffing support is not matching patient dependency.',
+        education: 'Explain to patient or bystander when extra assistance, call bell use, or fall precautions are required.'
+      },
+      {
+        title: 'Modified DVT Assessment',
+        description: 'Clean DVT risk and Modified Wells style assessment structure for patients requiring thrombosis-risk review.',
+        chips: ['DVT risk', 'Modified Wells', 'Anticoagulation watch'],
+        fields: ['Reason for reassessment', 'DVT signs or symptoms', 'Mobility status', 'Risk category: low, moderate, or high', 'Mechanical prophylaxis status', 'Anticoagulant order and bleeding risk', 'Action taken as per policy'],
+        cues: ['Leg swelling, pain, immobility, or suspected DVT', 'DVT pump or compression device in use', 'Anticoagulation ordered or withheld'],
+        goal: 'DVT risk status and prescribed prophylaxis are clearly visible for the shift.',
+        actions: ['Check limb pain, swelling, warmth, and mobility status', 'Verify mechanical prophylaxis and anticoagulant orders', 'Monitor for bleeding if anticoagulation is prescribed', 'Document reassessment reason and current risk category'],
+        escalation: 'Inform doctor for suspected DVT, sudden limb swelling, chest pain, breathlessness, bleeding, or change in anticoagulation safety.',
+        education: 'Teach leg movement, hydration if allowed, and need to report calf pain, swelling, chest pain, or breathlessness.'
+      },
+      {
+        title: 'Adult Neurological Assessment Part 1',
+        description: 'Clean neurological assessment structure for patients needing consciousness, pupil, limb power, and deterioration monitoring.',
+        chips: ['Neurology', 'GCS', 'Pupil monitoring'],
+        fields: ['Consciousness and orientation', 'GCS or sensorium trend', 'Pupil size and reaction', 'Limb power and new weakness', 'Speech or swallowing concern', 'Seizure or aspiration risk', 'Neuro observation frequency'],
+        cues: ['Drowsiness, altered sensorium, seizure risk, or neurological deficit', 'Pupil asymmetry or limb weakness', 'Hourly or frequent neuro monitoring required'],
+        goal: 'Neurological status is monitored consistently and deterioration is detected early.',
+        actions: ['Document sensorium, GCS if available, pupils, limb power, and speech/swallow concern', 'Maintain fall and aspiration precautions as applicable', 'Follow ordered neuro-observation frequency', 'Keep seizure precautions if risk is present'],
+        escalation: 'Urgently inform doctor for drop in GCS, new weakness, seizure, unequal pupils, worsening headache, vomiting, or sudden confusion.',
+        education: 'Explain to bystander to alert staff for drowsiness, seizure, vomiting, new weakness, or change in speech.'
+      },
+      {
+        title: 'Adult Neurological Assessment Part 2',
+        description: 'Continuation template for trending neurological status, devices, mobility, rehabilitation, and safety needs.',
+        chips: ['Neuro trend', 'Rehabilitation', 'Safety'],
+        fields: ['Neurological trend compared with previous shift', 'Mobility and physiotherapy status', 'Feeding route and aspiration risk', 'Catheter, tube, IV line, or drain status', 'Skin and pressure-area care', 'Pending imaging, review, or procedure'],
+        cues: ['Neurological findings need comparison with previous shift', 'Ryle tube, catheter, IV line, or device care is present', 'Pending CT, MRI, review, or rehab plan'],
+        goal: 'Neurology-related nursing care, device care, and pending follow-up are clearly carried forward.',
+        actions: ['Compare current neuro status with previous documentation', 'Continue aspiration, fall, and pressure injury precautions', 'Track device care and pending investigations', 'Coordinate review, imaging, or physiotherapy as ordered'],
+        escalation: 'Escalate any worsening neurological trend, device complication, aspiration concern, or delayed urgent review.',
+        education: 'Teach the bystander what neurological changes must be reported immediately.'
+      },
+      {
+        title: 'In-House Transfer Readiness',
+        description: 'Clean transfer-readiness care plan for patients moving between ward, ICU, OT, cath lab, imaging, or another department.',
+        chips: ['Transfer', 'Checklist', 'Safety'],
+        fields: ['Transfer from and transfer to', 'Reason for transfer', 'Current stability and vital concerns', 'Lines, tubes, drains, oxygen, and devices', 'Documents, consent, reports, and case sheet', 'Medication or infusion during transfer', 'Receiving staff handover'],
+        cues: ['Patient is planned for internal transfer', 'Case sheet, reports, consent, or equipment must accompany patient', 'Oxygen, IV line, catheter, or monitoring is needed during transfer'],
+        goal: 'Patient is transferred safely with required documents, equipment, and clinical handover completed.',
+        actions: ['Verify identity, destination, reason, and current stability', 'Secure IV lines, tubes, drains, oxygen, and monitoring equipment', 'Ensure documents, reports, consent, and medication accompany the patient', 'Give clear handover to receiving staff'],
+        escalation: 'Delay and escalate transfer if the patient is unstable, required documents are missing, or essential equipment is unavailable.',
+        education: 'Explain transfer destination and safety precautions to patient and bystander.'
+      },
+      {
+        title: 'IP Case Sheet Snapshot',
+        description: 'Clean nursing snapshot template for summarizing patient status, active risks, orders, investigations, and pending tasks.',
+        chips: ['Case snapshot', 'Shift summary', 'Pending tasks'],
+        fields: ['Patient identifiers', 'Current diagnosis or reason for admission', 'Allergies if known', 'Vital trend and clinical status', 'Active nursing problems', 'Medications or infusions due', 'Investigations and reports pending', 'Procedures or transfers planned', 'Handover priorities'],
+        cues: ['Supervisor or next nurse needs a quick patient overview', 'Multiple active problems or pending tasks exist', 'Medication, investigation, or transfer status must be visible'],
+        goal: 'The shift team has a concise, current patient snapshot for safe continuity of care.',
+        actions: ['Summarize only current and clinically relevant information', 'Separate completed work from pending work', 'Highlight abnormal findings and active risks', 'Make the next required nursing action clear'],
+        escalation: 'Escalate unresolved urgent tasks, abnormal findings, or missing critical information.',
+        education: 'Explain patient-specific precautions and pending steps when appropriate.'
       }
     ];
 
@@ -378,6 +452,7 @@
       document.getElementById('selectedChips').innerHTML = template.chips.map(chip => `<span class="chip">${escapeHtml(chip)}</span>`).join('');
       document.getElementById('sampleProblem').textContent = template.title;
       document.getElementById('sampleCues').innerHTML = template.cues.map(item => `- ${escapeHtml(item)}`).join('<br>');
+      document.getElementById('sampleFields').innerHTML = (template.fields || []).map(item => `- ${escapeHtml(item)}`).join('<br>');
       document.getElementById('sampleGoal').textContent = template.goal;
       document.getElementById('sampleActions').innerHTML = template.actions.map(item => `- ${escapeHtml(item)}`).join('<br>');
       document.getElementById('sampleEscalation').textContent = template.escalation;
@@ -400,6 +475,9 @@
         'Selected template: ' + template.title,
         'Assessment cues supported by this template:',
         ...template.cues.map(item => '- ' + item),
+        '',
+        'EMR fields to capture if dictated:',
+        ...(template.fields || []).map(item => '- ' + item),
         '',
         'Output headings:',
         'NURSING CARE PLAN - SHIFT',
@@ -432,7 +510,7 @@
 
     function copyTemplate() {
       const template = templates[selectedIndex];
-      const text = `${template.title}\n\nAssessment cues:\n${template.cues.map(item => '- ' + item).join('\n')}\n\nGoal:\n${template.goal}\n\nNursing actions:\n${template.actions.map(item => '- ' + item).join('\n')}\n\nEscalation:\n${template.escalation}\n\nEducation:\n${template.education}`;
+      const text = `${template.title}\n\nAssessment cues:\n${template.cues.map(item => '- ' + item).join('\n')}\n\nEMR fields to capture:\n${(template.fields || []).map(item => '- ' + item).join('\n')}\n\nGoal:\n${template.goal}\n\nNursing actions:\n${template.actions.map(item => '- ' + item).join('\n')}\n\nEscalation:\n${template.escalation}\n\nEducation:\n${template.education}`;
       copyText(text, 'Template copied');
     }
 

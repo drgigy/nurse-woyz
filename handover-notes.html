@@ -115,6 +115,31 @@
       font-size: 12px;
       font-weight: 850;
     }
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .template-card {
+      border: 1px solid #d7e1ef;
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 16px;
+    }
+    .template-card h3 {
+      color: #a6192e;
+      font-size: 19px;
+      margin: 0 0 8px;
+    }
+    .template-card .small-title {
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin: 14px 0 6px;
+      text-transform: uppercase;
+    }
     textarea {
       width: 100%;
       min-height: 200px;
@@ -160,6 +185,7 @@
     .toast.show { opacity: 1; transform: translateY(0); }
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
+      .template-grid { grid-template-columns: 1fr; }
       .topbar { align-items: flex-start; flex-direction: column; }
     }
   </style>
@@ -230,6 +256,77 @@
     </section>
 
     <section class="panel">
+      <p class="section-title">Cleaned EMR-Derived Handover Templates</p>
+      <p class="muted">These templates are rewritten from the supplied EMR downloads as generic Nurse WOYZ formats. They should not carry hospital names, patient names, doctor names, phone numbers, or identifiers from the downloaded files.</p>
+      <div class="template-grid">
+        <article class="template-card">
+          <h3>Nursing Shift Handover</h3>
+          <p class="muted">Use at the end of a shift for routine ward continuity.</p>
+          <p class="small-title">Headings</p>
+          <ul>
+            <li>Identification and diagnosis or reason for admission.</li>
+            <li>Current status: vitals, sensorium, pain, feeding, elimination, mobility, oxygen or device support.</li>
+            <li>Events and changes during the shift.</li>
+            <li>WATCH: risks, red flags, and escalation points.</li>
+            <li>NEXT SHIFT / PENDING: reports, medications, procedures, reviews, and follow-up.</li>
+          </ul>
+        </article>
+
+        <article class="template-card">
+          <h3>In-House Transfer Handover</h3>
+          <p class="muted">Use before transfer to ICU, ward, OT, cath lab, imaging, or another unit.</p>
+          <p class="small-title">Headings</p>
+          <ul>
+            <li>Transfer from and transfer to.</li>
+            <li>Reason for transfer and current stability.</li>
+            <li>Lines, tubes, drains, oxygen, monitoring, and equipment.</li>
+            <li>Documents, consent, reports, files, medications, and infusions sent with patient.</li>
+            <li>Receiving staff handover and pending actions.</li>
+          </ul>
+        </article>
+
+        <article class="template-card">
+          <h3>Neurology Handover</h3>
+          <p class="muted">Use when neurological observation is a major part of the next shift's work.</p>
+          <p class="small-title">Headings</p>
+          <ul>
+            <li>Consciousness, orientation, GCS or sensorium trend.</li>
+            <li>Pupils, limb power, speech, swallowing, seizure risk, and aspiration risk.</li>
+            <li>Neuro observation frequency and comparison with previous shift.</li>
+            <li>Safety precautions: fall, aspiration, seizure, and restraint observation if applicable.</li>
+            <li>Escalation triggers: drop in GCS, new weakness, seizure, unequal pupils, worsening headache, vomiting, or sudden confusion.</li>
+          </ul>
+        </article>
+
+        <article class="template-card">
+          <h3>DVT / Anticoagulation Watch</h3>
+          <p class="muted">Use when DVT risk, suspected DVT, prophylaxis, or anticoagulation is part of nursing care.</p>
+          <p class="small-title">Headings</p>
+          <ul>
+            <li>Reason for reassessment and current DVT risk category.</li>
+            <li>Limb pain, swelling, warmth, mobility, and mechanical prophylaxis.</li>
+            <li>Anticoagulant status, bleeding watch, and contraindications if dictated.</li>
+            <li>Pending review, Doppler, investigation, or medication instruction.</li>
+            <li>Escalation for breathlessness, chest pain, sudden limb swelling, or bleeding.</li>
+          </ul>
+        </article>
+
+        <article class="template-card">
+          <h3>IP Case Sheet Snapshot</h3>
+          <p class="muted">Use when the nurse or supervisor needs a compact patient overview.</p>
+          <p class="small-title">Headings</p>
+          <ul>
+            <li>Patient identification, allergy status if known, and current clinical problem.</li>
+            <li>Vital trend and abnormal findings.</li>
+            <li>Active nursing concerns and device care.</li>
+            <li>Medication, investigation, procedure, transfer, and review status.</li>
+            <li>Clear pending tasks for the next responsible nurse.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
       <p class="section-title">Reusable AI Prompt Skeleton</p>
       <textarea id="promptText" readonly>Translate this nurse-dictated Malayalam handover into professional English nursing handover documentation.
 
@@ -250,6 +347,8 @@ WATCH:
 
 NEXT SHIFT / PENDING:
 - ...
+
+If the dictation is for transfer, neurology, DVT watch, or case-sheet snapshot, use the matching cleaned EMR-derived headings from this documentation template library.
 
 Rules:
 - Use only what the nurse dictated or what is already available in the patient context.
