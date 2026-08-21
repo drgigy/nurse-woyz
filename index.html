@@ -101,11 +101,13 @@
     }
     a.card,
     .card {
+      position: relative;
+      overflow: hidden;
       text-decoration: none;
       background: #fff;
       border: 1px solid #d7e1ef;
       border-radius: 16px;
-      padding: 12px;
+      padding: 14px;
       min-height: 106px;
       color: #162033;
       box-shadow: 0 12px 34px rgba(20, 40, 70, 0.09);
@@ -123,6 +125,85 @@
       box-shadow: 0 16px 40px rgba(166, 25, 46, 0.14);
       outline: none;
     }
+    a.card::after,
+    .card::after {
+      content: "";
+      position: absolute;
+      right: -34px;
+      top: -42px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(166, 25, 46, 0.08), rgba(166, 25, 46, 0));
+      pointer-events: none;
+    }
+    .card-main {
+      position: relative;
+      z-index: 1;
+    }
+    .card-visual {
+      width: 48px;
+      height: 34px;
+      position: relative;
+      display: block;
+      margin-bottom: 10px;
+      color: #a6192e;
+    }
+    .card-visual::before,
+    .card-visual::after,
+    .card-visual span,
+    .card-visual span::before,
+    .card-visual span::after {
+      content: "";
+      position: absolute;
+      box-sizing: border-box;
+    }
+    .art-phone::before { width: 23px; height: 34px; left: 10px; top: 0; border: 2px solid #a6192e; border-radius: 8px; background: linear-gradient(180deg, #fff 0%, #fff6f7 100%); }
+    .art-phone::after { width: 11px; height: 4px; left: 16px; top: 4px; border-radius: 99px; background: #e7c0c7; }
+    .art-phone span { width: 12px; height: 12px; left: 15.5px; top: 15px; border-radius: 50%; background: #a6192e; box-shadow: 0 0 0 7px rgba(166, 25, 46, 0.1); }
+    .art-desktop::before { width: 34px; height: 22px; left: 4px; top: 1px; border: 2px solid #a6192e; border-radius: 4px; background: linear-gradient(135deg, #fff, #fff4f5); }
+    .art-desktop::after { width: 20px; height: 2px; left: 11px; top: 31px; background: #a6192e; border-radius: 99px; }
+    .art-desktop span { width: 8px; height: 8px; left: 17px; top: 23px; border-left: 2px solid #a6192e; border-right: 2px solid #a6192e; }
+    .art-book::before { width: 18px; height: 25px; left: 4px; top: 4px; border: 2px solid #a6192e; border-radius: 3px 0 0 3px; transform: skewY(-4deg); background: #fff; }
+    .art-book::after { width: 18px; height: 25px; left: 22px; top: 4px; border: 2px solid #e7c0c7; border-left: 0; border-radius: 0 3px 3px 0; transform: skewY(4deg); background: #fff8f9; }
+    .art-book span { width: 20px; height: 2px; left: 10px; top: 13px; background: #a6192e; box-shadow: 0 6px 0 #e7c0c7; opacity: 0.75; }
+    .art-form::before { width: 29px; height: 32px; left: 8px; top: 1px; border: 2px solid #a6192e; border-radius: 5px; background: #fff; }
+    .art-form::after { width: 18px; height: 2px; left: 14px; top: 10px; background: #a6192e; box-shadow: 0 7px 0 #e7c0c7, 0 14px 0 #e7c0c7; }
+    .art-risk::before { width: 28px; height: 22px; left: 9px; top: 7px; border-left: 2px solid #a6192e; border-bottom: 2px solid #a6192e; transform: skewX(-10deg); }
+    .art-risk::after { width: 21px; height: 2px; left: 17px; top: 15px; background: #a6192e; transform: rotate(-28deg); box-shadow: -8px 8px 0 #e7c0c7; }
+    .art-dvt::before { width: 34px; height: 22px; left: 5px; top: 5px; border: 2px solid #e7c0c7; border-radius: 50%; border-left-color: transparent; border-bottom-color: transparent; transform: rotate(28deg); }
+    .art-dvt::after { width: 7px; height: 7px; left: 18px; top: 14px; border-radius: 50%; background: #a6192e; box-shadow: 10px 5px 0 #e7c0c7; }
+    .art-bars::before { width: 6px; height: 12px; left: 9px; bottom: 4px; background: #a6192e; border-radius: 3px 3px 0 0; box-shadow: 11px -7px 0 #c84455, 22px -15px 0 #e7c0c7; }
+    .art-bars::after { width: 34px; height: 2px; left: 6px; bottom: 3px; background: #a6192e; opacity: 0.35; }
+    .art-grid::before { width: 30px; height: 30px; left: 7px; top: 2px; border: 2px solid #a6192e; border-radius: 6px; background:
+      linear-gradient(90deg, transparent 31%, #e7c0c7 31%, #e7c0c7 36%, transparent 36%, transparent 64%, #e7c0c7 64%, #e7c0c7 69%, transparent 69%),
+      linear-gradient(0deg, transparent 31%, #e7c0c7 31%, #e7c0c7 36%, transparent 36%, transparent 64%, #e7c0c7 64%, #e7c0c7 69%, transparent 69%); }
+    .art-restraint::before { width: 26px; height: 18px; left: 10px; top: 13px; border: 2px solid #a6192e; border-radius: 5px; }
+    .art-restraint::after { width: 16px; height: 15px; left: 15px; top: 3px; border: 2px solid #a6192e; border-bottom: 0; border-radius: 9px 9px 0 0; }
+    .art-neuro::before { width: 8px; height: 8px; left: 8px; top: 13px; border-radius: 50%; background: #a6192e; box-shadow: 16px -9px 0 #c84455, 27px 8px 0 #e7c0c7; }
+    .art-neuro::after { width: 28px; height: 18px; left: 12px; top: 10px; border-top: 2px solid #e7c0c7; border-right: 2px solid #e7c0c7; transform: skewY(-24deg); }
+    .art-transfer::before { width: 34px; height: 2px; left: 6px; top: 16px; background: #a6192e; }
+    .art-transfer::after { width: 12px; height: 12px; right: 7px; top: 11px; border-top: 2px solid #a6192e; border-right: 2px solid #a6192e; transform: rotate(45deg); }
+    .art-admin::before { width: 15px; height: 12px; left: 6px; top: 5px; border: 2px solid #a6192e; border-radius: 3px; box-shadow: 20px 0 0 -2px #fff, 20px 0 0 0 #e7c0c7, 0 17px 0 -2px #fff, 0 17px 0 0 #e7c0c7, 20px 17px 0 -2px #fff, 20px 17px 0 0 #a6192e; }
+    .art-calendar::before { width: 32px; height: 28px; left: 7px; top: 4px; border: 2px solid #a6192e; border-radius: 5px; background: linear-gradient(#fff4f5 0 28%, #fff 28%); }
+    .art-calendar::after { width: 4px; height: 4px; left: 15px; top: 17px; border-radius: 50%; background: #a6192e; box-shadow: 9px 0 0 #e7c0c7, 18px 0 0 #e7c0c7, 0 8px 0 #e7c0c7, 9px 8px 0 #a6192e; }
+    .art-mobile-admin::before { width: 20px; height: 31px; left: 5px; top: 1px; border: 2px solid #a6192e; border-radius: 7px; }
+    .art-mobile-admin::after { width: 14px; height: 14px; right: 6px; bottom: 3px; border: 2px solid #a6192e; border-radius: 50%; box-shadow: inset 0 0 0 3px #fff; background: #fff4f5; }
+    .art-competency::before { width: 30px; height: 27px; left: 8px; top: 4px; border: 2px solid #a6192e; border-radius: 5px; }
+    .art-competency::after { width: 7px; height: 12px; left: 15px; top: 12px; border-right: 3px solid #a6192e; border-bottom: 3px solid #a6192e; transform: rotate(42deg); }
+    .art-hierarchy::before { width: 8px; height: 8px; left: 18px; top: 2px; border-radius: 3px; background: #a6192e; box-shadow: -15px 22px 0 #e7c0c7, 15px 22px 0 #e7c0c7; }
+    .art-hierarchy::after { width: 30px; height: 20px; left: 7px; top: 10px; border-top: 2px solid #a6192e; border-left: 2px solid #a6192e; border-right: 2px solid #a6192e; }
+    .art-register::before { width: 30px; height: 28px; left: 8px; top: 3px; border: 2px solid #a6192e; border-radius: 5px; }
+    .art-register::after { width: 18px; height: 2px; left: 17px; top: 11px; background: #a6192e; box-shadow: 0 7px 0 #e7c0c7, 0 14px 0 #e7c0c7; }
+    .art-pool::before { width: 11px; height: 11px; left: 5px; top: 12px; border: 2px solid #a6192e; border-radius: 50%; box-shadow: 15px -9px 0 -2px #fff, 15px -9px 0 0 #e7c0c7, 28px 5px 0 -2px #fff, 28px 5px 0 0 #a6192e; }
+    .art-pool::after { width: 34px; height: 18px; left: 9px; top: 11px; border-top: 2px solid #e7c0c7; transform: skewY(-20deg); }
+    .art-ot::before { width: 30px; height: 26px; left: 8px; top: 5px; border: 2px solid #a6192e; border-radius: 3px; background: #fff; }
+    .art-ot::after { width: 16px; height: 2px; left: 15px; top: 18px; background: #a6192e; box-shadow: 0 -6px 0 #a6192e; }
+    .art-cath::before { width: 30px; height: 20px; left: 8px; top: 8px; border: 2px solid #a6192e; border-radius: 14px 14px 4px 4px; border-bottom-color: #e7c0c7; }
+    .art-cath::after { width: 24px; height: 2px; left: 12px; top: 18px; background: #a6192e; transform: rotate(-18deg); }
+    .art-qr::before { width: 30px; height: 30px; left: 7px; top: 2px; border: 2px solid #a6192e; border-radius: 4px; background:
+      linear-gradient(90deg, #a6192e 0 18%, transparent 18% 32%, #e7c0c7 32% 48%, transparent 48% 64%, #a6192e 64% 82%, transparent 82%),
+      linear-gradient(0deg, transparent 0 18%, rgba(166,25,46,0.18) 18% 32%, transparent 32% 48%, rgba(166,25,46,0.18) 48% 64%, transparent 64%); }
     .title {
       color: #a6192e;
       font-size: 16px;
@@ -160,6 +241,13 @@
       min-height: 82px;
       padding: 12px;
     }
+    .compact .card-visual {
+      width: 42px;
+      height: 28px;
+      margin-bottom: 8px;
+      transform: scale(0.88);
+      transform-origin: left top;
+    }
     .compact .title {
       font-size: 15px;
     }
@@ -167,10 +255,17 @@
       display: none;
     }
     .doc-tools a.card {
-      min-height: 70px;
+      min-height: 92px;
       padding: 10px;
       background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
       border-color: #e7c0c7;
+    }
+    .doc-tools .card-visual {
+      width: 38px;
+      height: 28px;
+      margin-bottom: 8px;
+      transform: scale(0.82);
+      transform-origin: left top;
     }
     .doc-tools .title {
       font-size: 13px;
@@ -219,13 +314,15 @@
     <div class="section-title">Daily Workflow</div>
     <section class="grid primary" aria-label="Daily Nurse Woyz workflow links">
       <a class="card" href="./ward.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-phone"><span></span></span>
           <div class="title">Ward Device</div>
           <div class="desc">Mobile nurse page. PIN: 2222. Dictate, edit, save notes and handover.</div>
         </div>
       </a>
       <a class="card" href="./nurse-desktop.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-desktop"><span></span></span>
           <div class="title">Nurse Desktop</div>
           <div class="desc">Same nurse workflow on desktop for reviewing notes and copying to EMR.</div>
         </div>
@@ -235,73 +332,85 @@
     <div class="section-title">Documentation Templates</div>
     <section class="grid doc-tools" aria-label="Documentation template links">
       <a class="card" href="./pocket-template-booklet.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-book"><span></span></span>
           <div class="title">Pocket Dictation Booklet</div>
           <div class="desc">Compact printable cue cards for nurses to look at while dictating.</div>
         </div>
       </a>
       <a class="card" href="./template-rhfra.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-risk"><span></span></span>
           <div class="title">Hospital Fall Risk Assessment Tool</div>
           <div class="desc">Fall risk scoring and prevention bundle.</div>
         </div>
       </a>
       <a class="card" href="./template-modified-dvt-assessment.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-dvt"><span></span></span>
           <div class="title">Modified DVT Assessment Tool</div>
           <div class="desc">DVT risk, Wells-style cues, and prophylaxis watch.</div>
         </div>
       </a>
       <a class="card" href="./template-rhpass-icu.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-bars"><span></span></span>
           <div class="title">PASS ICU</div>
           <div class="desc">ICU acuity, organ support, and monitoring needs.</div>
         </div>
       </a>
       <a class="card" href="./template-braden-score.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-grid"><span></span></span>
           <div class="title">Pressure Injury Risk Assessment - Braden Score</div>
           <div class="desc">Braden domains and pressure injury prevention plan.</div>
         </div>
       </a>
       <a class="card" href="./template-restraint-monitoring.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-restraint"><span></span></span>
           <div class="title">Restraint Monitoring Form (Physical and Chemical)</div>
           <div class="desc">Indication, monitoring, release checks, and review.</div>
         </div>
       </a>
       <a class="card" href="./template-rhpass-ward.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-bars"><span></span></span>
           <div class="title">PASS WARD</div>
           <div class="desc">Ward acuity and nursing dependency.</div>
         </div>
       </a>
       <a class="card" href="./template-neuro-assessment-part-1.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-neuro"><span></span></span>
           <div class="title">Adult Neurological Assessment Form - PART 1</div>
           <div class="desc">Consciousness, GCS, pupils, and limb power.</div>
         </div>
       </a>
       <a class="card" href="./template-neuro-assessment-part-2.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-neuro"><span></span></span>
           <div class="title">Adult Neurological Assessment Form - Part 2</div>
           <div class="desc">Neurology trend, devices, feeding, and safety review.</div>
         </div>
       </a>
       <a class="card" href="./template-in-house-transfer.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-transfer"><span></span></span>
           <div class="title">In House Transfer</div>
           <div class="desc">Transfer readiness and receiving-unit handover.</div>
         </div>
       </a>
       <a class="card" href="./template-patient-movement.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-transfer"><span></span></span>
           <div class="title">Patient Movement Form</div>
           <div class="desc">Movement to investigation, procedure, OT, cath lab, or ward.</div>
         </div>
       </a>
       <a class="card" href="./template-nursing-initial-assessment-adult.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-form"><span></span></span>
           <div class="title">Nursing Initial Assessment - Adult</div>
           <div class="desc">Admission baseline nursing assessment.</div>
         </div>
@@ -311,49 +420,57 @@
     <div class="section-title">Admin</div>
     <section class="grid compact" aria-label="Nurse Woyz setup and governance links">
       <a class="card" href="./manager.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-admin"><span></span></span>
           <div class="title">Admin Dashboard</div>
           <div class="desc">Supervisor dashboard for ward notes, transfer requests, and live activity.</div>
         </div>
       </a>
       <a class="card" href="./manager.html?roster=1">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-calendar"><span></span></span>
           <div class="title">Duty Roster</div>
           <div class="desc">Assign nurses shift-wise using patient acuity.</div>
         </div>
       </a>
       <a class="card" href="./nursewoyzadmin.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-mobile-admin"><span></span></span>
           <div class="title">Mobile Ward Admin</div>
           <div class="desc">Mobile setup page for scanning patient QR, adding nurses, rooms, and assignments.</div>
         </div>
       </a>
       <a class="card" href="./manager.html?governance=rhpass">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-bars"><span></span></span>
           <div class="title">PASS Patient Acuity</div>
           <div class="desc">Assess ICU or ward patient acuity and estimate nursing care requirement.</div>
         </div>
       </a>
       <a class="card" href="./manager.html?governance=competency">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-competency"><span></span></span>
           <div class="title">Competency Assessment</div>
           <div class="desc">Enter nurse details, complete assessment items, and assign a competency grade.</div>
         </div>
       </a>
       <a class="card" href="./manager.html?governance=hierarchy">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-hierarchy"><span></span></span>
           <div class="title">Nursing Hierarchy</div>
           <div class="desc">Reference view of role-based nursing access and escalation levels.</div>
         </div>
       </a>
       <div class="card soon" aria-label="Nurse Register launching soon">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-register"><span></span></span>
           <div class="title">Nurse Register</div>
           <div class="desc">Complete nurse pool with profile details, competency grade, training status, and certification records.</div>
         </div>
       </div>
       <div class="card soon" aria-label="Pool Creator launching soon">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-pool"><span></span></span>
           <div class="title">Pool Creator</div>
           <div class="desc">Create nursing pools for ICU, wards, OT, Cath Lab, emergency, and other clinical areas.</div>
         </div>
@@ -363,19 +480,22 @@
     <div class="section-title">External Tools</div>
     <section class="grid compact" aria-label="External supporting tool links">
       <a class="card" href="./ot.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-ot"><span></span></span>
           <div class="title">OT Command</div>
           <div class="desc">Operation Theatre command tool for sending patient transfer requests.</div>
         </div>
       </a>
       <a class="card" href="./cathlab.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-cath"><span></span></span>
           <div class="title">Cath Lab Command</div>
           <div class="desc">Cath Lab command tool for transfer notifications to the assigned nurse.</div>
         </div>
       </a>
       <a class="card" href="./qr-generator.html">
-        <div>
+        <div class="card-main">
+          <span class="card-visual art-qr"><span></span></span>
           <div class="title">QR Generator</div>
           <div class="desc">Operations tool for creating patient wristband QR codes.</div>
         </div>
