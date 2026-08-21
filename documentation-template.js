@@ -36,7 +36,8 @@ function twoColRow(leftLabel, leftControl, rightLabel, rightControl) {
 }
 
 function scoreRow(label, options = ['Select'], scorePlaceholder = '') {
-  return `<div class="score-row"><label>${escapeHtml(label)}</label><div>${select(options, 'class="score-select"')}</div><div><input class="score-value" type="text" placeholder="${escapeHtml(scorePlaceholder)}" readonly></div></div>`;
+  const placeholder = scorePlaceholder || 'Auto';
+  return `<div class="score-row"><label>${escapeHtml(label)}</label><div>${select(options, 'class="score-select"')}</div><div><input class="score-value" type="text" placeholder="${escapeHtml(placeholder)}" readonly tabindex="-1" aria-label="Auto calculated score"></div></div>`;
 }
 
 function check(text) {
@@ -47,7 +48,7 @@ function bar(text) {
   return `<div class="teal-bar">${escapeHtml(text)}</div>`;
 }
 
-function miniHeader(left, right = 'Score') {
+function miniHeader(left, right = 'Auto Score') {
   return `<div class="mini-head"><span>${escapeHtml(left)}</span><span>${escapeHtml(right)}</span></div>`;
 }
 
@@ -58,7 +59,7 @@ function scored(label, score) {
 function calculatedResult(categoryLabel = 'Category / Result') {
   return `
     <div class="calculation-result">
-      <div><label>Total Score</label><input class="auto-total" type="text" value="0" readonly></div>
+      <div><label>Total Score</label><input class="auto-total" type="text" value="0" readonly tabindex="-1" aria-label="Auto calculated total score"></div>
       <div><label>${escapeHtml(categoryLabel)}</label><input class="auto-category" type="text" value="Not assessed" readonly></div>
     </div>`;
 }
@@ -114,7 +115,7 @@ function fallRiskTemplate() {
     </div>
     <div class="subbar">Low Fall Risk - Implement Low Fall Risk interventions per protocol</div>
     <div class="check-grid">${check('Completely paralyzed or immobilized or comatose')}</div>
-    ${bar('FALL RISK SCORE CALCULATION - Select the appropriate option in each category. Add all points to calculate Fall Risk Score.')}
+    ${bar('FALL RISK SCORE CALCULATION - Select the appropriate option in each category. Scores and risk category are calculated automatically.')}
     <div class="score-grid">
       ${scoreRow('Age', [scored('Select', 0), scored('Below 60', 0), scored('60 to 69', 1), scored('70 to 79', 2), scored('80 and above', 3)])}
       ${scoreRow('Fall history', [scored('Select', 0), scored('No fall history', 0), scored('One fall history', 2), scored('More than one fall history', 3)])}
@@ -151,7 +152,7 @@ function dvtTemplate() {
     ${patientHeader()}
     ${bar('DVT Assessment - Modified WELLS Scoring')}
     ${row('Reason for re-assessment', select(['Select', 'As per Moderate Risk (1 to 2) and High Risk (>=3) DVT Policy']))}
-    ${miniHeader('Clinical Characteristics', 'Score')}
+    ${miniHeader('Clinical Characteristics')}
     <div class="score-grid">${rows.map((item, index) => {
       const yesScore = index === 9 ? -2 : 1;
       return scoreRow(item, [scored('Select', 0), scored('No', 0), scored('Yes', yesScore)]);
@@ -166,8 +167,8 @@ function bradenTemplate() {
     ${patientHeader()}
     ${bar('MODIFIED BRADEN PRESSURE INJURY RISK ASSESSMENT SCALE')}
     ${row('Reason for re-assessment', select(['Select', 'As per moderate or high skin injury risk policy']))}
-    <div class="callout">Braden pressure ulcer risk assessment: Total Score Auto Calculated</div>
-    ${miniHeader('Criteria', 'Score')}
+    <div class="callout">Braden pressure injury risk assessment: score and risk category are calculated automatically from the selected entries.</div>
+    ${miniHeader('Criteria')}
     <div class="score-grid">
       ${scoreRow('Sensory perception', [scored('Select', 0), scored('Completely limited', 1), scored('Very limited', 2), scored('Slightly limited', 3), scored('No impairment', 4)])}
       ${scoreRow('Moisture', [scored('Select', 0), scored('Constantly moist', 1), scored('Very moist', 2), scored('Occasionally moist', 3), scored('Rarely moist', 4)])}
@@ -264,7 +265,7 @@ function rhpassWardTemplate() {
   ];
   return `
     ${patientHeader()}
-    ${bar('RHPASS WARD')}
+    ${bar('PASS WARD')}
     <div class="score-grid">${rows.map(([label, options]) => scoreRow(label, [scored('Select', 0), ...options.map((option, index) => scored(option, index + 1))])).join('')}</div>
     ${calculatedResult('Acuity / Recommended N:P')}
     ${row('Supervisor verification / remarks', textarea(4), 'full-row')}`;
@@ -299,7 +300,7 @@ function rhpassIcuTemplate() {
   ];
   return `
     ${patientHeader()}
-    ${bar('RHPASS ICU')}
+    ${bar('PASS ICU')}
     <div class="score-grid">${rows.map(([item, points]) => scoreRow(item, [scored('Select', 0), scored('No', 0), scored('Yes', points)])).join('')}</div>
     ${calculatedResult('ICU acuity / ratio')}
     ${row('Recommended nurse ratio / supervisor verification', textarea(4), 'full-row')}`;
@@ -404,7 +405,7 @@ function initialAssessmentTemplate() {
 
 const TEMPLATE_FORMS = {
   rhfra: {
-    title: 'Hospital Fall Risk Assessment Tool (RHFRA)',
+    title: 'Hospital Fall Risk Assessment Tool',
     source: 'EMR-derived fall risk assessment template',
     html: fallRiskTemplate
   },
@@ -414,8 +415,8 @@ const TEMPLATE_FORMS = {
     html: dvtTemplate
   },
   rhpassIcu: {
-    title: 'RHPASS (ICU)',
-    source: 'RHPASS ICU acuity scoring template',
+    title: 'PASS ICU',
+    source: 'ICU acuity scoring template',
     html: rhpassIcuTemplate
   },
   braden: {
@@ -429,8 +430,8 @@ const TEMPLATE_FORMS = {
     html: restraintTemplate
   },
   rhpassWard: {
-    title: 'RHPASS WARD',
-    source: 'RHPASS ward acuity scoring template',
+    title: 'PASS WARD',
+    source: 'Ward acuity scoring template',
     html: rhpassWardTemplate
   },
   neuro1: {
