@@ -39,33 +39,11 @@
       flex-wrap: wrap;
     }
     .woyz-mark {
-      width: 128px;
-      height: 56px;
+      width: 130px;
+      height: auto;
       margin: 0;
-      border-radius: 999px;
       flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 16px 7px 8px;
-      background: #171922;
-      border: 5px solid #ff4d57;
-      color: #fff;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      box-shadow: 0 16px 38px rgba(255, 77, 87, 0.22);
-    }
-    .woyz-mark::before {
-      content: "";
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      flex: 0 0 auto;
-      background: #ff4d57;
-      box-shadow:
-        0 0 0 10px rgba(255, 77, 87, 0.18),
-        0 0 0 21px rgba(255, 77, 87, 0.08);
+      display: block;
     }
     h1 {
       color: #a6192e;
@@ -99,10 +77,13 @@
       line-height: 1.35;
       margin: -4px 0 8px;
     }
+    .workflow-group {
+      margin-bottom: 26px;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 10px;
+      gap: 14px;
     }
     .grid.primary {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -323,8 +304,7 @@
       body { padding: 14px; }
       .hero { align-items: flex-start; }
       .hero-copy { align-items: flex-start; flex-direction: column; gap: 6px; }
-      .woyz-mark { width: 118px; height: 52px; font-size: 22px; }
-      .woyz-mark::before { width: 34px; height: 34px; }
+      .woyz-mark { width: 118px; }
       .grid,
       .grid.primary,
       .grid.compact,
@@ -338,15 +318,14 @@
 <body>
   <main>
     <section class="hero">
-      <div class="woyz-mark" aria-label="WOYZ logo">WOYZ</div>
+      <img class="woyz-mark" src="./icons/woyz-pill.svg" alt="WOYZ">
       <div class="hero-copy">
-        <h1>Nurse WOYZ</h1>
+        <h1>Nurse</h1>
         <div class="demo-note">Demo version only</div>
       </div>
     </section>
 
-    <div class="section-title">Daily Workflow</div>
-    <section class="grid primary" aria-label="Daily Nurse Woyz workflow links">
+    <section class="grid primary workflow-group" aria-label="Daily Nurse Woyz workflow links">
       <a class="card" href="./ward.html">
         <div class="card-main">
           <span class="card-visual art-phone"><span></span></span>
@@ -364,7 +343,7 @@
     </section>
 
     <div class="section-title">Documentation Templates</div>
-    <section class="grid doc-tools" aria-label="Documentation template links">
+    <section class="grid doc-tools workflow-group" aria-label="Documentation template links">
       <a class="card" href="./pocket-template-booklet.html">
         <div class="card-main">
           <span class="card-visual art-book"><span></span></span>
@@ -452,7 +431,7 @@
     </section>
 
     <div class="section-title">Admin</div>
-    <section class="grid compact" aria-label="Nurse Woyz setup and governance links">
+    <section class="grid compact workflow-group" aria-label="Nurse Woyz setup and governance links">
       <a class="card" href="./manager.html">
         <div class="card-main">
           <span class="card-visual art-admin"><span></span></span>
@@ -511,8 +490,8 @@
       </div>
     </section>
 
-    <div class="section-title">External Tools</div>
-    <section class="grid compact" aria-label="External supporting tool links">
+    <div class="section-title">Tools</div>
+    <section class="grid compact workflow-group" aria-label="Supporting tool links">
       <a class="card" href="./ot.html">
         <div class="card-main">
           <span class="card-visual art-ot"><span></span></span>
