@@ -106,17 +106,22 @@
       border: 1px solid #d7e1ef;
       border-radius: 16px;
       padding: 12px;
-      min-height: 120px;
+      min-height: 106px;
       color: #162033;
       box-shadow: 0 12px 34px rgba(20, 40, 70, 0.09);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.14s ease, border-color 0.14s ease;
+      justify-content: flex-start;
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
     }
-    a.card:hover {
+    a.card:hover,
+    a.card:focus-visible {
       transform: translateY(-2px);
       border-color: #e5b7be;
+      background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
+      box-shadow: 0 16px 40px rgba(166, 25, 46, 0.14);
+      outline: none;
     }
     .title {
       color: #a6192e;
@@ -130,29 +135,29 @@
       line-height: 1.35;
       margin-top: 6px;
     }
-    .pill {
-      align-self: flex-start;
-      margin-top: 10px;
-      color: #981b2d;
-      background: #fff2f4;
-      border: 1px solid #e5b7be;
-      border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 800;
-    }
     .card.soon {
+      position: relative;
+      cursor: default;
       border-style: dashed;
       background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
       opacity: 0.88;
     }
-    .card.soon .pill {
+    .card.soon::after {
+      content: "Launching soon";
+      position: absolute;
+      right: 10px;
+      top: 10px;
       color: #7a1222;
       background: #f7e7ea;
       border-color: #e8b8c0;
+      border: 1px solid #e8b8c0;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 850;
     }
     .compact a.card {
-      min-height: 94px;
+      min-height: 82px;
       padding: 12px;
     }
     .compact .title {
@@ -161,13 +166,8 @@
     .compact .desc {
       display: none;
     }
-    .compact .pill {
-      margin-top: 8px;
-      font-size: 10px;
-      padding: 4px 8px;
-    }
     .doc-tools a.card {
-      min-height: 82px;
+      min-height: 70px;
       padding: 10px;
       background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
       border-color: #e7c0c7;
@@ -178,11 +178,6 @@
     }
     .doc-tools .desc {
       display: none;
-    }
-    .doc-tools .pill {
-      margin-top: 8px;
-      font-size: 10px;
-      padding: 4px 8px;
     }
     footer {
       text-align: center;
@@ -206,7 +201,7 @@
       .grid.compact,
       .grid.doc-tools { grid-template-columns: 1fr; }
       a.card,
-      .compact a.card { min-height: 104px; }
+      .compact a.card { min-height: 96px; }
       .compact .desc { display: block; }
     }
   </style>
@@ -228,14 +223,12 @@
           <div class="title">Ward Device</div>
           <div class="desc">Mobile nurse page. PIN: 2222. Dictate, edit, save notes and handover.</div>
         </div>
-        <div class="pill">Open Ward</div>
       </a>
       <a class="card" href="./nurse-desktop.html">
         <div>
           <div class="title">Nurse Desktop</div>
           <div class="desc">Same nurse workflow on desktop for reviewing notes and copying to EMR.</div>
         </div>
-        <div class="pill">Open Nurse View</div>
       </a>
     </section>
 
@@ -246,144 +239,124 @@
           <div class="title">Pocket Dictation Booklet</div>
           <div class="desc">Compact printable cue cards for nurses to look at while dictating.</div>
         </div>
-        <div class="pill">Open Booklet</div>
       </a>
       <a class="card" href="./template-rhfra.html">
         <div>
           <div class="title">Hospital Fall Risk Assessment Tool</div>
           <div class="desc">Fall risk scoring and prevention bundle.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-modified-dvt-assessment.html">
         <div>
           <div class="title">Modified DVT Assessment Tool</div>
           <div class="desc">DVT risk, Wells-style cues, and prophylaxis watch.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-rhpass-icu.html">
         <div>
           <div class="title">PASS ICU</div>
           <div class="desc">ICU acuity, organ support, and monitoring needs.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-braden-score.html">
         <div>
           <div class="title">Pressure Injury Risk Assessment - Braden Score</div>
           <div class="desc">Braden domains and pressure injury prevention plan.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-restraint-monitoring.html">
         <div>
           <div class="title">Restraint Monitoring Form (Physical and Chemical)</div>
           <div class="desc">Indication, monitoring, release checks, and review.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-rhpass-ward.html">
         <div>
           <div class="title">PASS WARD</div>
           <div class="desc">Ward acuity and nursing dependency.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-neuro-assessment-part-1.html">
         <div>
           <div class="title">Adult Neurological Assessment Form - PART 1</div>
           <div class="desc">Consciousness, GCS, pupils, and limb power.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-neuro-assessment-part-2.html">
         <div>
           <div class="title">Adult Neurological Assessment Form - Part 2</div>
           <div class="desc">Neurology trend, devices, feeding, and safety review.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-in-house-transfer.html">
         <div>
           <div class="title">In House Transfer</div>
           <div class="desc">Transfer readiness and receiving-unit handover.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-patient-movement.html">
         <div>
           <div class="title">Patient Movement Form</div>
           <div class="desc">Movement to investigation, procedure, OT, cath lab, or ward.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./template-nursing-initial-assessment-adult.html">
         <div>
           <div class="title">Nursing Initial Assessment - Adult</div>
           <div class="desc">Admission baseline nursing assessment.</div>
         </div>
-        <div class="pill">Open Template</div>
       </a>
     </section>
 
-    <div class="section-title">Setup & Governance</div>
+    <div class="section-title">Admin</div>
     <section class="grid compact" aria-label="Nurse Woyz setup and governance links">
       <a class="card" href="./manager.html">
         <div>
           <div class="title">Admin Dashboard</div>
           <div class="desc">Supervisor dashboard for ward notes, transfer requests, and live activity.</div>
         </div>
-        <div class="pill">Open Dashboard</div>
       </a>
       <a class="card" href="./manager.html?roster=1">
         <div>
           <div class="title">Duty Roster</div>
           <div class="desc">Assign nurses shift-wise using patient acuity.</div>
         </div>
-        <div class="pill">Open Roster</div>
       </a>
       <a class="card" href="./nursewoyzadmin.html">
         <div>
           <div class="title">Mobile Ward Admin</div>
           <div class="desc">Mobile setup page for scanning patient QR, adding nurses, rooms, and assignments.</div>
         </div>
-        <div class="pill">Open Admin</div>
       </a>
       <a class="card" href="./manager.html?governance=rhpass">
         <div>
           <div class="title">PASS Patient Acuity</div>
           <div class="desc">Assess ICU or ward patient acuity and estimate nursing care requirement.</div>
         </div>
-        <div class="pill">Open PASS</div>
       </a>
       <a class="card" href="./manager.html?governance=competency">
         <div>
           <div class="title">Competency Assessment</div>
           <div class="desc">Enter nurse details, complete assessment items, and assign a competency grade.</div>
         </div>
-        <div class="pill">Open Competency</div>
       </a>
       <a class="card" href="./manager.html?governance=hierarchy">
         <div>
           <div class="title">Nursing Hierarchy</div>
           <div class="desc">Reference view of role-based nursing access and escalation levels.</div>
         </div>
-        <div class="pill">Open Hierarchy</div>
       </a>
       <div class="card soon" aria-label="Nurse Register launching soon">
         <div>
           <div class="title">Nurse Register</div>
           <div class="desc">Complete nurse pool with profile details, competency grade, training status, and certification records.</div>
         </div>
-        <div class="pill">Launching soon</div>
       </div>
       <div class="card soon" aria-label="Pool Creator launching soon">
         <div>
           <div class="title">Pool Creator</div>
           <div class="desc">Create nursing pools for ICU, wards, OT, Cath Lab, emergency, and other clinical areas.</div>
         </div>
-        <div class="pill">Launching soon</div>
       </div>
     </section>
 
@@ -394,21 +367,18 @@
           <div class="title">OT Command</div>
           <div class="desc">Operation Theatre command tool for sending patient transfer requests.</div>
         </div>
-        <div class="pill">Open OT</div>
       </a>
       <a class="card" href="./cathlab.html">
         <div>
           <div class="title">Cath Lab Command</div>
           <div class="desc">Cath Lab command tool for transfer notifications to the assigned nurse.</div>
         </div>
-        <div class="pill">Open Cath Lab</div>
       </a>
       <a class="card" href="./qr-generator.html">
         <div>
           <div class="title">QR Generator</div>
           <div class="desc">Operations tool for creating patient wristband QR codes.</div>
         </div>
-        <div class="pill">Create QR</div>
       </a>
     </section>
 

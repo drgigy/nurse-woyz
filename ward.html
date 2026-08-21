@@ -261,6 +261,12 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
 .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; font-size: 1.03em; margin: 14px 0 5px; }
+.note-card.handover { padding: 8px 10px; }
+.note-card.handover .nc-kind { margin-bottom: 4px; }
+.note-card.handover .nc-text { line-height: 1.25; }
+.note-card.handover .structured-note-heading { display: inline; margin: 0 4px 0 0; font-size: 1em; }
+.note-card.handover .structured-note-heading::after { content: " "; }
+.note-card.handover .note-edit-actions { margin-top: 6px; }
 .note-edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
 .note-edit-btn { border: 1px solid #c8d4e4; background: #fff; color: #c1121f; border-radius: 9px; padding: 8px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .note-edit-btn.save-edit { background: #e8f5ef; border-color: #b7e1ca; color: #147a4a; }
@@ -554,6 +560,9 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .nc-kind { font-size: 12px; }
   .nc-raw { font-size: 13px; }
   .nc-text { font-size: 17px; line-height: 1.55; }
+  .note-card.handover { padding: 10px 11px; }
+  .note-card.handover .nc-text { font-size: 15px; line-height: 1.32; }
+  .note-card.handover .structured-note-heading { display: inline; margin: 0 4px 0 0; }
   .note-edit-btn { font-size: 14px; padding: 9px 11px; }
   .note-edit-box { font-size: 17px; line-height: 1.5; min-height: 130px; }
   .toast { font-size: 15px; white-space: normal; width: calc(100% - 32px); text-align: center; }
@@ -2207,21 +2216,16 @@ function noteTypeCopyLabel(type, note = null) {
 function formatStructuredNoteText(note) {
   let text = String(note?.text || '').trim();
   if (!text) return '';
-  if (text.includes('\n')) return text;
   if (note?.type === 'handover') {
+    if (text.includes('\n')) return compactHandoverText(text);
     return [
       'NURSING SHIFT HANDOVER - SHIFT',
-      '',
-      'Current Status:',
-      text,
-      '',
-      'WATCH:',
-      'Nurse to verify.',
-      '',
-      'NEXT SHIFT / PENDING:',
-      'Nurse to verify.'
+      `Current Status: ${text}`,
+      'WATCH: Nurse to verify.',
+      'NEXT SHIFT / PENDING: Nurse to verify.'
     ].join('\n');
   }
+  if (text.includes('\n')) return text;
   if (note?.type === 'careplan') {
     const labels = [
       'NURSING CARE PLAN - SHIFT',
@@ -2253,6 +2257,16 @@ function formatStructuredNoteText(note) {
     return text;
   }
   return text;
+}
+
+function compactHandoverText(text) {
+  return String(text || '')
+    .replace(/\r/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{2,}/g, '\n')
+    .replace(/\n-\s+/g, ' - ')
+    .replace(/\n\s*([A-Za-z][A-Za-z /]+:)/g, '\n$1')
+    .trim();
 }
 
 function formatStructuredNoteHtml(note) {
@@ -2323,7 +2337,7 @@ function getDictationSystemInstruction() {
 
 function getDictationUserPrompt() {
   if (currentNoteType === 'handover') {
-    return 'Translate this nurse-dictated Malayalam handover into English. Return JSON with this exact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\n\\nIdentification:\\n- ...\\n\\nCurrent Status:\\n- ...\\n\\nRelevant Assessment:\\n- ...\\n\\nEvents/Changes This Shift:\\n- ...\\n\\nWATCH:\\n- ...\\n\\nNEXT SHIFT / PENDING:\\n- ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
+    return 'Translate this nurse-dictated Malayalam handover into concise English. Return JSON with this exact compact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\nIdentification: ...\\nCurrent Status: ...\\nRelevant Assessment: ...\\nEvents/Changes This Shift: ...\\nWATCH: ...\\nNEXT SHIFT / PENDING: ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not insert blank lines. Use short phrases or single-line bullets only when needed. Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
   }
   if (currentNoteType === 'careplan') {
     return `Translate this Malayalam bedside assessment into English and generate a concise, professional, nurse-reviewable shift care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact shape: {"nursingNote":"NURSING CARE PLAN - SHIFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated\\n\\nCare plan item 2:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated"}. Create only the care plan items clearly supported by the nurse dictation or patient context. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a required detail is missing, omit it or write "Nurse to verify".`;
@@ -2487,24 +2501,12 @@ function buildDemoCarePlan(assessmentText) {
 function buildDemoHandover(handoverText) {
   return [
     'NURSING SHIFT HANDOVER - SHIFT',
-    '',
-    'Identification:',
-    '- Nurse to verify patient identifiers and diagnosis.',
-    '',
-    'Current Status:',
-    '- ' + handoverText,
-    '',
-    'Relevant Assessment:',
-    '- Nurse to verify.',
-    '',
-    'Events/Changes This Shift:',
-    '- Document significant events if dictated.',
-    '',
-    'WATCH:',
-    '- Continue monitoring as dictated and verify pending tasks.',
-    '',
-    'NEXT SHIFT / PENDING:',
-    '- Nurse to verify pending investigations, medications, monitoring, or reviews.'
+    'Identification: Nurse to verify patient identifiers and diagnosis.',
+    'Current Status: ' + handoverText,
+    'Relevant Assessment: Nurse to verify.',
+    'Events/Changes This Shift: Document significant events if dictated.',
+    'WATCH: Continue monitoring as dictated and verify pending tasks.',
+    'NEXT SHIFT / PENDING: Nurse to verify pending investigations, medications, monitoring, or reviews.'
   ].join('\n');
 }
 
@@ -2572,7 +2574,7 @@ function renderNotesList() {
     const noteId = n.id || ('local-note-' + index);
     const isEditing = editingNoteId === noteId;
     return `
-    <div class="note-card">
+    <div class="note-card ${noteTypeClass(n.type)}">
       <div class="nc-time">${escapeHtml(n.time)}</div>
       <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
       ${isEditing ? `
@@ -2655,7 +2657,7 @@ function printCurrentBedNotes() {
   const printedAt = new Date();
   const details = getBedPrintDetails(currentBed);
   const notesHtml = bedNotes.map(note => `
-    <article class="note-row">
+    <article class="note-row ${noteTypeClass(note.type)}">
       <div class="note-meta">
         <strong>${escapeHtml(note.time)}</strong>
         <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
@@ -2676,31 +2678,33 @@ function printCurrentBedNotes() {
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #f7f9fc; }
-    .page { width: min(1120px, 100%); margin: 0 auto; padding: 20px; background: #fff; }
-    .top { border-bottom: 4px solid #a6192e; padding-bottom: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; gap: 18px; }
-    h1 { margin: 0; color: #a6192e; font-size: 24px; }
-    .subtitle { color: #61738a; margin-top: 4px; font-size: 12px; }
-    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
-    .meta-card { border: 1px solid #d7e1ef; border-radius: 10px; padding: 8px 10px; }
-    .label { color: #61738a; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-    .value { margin-top: 3px; font-size: 13px; font-weight: 800; }
-    .bed-section { border: 1px solid #d7e1ef; border-radius: 14px; overflow: hidden; margin: 12px 0; break-inside: avoid; }
-    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 9px 12px; }
-    h2 { margin: 0 0 3px; color: #8f0f1f; font-size: 16px; }
-    .bed-head div { color: #4d6078; font-size: 11px; font-weight: 700; }
-    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 10px; }
-    .note-row { border: 1px solid #edf2f7; border-radius: 12px; padding: 10px 12px; break-inside: avoid; }
+    .page { width: min(1120px, 100%); margin: 0 auto; padding: 12px; background: #fff; }
+    .top { border-bottom: 2px solid #a6192e; padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; }
+    h1 { margin: 0; color: #a6192e; font-size: 19px; }
+    .subtitle { color: #61738a; margin-top: 2px; font-size: 10px; }
+    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 6px 0; }
+    .meta-card { border: 1px solid #d7e1ef; border-radius: 7px; padding: 4px 6px; }
+    .label { color: #61738a; font-size: 8px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+    .value { margin-top: 1px; font-size: 10px; font-weight: 800; }
+    .bed-section { border: 1px solid #d7e1ef; border-radius: 9px; overflow: hidden; margin: 6px 0; break-inside: avoid; }
+    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 5px 8px; }
+    h2 { margin: 0 0 1px; color: #8f0f1f; font-size: 13px; }
+    .bed-head div { color: #4d6078; font-size: 9px; font-weight: 700; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+    .note-row { border: 1px solid #edf2f7; border-radius: 8px; padding: 5px 6px; break-inside: avoid; }
     .note-row:last-child { border-bottom: 1px solid #edf2f7; }
-    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 13px; margin-right: 8px; }
-    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: 0.06em; }
-    .note-text { white-space: pre-wrap; line-height: 1.38; font-size: 11.5px; margin-top: 8px; }
-    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 8px 0 3px; }
-    .sign { margin-top: 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-    .sign div { border-top: 1px solid #9aa8ba; padding-top: 8px; color: #61738a; font-size: 12px; }
-    @page { size: A4 landscape; margin: 8mm; }
+    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 10px; margin-right: 5px; }
+    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 5px; font-size: 7px; font-weight: 900; letter-spacing: 0.04em; }
+    .note-text { white-space: pre-wrap; line-height: 1.18; font-size: 9.5px; margin-top: 4px; }
+    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 4px 0 1px; }
+    .note-row.handover .note-text { line-height: 1.12; font-size: 9px; }
+    .note-row.handover .structured-note-heading { display: inline; margin: 0 3px 0 0; }
+    .sign { margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .sign div { border-top: 1px solid #9aa8ba; padding-top: 4px; color: #61738a; font-size: 9px; }
+    @page { size: A4 landscape; margin: 5mm; }
     @media print {
       body { background: #fff; }
-      .page { width: 100%; padding: 8mm; }
+      .page { width: 100%; padding: 5mm; }
       .no-print { display: none; }
     }
   </style>
@@ -2814,7 +2818,7 @@ function printShiftNotes() {
         </div>
         <div class="note-grid">
         ${bedNotes.map(note => `
-          <article class="note-row">
+          <article class="note-row ${noteTypeClass(note.type)}">
             <div class="note-meta">
               <strong>${escapeHtml(note.time)}</strong>
               <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
@@ -2839,31 +2843,33 @@ function printShiftNotes() {
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #f7f9fc; }
-    .page { width: min(1120px, 100%); margin: 0 auto; padding: 20px; background: #fff; }
-    .top { border-bottom: 4px solid #a6192e; padding-bottom: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; gap: 18px; }
-    h1 { margin: 0; color: #a6192e; font-size: 24px; }
-    .subtitle { color: #61738a; margin-top: 4px; font-size: 12px; }
-    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
-    .meta-card { border: 1px solid #d7e1ef; border-radius: 10px; padding: 8px 10px; }
-    .label { color: #61738a; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-    .value { margin-top: 3px; font-size: 13px; font-weight: 800; }
-    .bed-section { border: 1px solid #d7e1ef; border-radius: 14px; overflow: hidden; margin: 12px 0; break-inside: avoid; }
-    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 9px 12px; }
-    h2 { margin: 0 0 3px; color: #8f0f1f; font-size: 16px; }
-    .bed-head div { color: #4d6078; font-size: 11px; font-weight: 700; }
-    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 10px; }
-    .note-row { border: 1px solid #edf2f7; border-radius: 12px; padding: 10px 12px; break-inside: avoid; }
+    .page { width: min(1120px, 100%); margin: 0 auto; padding: 12px; background: #fff; }
+    .top { border-bottom: 2px solid #a6192e; padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; }
+    h1 { margin: 0; color: #a6192e; font-size: 19px; }
+    .subtitle { color: #61738a; margin-top: 2px; font-size: 10px; }
+    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 6px 0; }
+    .meta-card { border: 1px solid #d7e1ef; border-radius: 7px; padding: 4px 6px; }
+    .label { color: #61738a; font-size: 8px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+    .value { margin-top: 1px; font-size: 10px; font-weight: 800; }
+    .bed-section { border: 1px solid #d7e1ef; border-radius: 9px; overflow: hidden; margin: 6px 0; break-inside: avoid; }
+    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 5px 8px; }
+    h2 { margin: 0 0 1px; color: #8f0f1f; font-size: 13px; }
+    .bed-head div { color: #4d6078; font-size: 9px; font-weight: 700; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+    .note-row { border: 1px solid #edf2f7; border-radius: 8px; padding: 5px 6px; break-inside: avoid; }
     .note-row:last-child { border-bottom: 1px solid #edf2f7; }
-    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 13px; margin-right: 8px; }
-    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 3px 7px; font-size: 9px; font-weight: 900; letter-spacing: 0.06em; }
-    .note-text { white-space: pre-wrap; line-height: 1.38; font-size: 11.5px; margin-top: 8px; }
-    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 8px 0 3px; }
-    .sign { margin-top: 18px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-    .sign div { border-top: 1px solid #9aa8ba; padding-top: 8px; color: #61738a; font-size: 12px; }
-    @page { size: A4 landscape; margin: 8mm; }
+    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 10px; margin-right: 5px; }
+    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 5px; font-size: 7px; font-weight: 900; letter-spacing: 0.04em; }
+    .note-text { white-space: pre-wrap; line-height: 1.18; font-size: 9.5px; margin-top: 4px; }
+    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 4px 0 1px; }
+    .note-row.handover .note-text { line-height: 1.12; font-size: 9px; }
+    .note-row.handover .structured-note-heading { display: inline; margin: 0 3px 0 0; }
+    .sign { margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .sign div { border-top: 1px solid #9aa8ba; padding-top: 4px; color: #61738a; font-size: 9px; }
+    @page { size: A4 landscape; margin: 5mm; }
     @media print {
       body { background: #fff; }
-      .page { width: 100%; padding: 8mm; }
+      .page { width: 100%; padding: 5mm; }
       .no-print { display: none; }
     }
   </style>
