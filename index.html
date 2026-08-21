@@ -55,12 +55,17 @@
       max-width: 620px;
     }
     .section-title {
-      color: #a6192e;
-      font-size: 12px;
+      color: #fff;
+      font-size: 13px;
       font-weight: 900;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin: 14px 0 8px;
+      margin: 18px 0 10px;
+      background: linear-gradient(90deg, #a6192e 0%, #c41f3a 58%, rgba(196, 31, 58, 0) 100%);
+      border-radius: 999px;
+      padding: 8px 16px;
+      box-shadow: 0 12px 28px rgba(166, 25, 46, 0.12);
+      width: fit-content;
     }
     .section-note {
       color: #61738a;
@@ -159,12 +164,28 @@
       padding: 4px 8px;
     }
     .doc-tools a.card {
-      min-height: 104px;
+      min-height: 180px;
       background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
       border-color: #e7c0c7;
     }
     .doc-tools .desc {
       max-width: 520px;
+    }
+    .template-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .template-tag {
+      color: #7a1222;
+      background: #fff2f4;
+      border: 1px solid #efc4cb;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.1;
     }
     footer {
       text-align: center;
@@ -258,6 +279,16 @@
           <div class="icon">🧾</div>
           <div class="title">Care Plan</div>
           <div class="desc">Standalone care-plan and EMR template library for planning how approved hospital care plans should look.</div>
+          <div class="template-tags" aria-label="Care plan templates included">
+            <span class="template-tag">PASS Ward Acuity</span>
+            <span class="template-tag">DVT Assessment</span>
+            <span class="template-tag">Neurology Part 1</span>
+            <span class="template-tag">Neurology Part 2</span>
+            <span class="template-tag">Fall Risk</span>
+            <span class="template-tag">Pressure Injury</span>
+            <span class="template-tag">Transfer Readiness</span>
+            <span class="template-tag">Case Sheet Snapshot</span>
+          </div>
         </div>
         <div class="pill">Open Care Plan</div>
       </a>
@@ -266,6 +297,13 @@
           <div class="icon">📝</div>
           <div class="title">Handover Notes</div>
           <div class="desc">Standalone reference page for shift, transfer, neurology, DVT, and case-sheet handover formats.</div>
+          <div class="template-tags" aria-label="Handover templates included">
+            <span class="template-tag">Shift Handover</span>
+            <span class="template-tag">In-House Transfer</span>
+            <span class="template-tag">Neurology Handover</span>
+            <span class="template-tag">DVT Watch</span>
+            <span class="template-tag">Case Sheet Snapshot</span>
+          </div>
         </div>
         <div class="pill">Open Handover</div>
       </a>
