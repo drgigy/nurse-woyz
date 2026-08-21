@@ -286,6 +286,17 @@
   <script>
     const templates = [
       {
+        title: 'Care Plan Template',
+        description: 'Generic approved nursing care-plan format to be used as the base structure for AI-assisted care-plan drafting.',
+        chips: ['Care plan', 'Template', 'Nurse verification'],
+        fields: ['Patient assessment cues', 'Applicable approved care-plan template', 'Active problem or nursing concern', 'Related factors', 'Evidence or cues', 'Goal for this shift', 'Nursing actions and monitoring', 'Escalation or referral', 'Patient and family education', 'Evaluation'],
+        cues: ['Nurse dictates meaningful clinical details', 'The system selects only applicable care-plan headings', 'Missing details are left for nurse verification'],
+        goal: 'Generate a clear care plan draft that follows the approved structure and can be verified by the nurse.',
+        actions: ['Use only dictated or available patient-context information', 'Arrange content under standard care-plan headings', 'Do not invent normal findings, diagnoses, orders, or interventions', 'Mark uncertain or missing items as nurse to verify'],
+        escalation: 'Escalate any clinical risk or deterioration described in the dictation according to hospital policy.',
+        education: 'Include patient or family education only when relevant to the dictated problem.'
+      },
+      {
         title: 'Risk for Falls',
         description: 'For patients with unsteady gait, altered sensorium, weakness, sedation, previous falls, or need for assistance while mobilizing.',
         chips: ['Fall prevention', 'Mobility support', 'Safety monitoring'],
@@ -363,7 +374,7 @@
         education: 'Encourage patient to report pain early and describe response to medication.'
       },
       {
-        title: 'PASS Ward Patient Acuity',
+        title: 'RH Pass Ward',
         description: 'Clean ward-acuity template for estimating patient dependency and nursing workload in a ward setting.',
         chips: ['PASS ward', 'Acuity', 'Nursing dependency'],
         fields: ['Reason for assessment or reassessment', 'Mobility and fall risk', 'Feeding and nutrition support', 'Elimination and catheter care', 'Respiratory support', 'Lines, drains, tubes, wounds, and devices', 'Monitoring frequency', 'Total score and acuity category'],
@@ -374,7 +385,18 @@
         education: 'Explain to patient or bystander when extra assistance, call bell use, or fall precautions are required.'
       },
       {
-        title: 'Modified DVT Assessment',
+        title: 'RH Pass ICU',
+        description: 'Clean ICU-acuity template for documenting organ support, monitoring intensity, and nursing dependency.',
+        chips: ['PASS ICU', 'Critical care acuity', 'Organ support'],
+        fields: ['Reason for assessment or reassessment', 'Airway and breathing support', 'Hemodynamic monitoring or vasoactive support', 'Neurological monitoring', 'Renal support and urine output', 'Lines, drains, tubes, wounds, and devices', 'Isolation or infection-control needs', 'Total score and ICU acuity category'],
+        cues: ['Patient requires intensive monitoring or organ support', 'Ventilator, oxygen, vasoactive drug, dialysis, drain, or invasive line care is present', 'Critical care workload affects nurse assignment'],
+        goal: 'ICU acuity and nursing dependency are documented clearly for safe critical-care prioritization.',
+        actions: ['Record organ support and monitoring needs dictated by the nurse', 'Map the patient to ICU acuity category after nurse verification', 'Highlight high-risk devices and frequent observation needs', 'Use the acuity result for supervisor review and staffing awareness'],
+        escalation: 'Escalate immediately if ICU acuity increases, organ support changes, or staffing support is inadequate for dependency level.',
+        education: 'Explain relevant device and infection-control precautions to patient or bystander when appropriate.'
+      },
+      {
+        title: 'DVT Assessment',
         description: 'Clean DVT risk and Modified Wells style assessment structure for patients requiring thrombosis-risk review.',
         chips: ['DVT risk', 'Modified Wells', 'Anticoagulation watch'],
         fields: ['Reason for reassessment', 'DVT signs or symptoms', 'Mobility status', 'Risk category: low, moderate, or high', 'Mechanical prophylaxis status', 'Anticoagulant order and bleeding risk', 'Action taken as per policy'],
@@ -385,7 +407,7 @@
         education: 'Teach leg movement, hydration if allowed, and need to report calf pain, swelling, chest pain, or breathlessness.'
       },
       {
-        title: 'Adult Neurological Assessment Part 1',
+        title: 'Neurological Assessment Part 1',
         description: 'Clean neurological assessment structure for patients needing consciousness, pupil, limb power, and deterioration monitoring.',
         chips: ['Neurology', 'GCS', 'Pupil monitoring'],
         fields: ['Consciousness and orientation', 'GCS or sensorium trend', 'Pupil size and reaction', 'Limb power and new weakness', 'Speech or swallowing concern', 'Seizure or aspiration risk', 'Neuro observation frequency'],
@@ -396,7 +418,7 @@
         education: 'Explain to bystander to alert staff for drowsiness, seizure, vomiting, new weakness, or change in speech.'
       },
       {
-        title: 'Adult Neurological Assessment Part 2',
+        title: 'Neurological Assessment Part 2',
         description: 'Continuation template for trending neurological status, devices, mobility, rehabilitation, and safety needs.',
         chips: ['Neuro trend', 'Rehabilitation', 'Safety'],
         fields: ['Neurological trend compared with previous shift', 'Mobility and physiotherapy status', 'Feeding route and aspiration risk', 'Catheter, tube, IV line, or drain status', 'Skin and pressure-area care', 'Pending imaging, review, or procedure'],
@@ -407,7 +429,29 @@
         education: 'Teach the bystander what neurological changes must be reported immediately.'
       },
       {
-        title: 'In-House Transfer Readiness',
+        title: 'Fall Risk Assessment',
+        description: 'Clean hospital fall-risk assessment structure for identifying risk factors and selecting prevention interventions.',
+        chips: ['Fall score', 'Safety bundle', 'Reassessment'],
+        fields: ['Reason for assessment or reassessment', 'Previous fall history', 'Gait, mobility, and transfer assistance', 'Mental status or confusion', 'Sedation or high-risk medication', 'Toileting need', 'Fall risk category', 'Selected fall-prevention intervention'],
+        cues: ['Patient has fall risk factors or needs reassessment', 'Mobility, sensorium, medication, or toileting increases risk', 'Fall prevention measures need to be documented'],
+        goal: 'Fall risk is identified and prevention measures are started without delay.',
+        actions: ['Assess fall risk factors and current mobility before transfer', 'Apply fall-prevention interventions according to risk category', 'Keep patient essentials and call bell within reach', 'Document reassessment and prevention measures'],
+        escalation: 'Inform supervisor or doctor for fall, near-fall, sudden confusion, new weakness, or worsening mobility.',
+        education: 'Explain to patient and bystander that the nurse must be called before mobilization.'
+      },
+      {
+        title: 'Neurology Exam Assessment',
+        description: 'Focused neurological examination template for documenting bedside neurological findings in a structured way.',
+        chips: ['Focused exam', 'Neuro findings', 'Escalation'],
+        fields: ['Level of consciousness', 'Orientation', 'Speech and language', 'Cranial nerve or pupil findings', 'Motor power', 'Sensory symptoms', 'Coordination or gait if assessed', 'Seizure activity or headache', 'Comparison with previous examination'],
+        cues: ['Nurse or clinician dictates focused neurological findings', 'New neurological deficit is suspected', 'Repeated neurological examination is required'],
+        goal: 'Neurological examination findings are documented clearly and compared with previous status.',
+        actions: ['Capture only the neurological findings that were dictated', 'Separate normal and abnormal findings', 'Highlight new or worsening deficits', 'Document whether findings are improving, static, or worsening'],
+        escalation: 'Escalate any new weakness, speech change, seizure, unequal pupils, drop in consciousness, or sudden deterioration.',
+        education: 'Advise patient or bystander to report new weakness, speech difficulty, seizure, vomiting, severe headache, or drowsiness.'
+      },
+      {
+        title: 'In-house Transfer',
         description: 'Clean transfer-readiness care plan for patients moving between ward, ICU, OT, cath lab, imaging, or another department.',
         chips: ['Transfer', 'Checklist', 'Safety'],
         fields: ['Transfer from and transfer to', 'Reason for transfer', 'Current stability and vital concerns', 'Lines, tubes, drains, oxygen, and devices', 'Documents, consent, reports, and case sheet', 'Medication or infusion during transfer', 'Receiving staff handover'],
@@ -431,6 +475,23 @@
     ];
 
     let selectedIndex = 0;
+
+    function slugify(value) {
+      return String(value || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function applyTemplateFromUrl() {
+      const requested = new URLSearchParams(window.location.search).get('template');
+      if (!requested) return;
+      const aliases = {
+        'care-plan': 'care-plan-template',
+        'care-plan-template': 'care-plan-template',
+        'rh-pass-board': 'rh-pass-ward'
+      };
+      const target = aliases[requested] || requested;
+      const index = templates.findIndex(template => slugify(template.title) === target);
+      if (index >= 0) selectedIndex = index;
+    }
 
     function escapeHtml(value) {
       return String(value || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -514,6 +575,7 @@
       copyText(text, 'Template copied');
     }
 
+    applyTemplateFromUrl();
     renderTemplates();
     renderSelected();
   </script>

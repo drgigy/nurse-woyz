@@ -85,7 +85,7 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
     .grid.doc-tools {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       margin-bottom: 2px;
     }
     a.card,
@@ -164,28 +164,12 @@
       padding: 4px 8px;
     }
     .doc-tools a.card {
-      min-height: 180px;
+      min-height: 116px;
       background: linear-gradient(180deg, #ffffff 0%, #fff8f9 100%);
       border-color: #e7c0c7;
     }
     .doc-tools .desc {
       max-width: 520px;
-    }
-    .template-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .template-tag {
-      color: #7a1222;
-      background: #fff2f4;
-      border: 1px solid #efc4cb;
-      border-radius: 999px;
-      padding: 4px 8px;
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1.1;
     }
     footer {
       text-align: center;
@@ -272,40 +256,87 @@
     </section>
 
     <div class="section-title">Documentation Templates</div>
-    <p class="section-note">Reference pages for clean EMR-derived care-plan and handover formats used by the nurse dictation app.</p>
-    <section class="grid doc-tools" aria-label="Care plan and handover template links">
-      <a class="card" href="./care-plan.html">
+    <p class="section-note">Open each clean template as a separate reference button.</p>
+    <section class="grid doc-tools" aria-label="Documentation template links">
+      <a class="card" href="./care-plan.html?template=care-plan">
         <div>
           <div class="icon">🧾</div>
-          <div class="title">Care Plan</div>
-          <div class="desc">Standalone care-plan and EMR template library for planning how approved hospital care plans should look.</div>
-          <div class="template-tags" aria-label="Care plan templates included">
-            <span class="template-tag">PASS Ward Acuity</span>
-            <span class="template-tag">DVT Assessment</span>
-            <span class="template-tag">Neurology Part 1</span>
-            <span class="template-tag">Neurology Part 2</span>
-            <span class="template-tag">Fall Risk</span>
-            <span class="template-tag">Pressure Injury</span>
-            <span class="template-tag">Transfer Readiness</span>
-            <span class="template-tag">Case Sheet Snapshot</span>
-          </div>
+          <div class="title">Care Plan Template</div>
+          <div class="desc">Standard nursing care-plan format.</div>
         </div>
-        <div class="pill">Open Care Plan</div>
+        <div class="pill">Open Template</div>
       </a>
       <a class="card" href="./handover-notes.html">
         <div>
           <div class="icon">📝</div>
-          <div class="title">Handover Notes</div>
-          <div class="desc">Standalone reference page for shift, transfer, neurology, DVT, and case-sheet handover formats.</div>
-          <div class="template-tags" aria-label="Handover templates included">
-            <span class="template-tag">Shift Handover</span>
-            <span class="template-tag">In-House Transfer</span>
-            <span class="template-tag">Neurology Handover</span>
-            <span class="template-tag">DVT Watch</span>
-            <span class="template-tag">Case Sheet Snapshot</span>
-          </div>
+          <div class="title">Handover Note Template</div>
+          <div class="desc">Standard shift handover format.</div>
         </div>
-        <div class="pill">Open Handover</div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=neurological-assessment-part-1">
+        <div>
+          <div class="icon">🧠</div>
+          <div class="title">Neurological Assessment Part 1</div>
+          <div class="desc">Consciousness, GCS, pupils, and limb power.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=neurological-assessment-part-2">
+        <div>
+          <div class="icon">🧠</div>
+          <div class="title">Neurological Assessment Part 2</div>
+          <div class="desc">Neuro trend, devices, safety, and pending review.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=rh-pass-ward">
+        <div>
+          <div class="icon">📊</div>
+          <div class="title">RH Pass Ward</div>
+          <div class="desc">Ward patient acuity and nursing dependency.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=rh-pass-icu">
+        <div>
+          <div class="icon">📈</div>
+          <div class="title">RH Pass ICU</div>
+          <div class="desc">ICU acuity, organ support, and monitoring needs.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=fall-risk-assessment">
+        <div>
+          <div class="icon">⚠️</div>
+          <div class="title">Fall Risk Assessment</div>
+          <div class="desc">Fall risk score and prevention interventions.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=dvt-assessment">
+        <div>
+          <div class="icon">🦵</div>
+          <div class="title">DVT Assessment</div>
+          <div class="desc">DVT risk, prophylaxis, and anticoagulation watch.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=neurology-exam-assessment">
+        <div>
+          <div class="icon">🔎</div>
+          <div class="title">Neurology Exam Assessment</div>
+          <div class="desc">Focused neurological examination documentation.</div>
+        </div>
+        <div class="pill">Open Template</div>
+      </a>
+      <a class="card" href="./care-plan.html?template=in-house-transfer">
+        <div>
+          <div class="icon">🚚</div>
+          <div class="title">In-house Transfer</div>
+          <div class="desc">Transfer readiness and safety checklist.</div>
+        </div>
+        <div class="pill">Open Template</div>
       </a>
     </section>
 
