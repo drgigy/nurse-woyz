@@ -87,7 +87,7 @@ function fallRiskTemplate() {
   ];
   return `
     ${patientHeader()}
-    ${bar('Rajagiri Hospital Fall Risk Assessment Tool')}
+    ${bar('Hospital Fall Risk Assessment Tool')}
     ${row('Reason for re-assessment', select(['Select', 'As per Low Fall Risk Reassessment Policy', 'As per Moderate or High Fall Risk Reassessment Policy']))}
     ${bar('Select the appropriate Fall Risk intervention if the patient has any of the following conditions')}
     <div class="subbar">High Fall Risk - Implement High Fall Risk interventions per protocol</div>
@@ -364,7 +364,7 @@ function initialAssessmentTemplate() {
 
 const TEMPLATE_FORMS = {
   rhfra: {
-    title: 'Rajagiri Hospital Fall Risk Assessment Tool (RHFRA)',
+    title: 'Hospital Fall Risk Assessment Tool (RHFRA)',
     source: 'EMR-derived fall risk assessment template',
     html: fallRiskTemplate
   },
