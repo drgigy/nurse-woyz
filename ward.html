@@ -87,7 +87,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .mobile-drawer-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.42); opacity: 0; pointer-events: none; transition: opacity 0.18s; z-index: 90; }
 .mobile-drawer-backdrop.show { opacity: 1; pointer-events: auto; }
 .mobile-drawer { position: fixed; top: 0; bottom: 0; width: min(340px, 86vw); background: #fff; color: #162033; z-index: 95; padding: 18px; box-shadow: 0 0 40px rgba(15,23,42,0.25); transition: transform 0.22s ease; overflow-y: auto; }
-.mobile-drawer.left { display: flex; flex-direction: column; }
+#notificationsDrawer { display: flex; flex-direction: column; }
 .mobile-drawer.left { left: 0; transform: translateX(-105%); }
 .mobile-drawer.right { right: 0; transform: translateX(105%); }
 .mobile-drawer.show { transform: translateX(0); }
@@ -102,14 +102,20 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .template-pick span { display: block; color: #61738a; font-size: 11px; line-height: 1.35; margin-top: 3px; }
 .room-nav { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 10px; margin-bottom: 12px; }
 .room-back-btn { border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; border-radius: 14px; padding: 10px 12px; font: inherit; font-weight: 900; cursor: pointer; }
-.room-head-card { background: #fff; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 14px 16px; margin-bottom: 14px; }
+.room-head-card { background: #fff; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 10px 12px; margin-bottom: 10px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; }
+.room-head-info { min-width: 0; }
+.room-head-card .bed-heading { font-size: 22px; line-height: 1.05; }
+.room-head-card .patient-bed-details { font-size: 12px; line-height: 1.25; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.room-voice-btn { border: 4px solid #ff4f5e; background: #15161e; color: #fff; border-radius: 999px; padding: 8px 18px 8px 10px; display: inline-flex; align-items: center; gap: 10px; font: inherit; font-size: 15px; font-weight: 950; letter-spacing: 0.6px; cursor: pointer; box-shadow: 0 14px 28px rgba(255,79,94,0.18); }
+.room-voice-btn::before { content: ""; width: 28px; height: 28px; border-radius: 999px; background: #ff565b; box-shadow: 0 0 0 12px rgba(255,86,91,0.16); }
+.room-voice-btn:active { transform: scale(0.97); }
 .room-template-preview { display: none; background: #fff; border: 1.5px dashed #e6a9b3; border-radius: 18px; padding: 14px; margin: 8px 0 14px; color: #162033; }
 .room-template-preview.show { display: block; }
 .template-preview-title { color: #981b2d; font-size: 18px; font-weight: 950; margin-bottom: 6px; }
 .template-preview-help { color: #61738a; font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
 .template-preview-fields { display: grid; grid-template-columns: 1fr; gap: 6px; }
 .template-preview-fields div { background: #f7f9fc; border: 1px solid #dce5f2; border-radius: 10px; padding: 8px 10px; color: #24364d; font-size: 12px; font-weight: 750; }
-.room-dictate-launch { width: 100%; background: linear-gradient(135deg,#c1121f,#981b2d); color: #fff; border: 0; border-radius: 16px; padding: 16px; font: inherit; font-size: 18px; font-weight: 950; box-shadow: 0 14px 34px rgba(166,25,46,0.22); cursor: pointer; margin-bottom: 10px; }
+.room-dictate-launch { width: auto; }
 .voice-plugin { display: none; position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); width: min(335px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 24px; padding: 16px 18px 18px; z-index: 120; box-shadow: 0 24px 60px rgba(0,0,0,0.34); touch-action: none; }
 .voice-plugin.show { display: block; }
 .voice-plugin-head { display: flex; align-items: center; gap: 9px; color: #ff5454; font-size: 17px; font-weight: 950; cursor: grab; user-select: none; }
@@ -519,6 +525,11 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .back-chip { font-size: 16px; padding: 9px 15px; }
   .bed-heading { font-size: 28px; }
   .patient-bed-details { font-size: 16px; line-height: 1.45; margin-top: 5px; }
+  .room-head-card { padding: 9px 10px; border-radius: 16px; margin-bottom: 10px; }
+  .room-head-card .bed-heading { font-size: 22px; }
+  .room-head-card .patient-bed-details { font-size: 13px; line-height: 1.25; margin-top: 3px; }
+  .room-voice-btn { padding: 7px 14px 7px 9px; font-size: 13px; gap: 9px; border-width: 3px; }
+  .room-voice-btn::before { width: 24px; height: 24px; box-shadow: 0 0 0 10px rgba(255,86,91,0.16); }
   .mic-btn { width: 100%; min-height: 46px; border-radius: 11px; }
   .mic-tap-label { font-size: 15px; }
   .mic-status { font-size: 14px; }
@@ -688,12 +699,12 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <!-- ══ BEDS ══ -->
 <div class="screen" id="screen-beds" style="padding-bottom:60px;">
   <div class="mobile-shell-top">
-    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(false)" aria-label="Open notifications">≡</button>
+    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Open templates">□</button>
     <div class="mobile-shell-title">
       <strong>Nurse WOYZ</strong>
       <span data-current-nurse>Nurse</span>
     </div>
-    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Open templates">□</button>
+    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(false)" aria-label="Open notifications">≡</button>
   </div>
   <div class="nurse-alerts" id="nurseNotificationList" style="display:none;"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
   <div class="ward-entry-actions">
@@ -755,18 +766,20 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <!-- ══ MIC ══ -->
 <div class="screen" id="screen-mic" style="padding-bottom:60px;">
   <div class="room-nav">
-    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(true)" aria-label="Room notifications">≡</button>
-    <button class="room-back-btn" onclick="goBackToBeds()">Back</button>
     <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Room templates">□</button>
+    <button class="room-back-btn" onclick="goBackToBeds()">Back</button>
+    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(true)" aria-label="Room notifications">≡</button>
   </div>
   <div class="room-head-card">
-    <div class="bed-heading" id="micBedTitle">Bed 102</div>
-    <div class="patient-bed-details" id="micPatientDetails"></div>
+    <div class="room-head-info">
+      <div class="bed-heading" id="micBedTitle">Bed 102</div>
+      <div class="patient-bed-details" id="micPatientDetails"></div>
+    </div>
+    <button class="room-voice-btn room-dictate-launch" id="roomDictateLaunch" onclick="startBedNoteFromRoom()">VOICE</button>
   </div>
-  <div id="bedTransferPanel"></div>
+  <div id="bedTransferPanel" style="display:none;"></div>
   <div class="review-banner" id="reviewModeBanner">Review mode - scan patient QR to record a new note. You can copy notes and edit existing saved notes here.</div>
   <div class="room-template-preview" id="activeTemplatePreview"></div>
-  <button class="room-dictate-launch" id="roomDictateLaunch" onclick="startBedNoteFromRoom()">Tap to Dictate</button>
   <div class="mic-area">
     <div class="dictation-actions">
       <button type="button" class="mic-btn" id="micBtn" onclick="toggleMic()">
@@ -791,7 +804,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <button class="ctrl-btn save" id="btnSave" onclick="recordAndSave()" disabled="">✓ Record &amp; Save</button>
   </div>
 
-  <div class="notes-toolbar">
+  <div class="notes-toolbar" style="display:none;">
     <div class="section-lbl" style="margin:0;">Patient timeline</div>
     <div class="notes-actions">
       <button class="copy-bed-btn handover-toolbar-btn" onclick="printCurrentBedNotes()">Print Bed Notes</button>
@@ -818,7 +831,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 </div>
 
 <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawers()"></div>
-<aside class="mobile-drawer left" id="notificationsDrawer" aria-hidden="true">
+<aside class="mobile-drawer right" id="notificationsDrawer" aria-hidden="true">
   <div class="drawer-head">
     <div class="drawer-title">Notifications</div>
     <button class="drawer-close" onclick="closeMobileDrawers()">×</button>
@@ -835,7 +848,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     </div>
   </div>
 </aside>
-<aside class="mobile-drawer right" id="templatesDrawer" aria-hidden="true">
+<aside class="mobile-drawer left" id="templatesDrawer" aria-hidden="true">
   <div class="drawer-head">
     <div class="drawer-title">Templates</div>
     <button class="drawer-close" onclick="closeMobileDrawers()">×</button>
