@@ -38,19 +38,34 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    .mark {
-      width: 50px;
-      height: 50px;
+    .woyz-mark {
+      width: 128px;
+      height: 56px;
       margin: 0;
-      border-radius: 16px;
+      border-radius: 999px;
       flex: 0 0 auto;
-      display: grid;
-      place-items: center;
-      background: #a6192e;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px 7px 8px;
+      background: #171922;
+      border: 5px solid #ff4d57;
       color: #fff;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 900;
-      box-shadow: 0 16px 38px rgba(166, 25, 46, 0.22);
+      letter-spacing: 0.05em;
+      box-shadow: 0 16px 38px rgba(255, 77, 87, 0.22);
+    }
+    .woyz-mark::before {
+      content: "";
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: #ff4d57;
+      box-shadow:
+        0 0 0 10px rgba(255, 77, 87, 0.18),
+        0 0 0 21px rgba(255, 77, 87, 0.08);
     }
     h1 {
       color: #a6192e;
@@ -113,7 +128,9 @@
       box-shadow: 0 12px 34px rgba(20, 40, 70, 0.09);
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
       cursor: pointer;
       transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
     }
@@ -140,13 +157,17 @@
     .card-main {
       position: relative;
       z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .card-visual {
       width: 48px;
       height: 34px;
       position: relative;
       display: block;
-      margin-bottom: 10px;
+      margin: 0 auto 10px;
       color: #a6192e;
     }
     .card-visual::before,
@@ -214,7 +235,19 @@
       color: #61738a;
       font-size: 11px;
       line-height: 1.35;
-      margin-top: 6px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-top: 0;
+      transform: translateY(-3px);
+      transition: opacity 0.16s ease, max-height 0.16s ease, margin 0.16s ease, transform 0.16s ease;
+    }
+    .card:hover .desc,
+    .card:focus-visible .desc {
+      max-height: 80px;
+      opacity: 1;
+      margin-top: 8px;
+      transform: translateY(0);
     }
     .card.soon {
       position: relative;
@@ -252,7 +285,7 @@
       font-size: 15px;
     }
     .compact .desc {
-      display: none;
+      font-size: 10px;
     }
     .doc-tools a.card {
       min-height: 92px;
@@ -272,7 +305,7 @@
       line-height: 1.15;
     }
     .doc-tools .desc {
-      display: none;
+      font-size: 10px;
     }
     footer {
       text-align: center;
@@ -290,21 +323,22 @@
       body { padding: 14px; }
       .hero { align-items: flex-start; }
       .hero-copy { align-items: flex-start; flex-direction: column; gap: 6px; }
-      .mark { width: 46px; height: 46px; border-radius: 14px; }
+      .woyz-mark { width: 118px; height: 52px; font-size: 22px; }
+      .woyz-mark::before { width: 34px; height: 34px; }
       .grid,
       .grid.primary,
       .grid.compact,
       .grid.doc-tools { grid-template-columns: 1fr; }
       a.card,
       .compact a.card { min-height: 96px; }
-      .compact .desc { display: block; }
+      .compact .desc { font-size: 11px; }
     }
   </style>
 </head>
 <body>
   <main>
     <section class="hero">
-      <div class="mark">NW</div>
+      <div class="woyz-mark" aria-label="WOYZ logo">WOYZ</div>
       <div class="hero-copy">
         <h1>Nurse WOYZ</h1>
         <div class="demo-note">Demo version only</div>
