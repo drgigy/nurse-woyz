@@ -1,14 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140" role="img" aria-label="WOYZ">
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="150" viewBox="0 0 320 150" role="img" aria-label="WOYZ">
   <defs>
     <filter id="shadow" x="-20%" y="-35%" width="140%" height="170%">
       <feDropShadow dx="0" dy="14" stdDeviation="13" flood-color="#11131a" flood-opacity=".16"/>
     </filter>
   </defs>
   <g filter="url(#shadow)">
-    <rect x="14" y="24" width="272" height="92" rx="46" fill="#171922" stroke="#ff4d57" stroke-width="8"/>
-    <circle cx="80" cy="70" r="42" fill="#21232d"/>
-    <circle cx="80" cy="70" r="26" fill="#502b34"/>
-    <circle cx="80" cy="70" r="15" fill="#ff4d57"/>
-    <text x="132" y="84" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="42" font-weight="900" letter-spacing="6">WOYZ</text>
+    <rect x="14" y="23" width="292" height="104" rx="52" fill="#171922" stroke="#ff4d57" stroke-width="8"/>
+    <circle cx="86" cy="75" r="46" fill="#21232d"/>
+    <circle cx="86" cy="75" r="28" fill="#502b34"/>
+    <circle cx="86" cy="75" r="15" fill="#ff4d57"/>
+    <text x="143" y="90" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="43" font-weight="900" letter-spacing="5">WOYZ</text>
   </g>
 </svg>
