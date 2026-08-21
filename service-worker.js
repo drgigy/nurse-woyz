@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nurse-woyz-demo-v62';
+const CACHE_NAME = 'nurse-woyz-demo-v63';
 const APP_SHELL = [
   './',
   './index.html',
@@ -7,6 +7,19 @@ const APP_SHELL = [
   './care-plan.html',
   './careplan.html',
   './handover-notes.html',
+  './documentation-template.css',
+  './documentation-template.js',
+  './template-rhfra.html',
+  './template-modified-dvt-assessment.html',
+  './template-rhpass-icu.html',
+  './template-braden-score.html',
+  './template-restraint-monitoring.html',
+  './template-rhpass-ward.html',
+  './template-neuro-assessment-part-1.html',
+  './template-neuro-assessment-part-2.html',
+  './template-in-house-transfer.html',
+  './template-patient-movement.html',
+  './template-nursing-initial-assessment-adult.html',
   './manager.html',
   './nursewoyzadmin.html',
   './ot.html',
