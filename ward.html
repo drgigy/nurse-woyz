@@ -72,6 +72,63 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .ward-entry-card.primary .ward-entry-sub { color: rgba(255,255,255,0.78); }
 .rooms-panel { display: none; }
 .rooms-panel.show { display: block; }
+.mobile-shell-top { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 10px; margin-bottom: 14px; }
+.mobile-icon-btn { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 20px rgba(20,40,70,0.08); }
+.mobile-shell-title { text-align: center; }
+.mobile-shell-title strong { display: block; color: #981b2d; font-size: 18px; font-weight: 900; }
+.mobile-shell-title span { display: block; color: #61738a; font-size: 12px; font-weight: 700; margin-top: 2px; }
+.nurse-profile-bar { position: fixed; left: 18px; right: 18px; bottom: 14px; z-index: 45; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; color: #162033; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 11px 14px; box-shadow: 0 14px 36px rgba(20,40,70,0.16); }
+.nurse-profile-name { font-size: 14px; font-weight: 900; color: #981b2d; }
+.nurse-profile-sub { font-size: 11px; color: #61738a; margin-top: 2px; }
+.nurse-profile-menu { display: none; position: absolute; right: 12px; bottom: 58px; background: #fff; border: 1px solid #d7e1ef; border-radius: 14px; padding: 8px; min-width: 150px; box-shadow: 0 18px 40px rgba(20,40,70,0.18); }
+.nurse-profile-bar.open .nurse-profile-menu { display: block; }
+.nurse-profile-menu button { width: 100%; border: 0; background: #fff0f2; color: #981b2d; border-radius: 10px; padding: 10px 12px; font: inherit; font-weight: 900; cursor: pointer; text-align: left; }
+.mobile-drawer-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.42); opacity: 0; pointer-events: none; transition: opacity 0.18s; z-index: 90; }
+.mobile-drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+.mobile-drawer { position: fixed; top: 0; bottom: 0; width: min(340px, 86vw); background: #fff; color: #162033; z-index: 95; padding: 18px; box-shadow: 0 0 40px rgba(15,23,42,0.25); transition: transform 0.22s ease; overflow-y: auto; }
+.mobile-drawer.left { left: 0; transform: translateX(-105%); }
+.mobile-drawer.right { right: 0; transform: translateX(105%); }
+.mobile-drawer.show { transform: translateX(0); }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.drawer-title { color: #981b2d; font-size: 22px; font-weight: 950; }
+.drawer-close { width: 38px; height: 38px; border-radius: 12px; border: 1px solid #d7e1ef; background: #fff; color: #52657d; font-size: 22px; cursor: pointer; }
+.template-list { display: flex; flex-direction: column; gap: 9px; }
+.template-pick { border: 1.5px solid #d7e1ef; background: #fff; border-radius: 14px; padding: 12px; text-align: left; cursor: pointer; color: #162033; font: inherit; }
+.template-pick.active { border-color: #c1121f; background: #fff7f8; }
+.template-pick strong { display: block; color: #981b2d; font-size: 14px; font-weight: 900; }
+.template-pick span { display: block; color: #61738a; font-size: 11px; line-height: 1.35; margin-top: 3px; }
+.room-nav { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 10px; margin-bottom: 12px; }
+.room-back-btn { border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; border-radius: 14px; padding: 10px 12px; font: inherit; font-weight: 900; cursor: pointer; }
+.room-head-card { background: #fff; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 14px 16px; margin-bottom: 14px; }
+.room-template-preview { display: none; background: #fff; border: 1.5px dashed #e6a9b3; border-radius: 18px; padding: 14px; margin: 8px 0 14px; color: #162033; }
+.room-template-preview.show { display: block; }
+.template-preview-title { color: #981b2d; font-size: 18px; font-weight: 950; margin-bottom: 6px; }
+.template-preview-help { color: #61738a; font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
+.template-preview-fields { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.template-preview-fields div { background: #f7f9fc; border: 1px solid #dce5f2; border-radius: 10px; padding: 8px 10px; color: #24364d; font-size: 12px; font-weight: 750; }
+.room-dictate-launch { width: 100%; background: linear-gradient(135deg,#c1121f,#981b2d); color: #fff; border: 0; border-radius: 16px; padding: 16px; font: inherit; font-size: 18px; font-weight: 950; box-shadow: 0 14px 34px rgba(166,25,46,0.22); cursor: pointer; margin-bottom: 10px; }
+.voice-plugin { display: none; position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); width: min(335px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 24px; padding: 16px 18px 18px; z-index: 120; box-shadow: 0 24px 60px rgba(0,0,0,0.34); touch-action: none; }
+.voice-plugin.show { display: block; }
+.voice-plugin-head { display: flex; align-items: center; gap: 9px; color: #ff5454; font-size: 17px; font-weight: 950; cursor: grab; user-select: none; }
+.voice-plugin-head:active { cursor: grabbing; }
+.record-dot { width: 11px; height: 11px; background: #ff5454; border-radius: 50%; box-shadow: 0 0 0 8px rgba(255,84,84,0.12); }
+.voice-wave { display: flex; justify-content: center; gap: 7px; margin: 24px 0 16px; height: 10px; opacity: 0.38; }
+.voice-wave span { width: 7px; height: 7px; background: #ff5454; border-radius: 50%; }
+.voice-plugin.recording .voice-wave span { animation: voiceDots 0.9s infinite ease-in-out; }
+.voice-plugin.recording .voice-wave span:nth-child(2n) { animation-delay: 0.13s; }
+.voice-plugin.recording .voice-wave span:nth-child(3n) { animation-delay: 0.26s; }
+@keyframes voiceDots { 0%,100%{ transform: translateY(0); opacity:0.35; } 50%{ transform: translateY(-8px); opacity:0.9; } }
+.voice-timer { text-align: center; font-size: 48px; line-height: 1; font-weight: 950; letter-spacing: 2px; margin-bottom: 18px; }
+.voice-actions { display: flex; justify-content: center; align-items: center; gap: 14px; }
+.voice-round { width: 78px; height: 78px; border-radius: 50%; border: 0; background: #2e2f34; color: #fff; font-size: 32px; font-weight: 950; cursor: pointer; }
+.voice-round.primary { background: #ff4f4f; box-shadow: 0 16px 32px rgba(255,79,79,0.25); }
+.voice-round.light { background: #f7f8ff; color: #20232d; }
+.voice-round.small { width: 66px; height: 66px; font-size: 26px; }
+.voice-save { display: none; width: 100%; margin-top: 14px; border: 0; border-radius: 14px; padding: 12px; background: #c1121f; color: #fff; font: inherit; font-weight: 950; cursor: pointer; }
+.voice-plugin.done .voice-save { display: block; }
+.voice-status { color: #d7d7dc; text-align: center; font-size: 14px; font-weight: 800; margin-top: 12px; }
+.template { border-left-color: #8b5cf6; }
+.nc-kind.template { color: #5b21b6; background: #f3e8ff; border-color: #ddd6fe; }
 .review-banner { display: none; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 12px; padding: 10px 12px; font-size: 12px; font-weight: 750; line-height: 1.4; margin: 0 0 12px; }
 .review-banner.show { display: block; }
 .bed-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 20px; }
@@ -100,7 +157,8 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .bed-subtext { font-size: 11px; color: #666; margin-top: 2px; }
 .patient-bed-details { font-size: 11px; color: #52657d; margin-top: 4px; line-height: 1.5; }
 .mic-area { display: flex; flex-direction: column; gap: 8px; padding: 8px 0 4px; }
-.mic-area.hidden, .draft-panel.hidden, .handover-toolbar-btn.hidden { display: none !important; }
+#screen-mic .mic-area { display: none; }
+.mic-area.hidden, .draft-panel.hidden, .handover-toolbar-btn.hidden, .room-dictate-launch.hidden { display: none !important; }
 .dictation-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; width: 100%; }
 .mic-btn {
   width: 100%;
@@ -629,13 +687,15 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 
 <!-- ══ BEDS ══ -->
 <div class="screen" id="screen-beds" style="padding-bottom:60px;">
-  <div class="topbar">
-    <div class="nurse-name" data-current-nurse>Nurse</div>
-    <div class="topbar-right">
-      <button class="exit-btn" onclick="doLogout()">🔒 Exit Shift</button>
+  <div class="mobile-shell-top">
+    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(false)" aria-label="Open notifications">≡</button>
+    <div class="mobile-shell-title">
+      <strong>Nurse WOYZ</strong>
+      <span data-current-nurse>Nurse</span>
     </div>
+    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Open templates">□</button>
   </div>
-  <div class="nurse-alerts" id="nurseNotificationList"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
+  <div class="nurse-alerts" id="nurseNotificationList" style="display:none;"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
   <div class="ward-entry-actions">
     <div class="ward-entry-card primary" onclick="showQrDisabledForDemo()">
       <div class="ward-entry-title">Scan QR</div>
@@ -690,19 +750,33 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="b-st">Vacant</div>
     </div></div>
   </div>
+  <div class="nurse-profile-bar" id="nurseProfileBar" onclick="toggleNurseProfileMenu(event)">
+    <div>
+      <div class="nurse-profile-name" data-current-nurse>Nurse</div>
+      <div class="nurse-profile-sub">On shift</div>
+    </div>
+    <button class="exit-btn" type="button">Account</button>
+    <div class="nurse-profile-menu">
+      <button type="button" onclick="doLogout()">Exit Shift</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ MIC ══ -->
 <div class="screen" id="screen-mic" style="padding-bottom:60px;">
-  <div class="back-row">
-    <button class="back-chip" onclick="goBackToBeds()">← Beds</button>
-    <div>
-      <div class="bed-heading" id="micBedTitle">Bed 102</div>
-      <div class="patient-bed-details" id="micPatientDetails"></div>
-    </div>
+  <div class="room-nav">
+    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(true)" aria-label="Room notifications">≡</button>
+    <button class="room-back-btn" onclick="goBackToBeds()">Back</button>
+    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Room templates">□</button>
+  </div>
+  <div class="room-head-card">
+    <div class="bed-heading" id="micBedTitle">Bed 102</div>
+    <div class="patient-bed-details" id="micPatientDetails"></div>
   </div>
   <div id="bedTransferPanel"></div>
   <div class="review-banner" id="reviewModeBanner">Review mode - scan patient QR to record a new note. You can copy notes and edit existing saved notes here.</div>
+  <div class="room-template-preview" id="activeTemplatePreview"></div>
+  <button class="room-dictate-launch" id="roomDictateLaunch" onclick="startBedNoteFromRoom()">Tap to Dictate</button>
   <div class="mic-area">
     <div class="dictation-actions">
       <button type="button" class="mic-btn" id="micBtn" onclick="toggleMic()">
@@ -739,7 +813,35 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>
   </div>
   <button class="copy-bed-btn copy-bed-bottom" onclick="copyCurrentBedNotes()">Copy Bed Notes</button>
+  <div class="voice-plugin" id="voicePlugin" aria-live="polite">
+    <div class="voice-plugin-head" id="voicePluginHandle"><span class="record-dot"></span><span id="voicePluginTitle">Voice note draft</span></div>
+    <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="voice-timer" id="voiceTimer">05:00</div>
+    <div class="voice-actions">
+      <button class="voice-round light" id="voicePauseBtn" type="button" onclick="togglePauseMic()">Ⅱ</button>
+      <button class="voice-round small" type="button" onclick="extendVoiceTimer()">+5</button>
+      <button class="voice-round primary" id="voiceRecordBtn" type="button" onclick="toggleMic()">⌾</button>
+    </div>
+    <button class="voice-save" id="voiceSaveBtn" type="button" onclick="recordAndSave()">Save Dictation</button>
+    <div class="voice-status" id="voicePluginStatus">Ready to record new voice note</div>
+  </div>
 </div>
+
+<div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawers()"></div>
+<aside class="mobile-drawer left" id="notificationsDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div class="drawer-title">Notifications</div>
+    <button class="drawer-close" onclick="closeMobileDrawers()">×</button>
+  </div>
+  <div id="drawerNotificationList"></div>
+</aside>
+<aside class="mobile-drawer right" id="templatesDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div class="drawer-title">Templates</div>
+    <button class="drawer-close" onclick="closeMobileDrawers()">×</button>
+  </div>
+  <div class="template-list" id="templateDrawerList"></div>
+</aside>
 
 <div class="qr-modal" id="qrModal" aria-hidden="true">
   <div class="qr-card">
@@ -1023,6 +1125,26 @@ let patients = [];
 let activeNurse = null;
 let roomsPanelVisible = false;
 let currentBedMode = 'review';
+let activeTemplateId = 'note';
+let voiceTimerSeconds = 300;
+let voiceTimerInterval = null;
+
+const WARD_TEMPLATE_LIBRARY = [
+  { id: 'note', type: 'note', title: 'Bed Note', help: 'Default nursing note when no template is selected.', fields: ['Current observation', 'Intervention done', 'Patient response', 'Pending follow-up'] },
+  { id: 'careplan', type: 'careplan', title: 'Care Plan', help: 'Structured care plan draft using approved nursing care-plan headings.', fields: ['Patient assessment cues', 'Applicable care-plan templates', 'Active problem', 'Goal', 'Nursing actions', 'Evaluation'] },
+  { id: 'handover', type: 'handover', title: 'Handover Note', help: 'Shift handover for the next nurse.', fields: ['Identification', 'Current status', 'Relevant assessment', 'Events this shift', 'Watch', 'Next shift / pending'] },
+  { id: 'fall-risk', type: 'template', title: 'Hospital Fall Risk Assessment Tool', help: 'Fall-risk score and prevention bundle.', fields: ['Reason for reassessment', 'High-risk criteria', 'Low-risk criteria', 'Fall-risk score', 'Risk category', 'Prevention measures'] },
+  { id: 'dvt', type: 'template', title: 'Modified DVT Assessment Tool', help: 'Modified Wells-style DVT assessment.', fields: ['Clinical characteristics', 'Selected score items', 'Total score', 'Criteria of risk', 'Doctor informed if indicated'] },
+  { id: 'rhpass-icu', type: 'template', title: 'PASS ICU', help: 'ICU acuity and nursing dependency score.', fields: ['Organ support', 'Monitoring needs', 'Interventions', 'Total PASS score', 'Care requirement'] },
+  { id: 'braden', type: 'template', title: 'Braden Pressure Injury Risk Assessment', help: 'Pressure injury risk score and prevention bundle.', fields: ['Sensory perception', 'Moisture', 'Activity', 'Mobility', 'Nutrition', 'Friction and shear', 'Total score', 'Risk category'] },
+  { id: 'restraint', type: 'template', title: 'Restraint Monitoring Form', help: 'Physical or chemical restraint monitoring.', fields: ['Indication', 'Type of restraint', 'Monitoring observations', 'Release checks', 'Review / escalation'] },
+  { id: 'rhpass-ward', type: 'template', title: 'PASS Ward', help: 'Ward acuity and nursing dependency score.', fields: ['Patient dependency cues', 'Interventions', 'Monitoring need', 'Total PASS score', 'Care requirement'] },
+  { id: 'neuro-1', type: 'template', title: 'Adult Neurological Assessment Part 1', help: 'GCS, pupils, limb power, and neurological baseline.', fields: ['Date / time', 'Eye opening', 'Verbal response', 'Motor response', 'GCS total', 'Pupils', 'Limb power'] },
+  { id: 'neuro-2', type: 'template', title: 'Adult Neurological Assessment Part 2', help: 'Neurology trend, devices, feeding, safety, and monitoring.', fields: ['Neurological trend', 'Devices', 'Feeding', 'Safety concerns', 'Monitoring plan'] },
+  { id: 'transfer', type: 'template', title: 'In House Transfer', help: 'Transfer readiness and receiving-unit handover.', fields: ['Reason for transfer', 'Clinical status', 'Lines / tubes / drains', 'Documents', 'Medication / oxygen', 'Receiving unit handover'] },
+  { id: 'movement', type: 'template', title: 'Patient Movement Form', help: 'Movement to investigation, procedure, OT, cath lab, or ward.', fields: ['Destination', 'Reason for movement', 'Escort', 'Safety checklist', 'Return status'] },
+  { id: 'initial-assessment', type: 'template', title: 'Nursing Initial Assessment - Adult', help: 'Admission baseline nursing assessment.', fields: ['Admission details', 'Presenting complaints', 'Vitals', 'Baseline assessment', 'Risk screening', 'Initial nursing plan'] }
+];
 
 function currentNurseName() {
   return activeNurse?.name || 'Nurse';
@@ -1036,6 +1158,55 @@ function assignedRooms() {
 function assignedPatients() {
   if (!activeNurse) return [];
   return patients.filter(patient => patient.assignedNurseId === activeNurse.id);
+}
+
+function activeTemplate() {
+  return WARD_TEMPLATE_LIBRARY.find(item => item.id === activeTemplateId) || WARD_TEMPLATE_LIBRARY[0];
+}
+
+function noteTypeForTemplate(templateId) {
+  const template = WARD_TEMPLATE_LIBRARY.find(item => item.id === templateId) || WARD_TEMPLATE_LIBRARY[0];
+  return template.type || 'note';
+}
+
+function setActiveTemplate(templateId, { silent = false, showRecorder = false } = {}) {
+  const template = WARD_TEMPLATE_LIBRARY.find(item => item.id === templateId) || WARD_TEMPLATE_LIBRARY[0];
+  activeTemplateId = template.id;
+  currentNoteType = template.type || 'note';
+  renderTemplateDrawer();
+  renderActiveTemplatePreview();
+  if (showRecorder) showVoicePlugin();
+  if (!silent) showToast(template.title + ' selected');
+}
+
+function renderActiveTemplatePreview() {
+  const box = document.getElementById('activeTemplatePreview');
+  if (!box) return;
+  const template = activeTemplate();
+  if (template.id === 'note') {
+    box.classList.remove('show');
+    box.innerHTML = '';
+    return;
+  }
+  box.classList.add('show');
+  box.innerHTML = `
+    <div class="template-preview-title">${escapeHtml(template.title)}</div>
+    <div class="template-preview-help">Use this as a visual checklist while dictating. Only dictated information will be filled; missing details remain for nurse verification.</div>
+    <div class="template-preview-fields">
+      ${template.fields.map(field => `<div>${escapeHtml(field)}</div>`).join('')}
+    </div>
+  `;
+}
+
+function renderTemplateDrawer() {
+  const list = document.getElementById('templateDrawerList');
+  if (!list) return;
+  list.innerHTML = WARD_TEMPLATE_LIBRARY.map(template => `
+    <button type="button" class="template-pick ${template.id === activeTemplateId ? 'active' : ''}" onclick="selectWardTemplate('${escapeJsArg(template.id)}')">
+      <strong>${escapeHtml(template.title)}</strong>
+      <span>${escapeHtml(template.help)}</span>
+    </button>
+  `).join('');
 }
 
 function updateNurseIdentity() {
@@ -1120,6 +1291,63 @@ function showScreen(name) {
   if (name === 'command') renderCommand();
 }
 
+function closeMobileDrawers() {
+  document.getElementById('mobileDrawerBackdrop')?.classList.remove('show');
+  ['notificationsDrawer', 'templatesDrawer'].forEach(id => {
+    const drawer = document.getElementById(id);
+    if (drawer) {
+      drawer.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+  });
+}
+
+function openNotificationsDrawer(roomOnly = false) {
+  renderDrawerNotifications(roomOnly);
+  document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
+  const drawer = document.getElementById('notificationsDrawer');
+  if (drawer) {
+    drawer.classList.add('show');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function openTemplatesDrawer() {
+  renderTemplateDrawer();
+  document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
+  const drawer = document.getElementById('templatesDrawer');
+  if (drawer) {
+    drawer.classList.add('show');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function renderDrawerNotifications(roomOnly = false) {
+  const list = document.getElementById('drawerNotificationList');
+  if (!list) return;
+  const assignedIds = new Set(assignedRooms().map(room => room.id));
+  let openRequests = transferRequests.filter(r => assignedIds.has(r.bedId) && !isRequestClosed(r.status));
+  if (roomOnly && currentBed) openRequests = openRequests.filter(r => r.bedId === currentBed);
+  list.innerHTML = openRequests.length
+    ? openRequests.map(r => requestCardHtml(r, currentBed === r.bedId)).join('')
+    : `<div class="nurse-alert"><div class="nurse-alert-title">No active notifications</div><div class="nurse-alert-text">${roomOnly ? 'No pending request for this room.' : 'OT and Cath Lab notifications will appear here.'}</div></div>`;
+}
+
+function selectWardTemplate(templateId) {
+  setActiveTemplate(templateId, { showRecorder: true });
+  closeMobileDrawers();
+}
+
+function toggleNurseProfileMenu(event) {
+  event.stopPropagation();
+  document.getElementById('nurseProfileBar')?.classList.toggle('open');
+}
+
+document.addEventListener('click', event => {
+  const profile = document.getElementById('nurseProfileBar');
+  if (profile && !profile.contains(event.target)) profile.classList.remove('open');
+});
+
 // ══════════════════════════════════════════
 // LOGIN
 // ══════════════════════════════════════════
@@ -1159,6 +1387,9 @@ function doLogin() {
   roomsPanelVisible = false;
   currentBedMode = 'review';
   updateNurseIdentity();
+  renderTemplateDrawer();
+  renderActiveTemplatePreview();
+  initVoicePluginDrag();
   renderBedGrid();
   renderNurseNotifications();
   showScreen('beds');
@@ -1237,6 +1468,7 @@ function openBed(bedId, mode = 'review') {
   currentBedMode = mode === 'record' ? 'record' : 'review';
   const room = rooms.find(item => item.id === bedId);
   document.getElementById('micBedTitle').textContent = room?.name || 'Bed ' + bedId;
+  setActiveTemplate('note', { silent: true });
   renderCurrentBedPatientDetails();
   resetMicState();
   renderNotesList();
@@ -1465,6 +1697,7 @@ function applyBedModeUI() {
   const isRecordMode = currentBedMode === 'record';
   document.querySelector('#screen-mic .mic-area')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('draftPanel')?.classList.toggle('hidden', !isRecordMode);
+  document.getElementById('roomDictateLaunch')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('btnHandover')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('btnCarePlan')?.classList.toggle('hidden', !isRecordMode);
   document.getElementById('reviewModeBanner')?.classList.toggle('show', !isRecordMode);
@@ -1481,6 +1714,141 @@ function goBackToBeds() {
 // ══════════════════════════════════════════
 // MIC
 // ══════════════════════════════════════════
+function startBedNoteFromRoom() {
+  setActiveTemplate('note', { silent: true });
+  showVoicePlugin();
+  if (!isRecording && !isPaused) startRecording();
+}
+
+function showVoicePlugin() {
+  const plugin = document.getElementById('voicePlugin');
+  if (!plugin) return;
+  plugin.classList.add('show');
+  syncVoicePluginUI('idle');
+}
+
+function hideVoicePlugin() {
+  document.getElementById('voicePlugin')?.classList.remove('show', 'recording', 'done');
+}
+
+function startVoiceTimer(seconds = 300) {
+  voiceTimerSeconds = seconds;
+  updateVoiceTimer();
+  stopVoiceTimer(false);
+  voiceTimerInterval = setInterval(() => {
+    if (!isPaused && voiceTimerSeconds > 0) {
+      voiceTimerSeconds -= 1;
+      updateVoiceTimer();
+    }
+  }, 1000);
+}
+
+function stopVoiceTimer(reset = true) {
+  if (voiceTimerInterval) clearInterval(voiceTimerInterval);
+  voiceTimerInterval = null;
+  if (reset) {
+    voiceTimerSeconds = 300;
+    updateVoiceTimer();
+  }
+}
+
+function extendVoiceTimer() {
+  voiceTimerSeconds += 300;
+  updateVoiceTimer();
+  showToast('Five minutes added');
+}
+
+function updateVoiceTimer() {
+  const timer = document.getElementById('voiceTimer');
+  if (!timer) return;
+  const mins = Math.floor(voiceTimerSeconds / 60).toString().padStart(2, '0');
+  const secs = (voiceTimerSeconds % 60).toString().padStart(2, '0');
+  timer.textContent = mins + ':' + secs;
+}
+
+function syncVoicePluginUI(state) {
+  const plugin = document.getElementById('voicePlugin');
+  if (!plugin) return;
+  const template = activeTemplate();
+  document.getElementById('voicePluginTitle').textContent = template.id === 'note' ? 'Voice note draft' : template.title + ' draft';
+  const status = document.getElementById('voicePluginStatus');
+  const pause = document.getElementById('voicePauseBtn');
+  const record = document.getElementById('voiceRecordBtn');
+  plugin.classList.toggle('recording', state === 'recording');
+  plugin.classList.toggle('done', state === 'done');
+  if (state === 'idle') {
+    status.textContent = template.id === 'note' ? 'Ready to record new voice note' : 'Ready to fill this template by voice';
+    pause.textContent = 'Ⅱ';
+    pause.disabled = true;
+    record.disabled = false;
+    record.textContent = '⌾';
+  }
+  if (state === 'recording') {
+    status.textContent = 'Recording in progress...';
+    pause.textContent = 'Ⅱ';
+    pause.disabled = false;
+    record.disabled = false;
+    record.textContent = '■';
+  }
+  if (state === 'paused') {
+    status.textContent = 'Recording paused. Tap pause again to resume.';
+    pause.textContent = '▶';
+    pause.disabled = false;
+    record.disabled = false;
+    record.textContent = '■';
+  }
+  if (state === 'processing') {
+    status.textContent = template.type === 'template' ? 'Filling selected template...' : 'Structuring dictation...';
+    pause.disabled = true;
+    record.disabled = true;
+    record.textContent = '...';
+  }
+  if (state === 'done') {
+    status.textContent = 'Review the text, then save.';
+    pause.disabled = true;
+    record.disabled = false;
+    record.textContent = '⌾';
+  }
+}
+
+function initVoicePluginDrag() {
+  const plugin = document.getElementById('voicePlugin');
+  const handle = document.getElementById('voicePluginHandle');
+  if (!plugin || !handle || plugin.dataset.dragReady === 'yes') return;
+  plugin.dataset.dragReady = 'yes';
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+  handle.addEventListener('pointerdown', event => {
+    dragging = true;
+    const rect = plugin.getBoundingClientRect();
+    plugin.style.left = rect.left + 'px';
+    plugin.style.top = rect.top + 'px';
+    plugin.style.bottom = 'auto';
+    plugin.style.transform = 'none';
+    startX = event.clientX;
+    startY = event.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener('pointermove', event => {
+    if (!dragging) return;
+    const maxLeft = Math.max(8, window.innerWidth - plugin.offsetWidth - 8);
+    const maxTop = Math.max(8, window.innerHeight - plugin.offsetHeight - 8);
+    const nextLeft = Math.min(maxLeft, Math.max(8, startLeft + event.clientX - startX));
+    const nextTop = Math.min(maxTop, Math.max(8, startTop + event.clientY - startY));
+    plugin.style.left = nextLeft + 'px';
+    plugin.style.top = nextTop + 'px';
+  });
+  handle.addEventListener('pointerup', event => {
+    dragging = false;
+    try { handle.releasePointerCapture(event.pointerId); } catch (error) {}
+  });
+}
+
 function resetMicState() {
   rawTranscript = '';
   englishNote = '';
@@ -1488,8 +1856,9 @@ function resetMicState() {
   currentDictationTime = '';
   isRecording = false;
   isPaused = false;
-  currentNoteType = 'note';
+  currentNoteType = noteTypeForTemplate(activeTemplateId);
   autoSaveAfterTranscription = false;
+  stopVoiceTimer();
   setMicUI('idle');
   // raw hidden
   setPreviewText('');
@@ -1497,6 +1866,7 @@ function resetMicState() {
   document.getElementById('btnHandover').disabled = false;
   document.getElementById('btnCarePlan').disabled = false;
   document.getElementById('btnSave').disabled = true;
+  syncVoicePluginUI('idle');
 }
 
 function setMicUI(state) {
@@ -1511,10 +1881,11 @@ function setMicUI(state) {
   btn.disabled = state === 'processing';
   draft.classList.toggle('show', state === 'processing' || state === 'done');
   if (state === 'idle') { status.textContent = ''; status.className = 'mic-status'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Speak in Malayalam'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Pause'; }
-  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? 'Recording handover...' : currentNoteType === 'careplan' ? 'Recording care plan assessment...' : 'Listening...'; status.className = 'mic-status recording'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = 'Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover...' : currentNoteType === 'careplan' ? 'Listening for care-plan triggers...' : 'Listening...'); }
+  if (state === 'recording') { status.textContent = currentNoteType === 'handover' ? 'Recording handover...' : currentNoteType === 'careplan' ? 'Recording care plan assessment...' : currentNoteType === 'template' ? 'Recording template details...' : 'Listening...'; status.className = 'mic-status recording'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.remove('hidden'); document.getElementById('btnPause').textContent = 'Pause'; setPreviewText(currentNoteType === 'handover' ? 'Listening to handover...' : currentNoteType === 'careplan' ? 'Listening for care-plan triggers...' : currentNoteType === 'template' ? 'Listening to fill ' + activeTemplate().title + '...' : 'Listening...'); }
   if (state === 'paused') { status.textContent = 'Paused'; status.className = 'mic-status'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Resume'; }
-  if (state === 'processing') { status.textContent = currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring note...'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING...'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
-  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : currentNoteType === 'careplan' ? 'Care plan ready to review' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
+  if (state === 'processing') { status.textContent = currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : currentNoteType === 'template' ? 'Filling selected template...' : 'Structuring note...'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING...'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
+  if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : currentNoteType === 'careplan' ? 'Care plan ready to review' : currentNoteType === 'template' ? 'Template ready to review' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
+  syncVoicePluginUI(state);
 }
 
 function toggleMic() {
@@ -1524,7 +1895,8 @@ function toggleMic() {
   }
   if (isRecording || isPaused) { stopRecording(); }
   else {
-    currentNoteType = 'note';
+    currentNoteType = noteTypeForTemplate(activeTemplateId);
+    showVoicePlugin();
     startRecording();
   }
 }
@@ -1540,6 +1912,7 @@ async function startRecording() {
   currentDictationTime = '';
   isPaused = false;
   setPreviewText('');
+  showVoicePlugin();
   document.getElementById('btnSave').disabled = true;
   document.getElementById('btnHandover').disabled = true;
   document.getElementById('btnCarePlan').disabled = true;
@@ -1567,6 +1940,7 @@ async function startRecording() {
     mediaRecorder.start();
     isRecording = true;
     isPaused = false;
+    startVoiceTimer();
     setMicUI('recording');
     document.getElementById('btnPause').disabled = false;
   } catch(e) {
@@ -1584,6 +1958,8 @@ function startHandoverDictation() {
   }
   if (isRecording || isPaused) return;
   currentNoteType = 'handover';
+  activeTemplateId = 'handover';
+  renderActiveTemplatePreview();
   startRecording();
 }
 
@@ -1594,6 +1970,8 @@ function startCarePlanDictation() {
   }
   if (isRecording || isPaused) return;
   currentNoteType = 'careplan';
+  activeTemplateId = 'careplan';
+  renderActiveTemplatePreview();
   startRecording();
 }
 
@@ -1613,6 +1991,7 @@ function recordAndSave() {
 function stopRecording() {
   isRecording = false;
   isPaused = false;
+  stopVoiceTimer(false);
   document.getElementById('btnPause').disabled = true;
   document.getElementById('btnPause').textContent = 'Pause';
   document.getElementById('btnHandover').disabled = true;
@@ -1665,21 +2044,24 @@ function blobToBase64(blob) {
   });
 }
 
-function noteTypeLabel(type) {
+function noteTypeLabel(type, note = null) {
   if (type === 'handover') return 'Handover';
   if (type === 'careplan') return 'Care Plan';
+  if (type === 'template') return note?.templateTitle || activeTemplate().title;
   return 'Nursing Note';
 }
 
 function noteTypeClass(type) {
   if (type === 'handover') return 'handover';
   if (type === 'careplan') return 'careplan';
+  if (type === 'template') return 'template';
   return '';
 }
 
-function noteTypeCopyLabel(type) {
+function noteTypeCopyLabel(type, note = null) {
   if (type === 'handover') return 'HANDOVER';
   if (type === 'careplan') return 'CARE PLAN';
+  if (type === 'template') return (note?.templateTitle || activeTemplate().title).toUpperCase();
   return 'NURSING NOTE';
 }
 
@@ -1727,6 +2109,9 @@ function formatStructuredNoteText(note) {
       text = text.replaceAll(label, '\n\n' + label);
     });
     return text.replace(/^CARE PLAN DRAFT\s*/, 'CARE PLAN DRAFT\n\n').trim();
+  }
+  if (note?.type === 'template') {
+    return text;
   }
   return text;
 }
@@ -1778,6 +2163,9 @@ function formatStructuredNoteHtml(note) {
       const escapedHeading = escapeHtml(heading);
       html = html.replaceAll(escapedHeading, `<strong class="structured-note-heading">${escapedHeading}</strong>`);
     });
+  if (note?.type === 'template') {
+    html = html.replace(/^([A-Za-z][A-Za-z0-9 /()–-]{2,80}:)/gm, '<strong class="structured-note-heading">$1</strong>');
+  }
   return html;
 }
 
@@ -1787,6 +2175,9 @@ function getDictationSystemInstruction() {
   }
   if (currentNoteType === 'careplan') {
     return 'You are an AI Nursing Documentation Assistant for shift nursing care plans. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into a short problem-oriented English nursing care plan for this shift. Use only information stated by the nurse or already available in the current patient context. Never assume, infer, fabricate, or convert unassessed items into normal findings. Use hospital-approved template areas only when supported by the dictation. Do not generate elaborate textbook nursing diagnoses, generic interventions, medical orders, or unnecessary explanations. Include only active or relevant problems for this shift. If there is no meaningful dictated clinical information, return an empty nursingNote. Return JSON only.';
+  }
+  if (currentNoteType === 'template') {
+    return 'You are an AI Nursing Documentation Assistant. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms, while viewing a hospital documentation template. Convert the dictation into a concise English filled-template draft. Use only dictated facts. Do not invent normal findings, scores, dates, times, vitals, or signatures. If a template field is not clearly dictated, write "Nurse to verify". If there is no meaningful dictated information, return an empty nursingNote. Return JSON only.';
   }
   return 'You are a clinical nursing documentation assistant for a hospital in Kerala, India. A nurse speaks in Malayalam, sometimes mixed with English medical terms. Convert the dictated audio into clear professional English nursing documentation. Keep it factual. Do not add diagnoses or details not spoken. Do not create separate event timestamps. Return JSON only.';
 }
@@ -1798,12 +2189,16 @@ function getDictationUserPrompt() {
   if (currentNoteType === 'careplan') {
     return `Translate this Malayalam bedside assessment into English and generate a concise, professional, nurse-reviewable shift care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact shape: {"nursingNote":"NURSING CARE PLAN - SHIFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated\\n\\nCare plan item 2:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated"}. Create only the care plan items clearly supported by the nurse dictation or patient context. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a required detail is missing, omit it or write "Nurse to verify".`;
   }
+  if (currentNoteType === 'template') {
+    const template = activeTemplate();
+    return `The nurse is filling this template: ${template.title}. Template fields: ${template.fields.join(', ')}. Translate the Malayalam dictation into English and fill only the fields supported by the dictation. Return JSON only with this exact shape: {"nursingNote":"${template.title.toUpperCase()}\\n\\n${template.fields.map(field => field + ':\\n- ...').join('\\n\\n')}\\n\\nItems needing nurse verification:\\n- ..."}. For each field not dictated, write "- Nurse to verify". Do not add any normal findings, score, risk category, intervention, or escalation that was not dictated.`;
+  }
   return 'Translate this Malayalam nursing dictation into English. Return JSON with this exact shape: {"nursingNote":"2-4 short professional nursing documentation sentences"}. Do not include activity timestamps in the note.';
 }
 
 async function sendAudioToGemini(audioBlob) {
   setMicUI('processing');
-  setPreviewLoading(currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring clinical note...');
+  setPreviewLoading(currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : currentNoteType === 'template' ? 'Filling selected template...' : 'Structuring clinical note...');
 
   const apiKey = getGeminiKey();
   if (!apiKey) {
@@ -1881,6 +2276,7 @@ let simIdx = 0;
 function runSimulation() {
   isRecording = true;
   isPaused = false;
+  startVoiceTimer();
   setMicUI('recording');
   document.getElementById('btnPause').disabled = false;
 
@@ -1898,15 +2294,16 @@ function runSimulation() {
     } else {
       clearInterval(iv);
       isRecording = false;
+      stopVoiceTimer(false);
       document.getElementById('micBtn').classList.remove('recording');
       document.getElementById('btnPause').disabled = true;
       // Use pre-built English for simulation
       currentDictationTime = getCurrentTime();
       rawTranscript = '[Simulated Malayalam dictation]';
-      englishNote = noteTypeAtStart === 'careplan' ? buildDemoCarePlan(phrase.en) : noteTypeAtStart === 'handover' ? buildDemoHandover(phrase.en) : phrase.en;
+      englishNote = noteTypeAtStart === 'careplan' ? buildDemoCarePlan(phrase.en) : noteTypeAtStart === 'handover' ? buildDemoHandover(phrase.en) : noteTypeAtStart === 'template' ? buildDemoTemplateNote(phrase.en) : phrase.en;
       setTimeout(() => {
         setMicUI('processing');
-        setPreviewLoading(noteTypeAtStart === 'careplan' ? 'Matching approved care-plan templates...' : 'Structuring clinical note...');
+        setPreviewLoading(noteTypeAtStart === 'careplan' ? 'Matching approved care-plan templates...' : noteTypeAtStart === 'template' ? 'Filling selected template...' : 'Structuring clinical note...');
         setTimeout(() => {
           setPreviewText(englishNote, { editable: true });
           document.getElementById('btnSave').disabled = false;
@@ -1970,6 +2367,22 @@ function buildDemoHandover(handoverText) {
   ].join('\n');
 }
 
+function buildDemoTemplateNote(dictatedText) {
+  const template = activeTemplate();
+  const fields = template.fields.map((field, index) => {
+    if (index === 0) return `${field}:\n- ${dictatedText}`;
+    return `${field}:\n- Nurse to verify`;
+  }).join('\n\n');
+  return [
+    template.title.toUpperCase(),
+    '',
+    fields,
+    '',
+    'Items needing nurse verification:',
+    '- Verify all fields not specifically dictated before final submission.'
+  ].join('\n');
+}
+
 // ══════════════════════════════════════════
 // SAVE NOTE
 // ══════════════════════════════════════════
@@ -1983,7 +2396,8 @@ async function saveNote() {
   englishNote = text;
   const time = currentDictationTime || getCurrentTime();
   const type = currentNoteType;
-  const note = { id: 'local-note-' + Date.now(), bed: currentBed, time, raw: rawTranscript, text, type, nurse: currentNurseName() };
+  const template = activeTemplate();
+  const note = { id: 'local-note-' + Date.now(), bed: currentBed, time, raw: rawTranscript, text, type, nurse: currentNurseName(), templateId: template.id, templateTitle: type === 'template' ? template.title : '' };
   if (firebaseReady) {
     try {
       await saveNoteToFirebase(note);
@@ -2000,8 +2414,9 @@ async function saveNote() {
   renderBedGrid();
   addLiveActivity(currentBed, text, time);
   refreshDashboard();
+  showToast(noteTypeLabel(type, note) + ' saved for Bed ' + currentBed + ' ✓');
+  setActiveTemplate('note', { silent: true });
   resetMicState();
-  showToast(noteTypeLabel(type) + ' saved for Bed ' + currentBed + ' ✓');
 }
 
 function renderNotesList() {
@@ -2018,7 +2433,7 @@ function renderNotesList() {
     return `
     <div class="note-card">
       <div class="nc-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
       ${isEditing ? `
         <textarea class="note-edit-box" id="editNoteText_${index}">${escapeHtml(n.text)}</textarea>
         <div class="note-edit-actions">
@@ -2083,7 +2498,7 @@ function copyCurrentBedNotes() {
     return;
   }
   const text = `BED ${currentBed} — NURSING RECORD\n\n` + bedNotes
-    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`)
+    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`)
     .join('\n\n');
   navigator.clipboard.writeText(text)
     .then(() => showToast('All Bed ' + currentBed + ' notes copied ✓'))
@@ -2102,7 +2517,7 @@ function printCurrentBedNotes() {
     <article class="note-row">
       <div class="note-meta">
         <strong>${escapeHtml(note.time)}</strong>
-        <span>${escapeHtml(noteTypeCopyLabel(note.type))}</span>
+        <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
       </div>
       <div class="note-text">${formatStructuredNoteHtml(note)}</div>
     </article>
@@ -2222,7 +2637,7 @@ function showSummary() {
     <div class="st-item">
       <div class="sti-bed">Bed ${escapeHtml(n.bed)}</div>
       <div class="sti-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
+      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
       <div class="sti-text">✦ ${formatStructuredNoteHtml(n)}</div>
     </div>
   `).join('') : '<div style="font-size:13px;color:#555;padding:20px;text-align:center;">No notes recorded this shift.</div>';
@@ -2233,7 +2648,7 @@ function copyToEMR() {
   const all = getAssignedShiftNotes();
   if (!all.length) { showToast('No notes to copy'); return; }
   const text = 'SHIFT NOTES\n' + currentNurseName() + ' · Ward 3 · Night Shift\n\n' +
-    all.map(n => `${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
+    all.map(n => `${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard ✓')).catch(() => showToast('Ready to paste'));
 }
 
@@ -2261,7 +2676,7 @@ function printShiftNotes() {
           <article class="note-row">
             <div class="note-meta">
               <strong>${escapeHtml(note.time)}</strong>
-              <span>${escapeHtml(noteTypeCopyLabel(note.type))}</span>
+              <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
             </div>
             <div class="note-text">${formatStructuredNoteHtml(note)}</div>
           </article>
@@ -2381,7 +2796,7 @@ function selectDashBed(bedId) {
     <div class="d-tl-item ${i===bedNotes.length-1?'new-item':''}">
       <div class="d-tl-time">${n.time}</div>
       <div class="d-tl-body">
-        <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type)}</div>
+        <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
         <div class="d-tl-note">✦ ${formatStructuredNoteHtml(n)}</div>
         <div class="d-tl-nurse">${escapeHtml(n.nurse || 'Nurse Priya')}</div>
       </div>
@@ -2666,6 +3081,8 @@ function listenToNotes() {
         raw: data.raw || '',
         text: data.text || '',
         type: data.type || 'note',
+        templateId: data.templateId || '',
+        templateTitle: data.templateTitle || '',
         nurse: data.nurse || 'Nurse Priya',
         editedAt: data.editedAt || ''
       });
@@ -2754,6 +3171,8 @@ async function saveNoteToFirebase(note) {
     raw: note.raw,
     text: note.text,
     type: note.type,
+    templateId: note.templateId || '',
+    templateTitle: note.templateTitle || '',
     nurse: currentNurseName(),
     ward: 'Ward 3',
     shift: 'Night Shift',
@@ -2800,7 +3219,7 @@ function copyBedToEMR() {
   if (!activeDashBed) { showToast('Select a bed first'); return; }
   const bedNotes = notes[activeDashBed] || [];
   if (!bedNotes.length) { showToast('No notes for this bed'); return; }
-  const text = `BED ${activeDashBed} — ${currentNurseName()} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
+  const text = `BED ${activeDashBed} — ${currentNurseName()} — Ward 3\n\n` + bedNotes.map(n=>`${n.time} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast('Bed ' + activeDashBed + ' copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
@@ -2809,7 +3228,7 @@ function copyAllToEMR() {
   Object.entries(notes).forEach(([bed,ns]) => ns.forEach(n=>all.push({bed,...n})));
   all.sort((a,b)=>a.time.localeCompare(b.time));
   if (!all.length) { showToast('No notes yet this shift'); return; }
-  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · ' + currentNurseName() + '\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type)}\n${n.text}`).join('\n\n');
+  const text = 'FULL WARD NOTES\nWard 3 · Night Shift · ' + currentNurseName() + '\n\n' + all.map(n=>`${n.time} | Bed ${n.bed} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`).join('\n\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Full summary copied ✓')).catch(()=>showToast('Ready to paste'));
 }
 
