@@ -115,24 +115,25 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .template-preview-help { color: #61738a; font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
 .template-preview-fields { display: grid; grid-template-columns: 1fr; gap: 6px; }
 .template-preview-fields div { background: #f7f9fc; border: 1px solid #dce5f2; border-radius: 10px; padding: 8px 10px; color: #24364d; font-size: 12px; font-weight: 750; }
+.template-preview-frame { width: 100%; height: 420px; border: 1px solid #d7e1ef; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); }
 .room-dictate-launch { width: auto; }
-.voice-plugin { display: none; position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); width: min(335px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 24px; padding: 16px 18px 18px; z-index: 120; box-shadow: 0 24px 60px rgba(0,0,0,0.34); touch-action: none; }
+.voice-plugin { display: none; position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); width: min(190px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 16px; padding: 10px 12px 12px; z-index: 120; box-shadow: 0 18px 42px rgba(0,0,0,0.34); touch-action: none; }
 .voice-plugin.show { display: block; }
-.voice-plugin-head { display: flex; align-items: center; gap: 9px; color: #ff5454; font-size: 17px; font-weight: 950; cursor: grab; user-select: none; }
+.voice-plugin-head { display: flex; align-items: center; gap: 6px; color: #ff5454; font-size: 11px; font-weight: 950; cursor: grab; user-select: none; }
 .voice-plugin-head:active { cursor: grabbing; }
-.record-dot { width: 11px; height: 11px; background: #ff5454; border-radius: 50%; box-shadow: 0 0 0 8px rgba(255,84,84,0.12); }
-.voice-wave { display: grid; grid-template-columns: repeat(28,1fr); align-items: end; gap: 3px; width: 76%; height: 30px; margin: 24px auto 16px; }
+.record-dot { width: 7px; height: 7px; background: #ff5454; border-radius: 50%; box-shadow: 0 0 0 5px rgba(255,84,84,0.12); }
+.voice-wave { display: grid; grid-template-columns: repeat(28,1fr); align-items: end; gap: 2px; width: 76%; height: 18px; margin: 12px auto 8px; }
 .voice-wave span { height: 0; min-height: 0; background: #ff5454; border-radius: 999px 999px 3px 3px; opacity: 0; transition: height 0.06s linear, opacity 0.08s linear; }
 .voice-plugin.recording .voice-wave span.active { opacity: 1; }
-.voice-timer { text-align: center; font-size: 48px; line-height: 1; font-weight: 950; letter-spacing: 2px; margin-bottom: 18px; }
-.voice-actions { display: flex; justify-content: center; align-items: center; gap: 14px; }
-.voice-round { width: 78px; height: 78px; border-radius: 50%; border: 0; background: #2e2f34; color: #fff; font-size: 32px; font-weight: 950; cursor: pointer; }
-.voice-round.primary { background: #ff4f4f; box-shadow: 0 16px 32px rgba(255,79,79,0.25); }
+.voice-timer { text-align: center; font-size: 28px; line-height: 1; font-weight: 950; letter-spacing: 1px; margin-bottom: 9px; }
+.voice-actions { display: flex; justify-content: center; align-items: center; gap: 8px; }
+.voice-round { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #2e2f34; color: #fff; font-size: 18px; font-weight: 950; cursor: pointer; }
+.voice-round.primary { background: #ff4f4f; box-shadow: 0 10px 24px rgba(255,79,79,0.25); }
 .voice-round.light { background: #f7f8ff; color: #20232d; }
-.voice-round.small { width: 66px; height: 66px; font-size: 26px; }
-.voice-save { display: none; width: 100%; margin-top: 14px; border: 0; border-radius: 14px; padding: 12px; background: #c1121f; color: #fff; font: inherit; font-weight: 950; cursor: pointer; }
+.voice-round.small { width: 38px; height: 38px; font-size: 15px; }
+.voice-save { display: none; width: 100%; margin-top: 8px; border: 0; border-radius: 10px; padding: 8px; background: #c1121f; color: #fff; font: inherit; font-size: 11px; font-weight: 950; cursor: pointer; }
 .voice-plugin.done .voice-save { display: block; }
-.voice-status { color: #d7d7dc; text-align: center; font-size: 14px; font-weight: 800; margin-top: 12px; }
+.voice-status { color: #d7d7dc; text-align: center; font-size: 10px; font-weight: 800; margin-top: 7px; }
 .template { border-left-color: #8b5cf6; }
 .nc-kind.template { color: #5b21b6; background: #f3e8ff; border-color: #ddd6fe; }
 .review-banner { display: none; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 12px; padding: 10px 12px; font-size: 12px; font-weight: 750; line-height: 1.4; margin: 0 0 12px; }
@@ -1152,17 +1153,17 @@ const WARD_TEMPLATE_LIBRARY = [
   { id: 'note', type: 'note', title: 'Bed Note', help: 'Default nursing note when no template is selected.', fields: ['Current observation', 'Intervention done', 'Patient response', 'Pending follow-up'] },
   { id: 'careplan', type: 'careplan', title: 'Care Plan', help: 'Structured care plan draft using approved nursing care-plan headings.', fields: ['Patient assessment cues', 'Applicable care-plan templates', 'Active problem', 'Goal', 'Nursing actions', 'Evaluation'] },
   { id: 'handover', type: 'handover', title: 'Handover Note', help: 'Shift handover for the next nurse.', fields: ['Identification', 'Current status', 'Relevant assessment', 'Events this shift', 'Watch', 'Next shift / pending'] },
-  { id: 'fall-risk', type: 'template', title: 'Hospital Fall Risk Assessment Tool', help: 'Fall-risk score and prevention bundle.', fields: ['Reason for reassessment', 'High-risk criteria', 'Low-risk criteria', 'Fall-risk score', 'Risk category', 'Prevention measures'] },
-  { id: 'dvt', type: 'template', title: 'Modified DVT Assessment Tool', help: 'Modified Wells-style DVT assessment.', fields: ['Clinical characteristics', 'Selected score items', 'Total score', 'Criteria of risk', 'Doctor informed if indicated'] },
-  { id: 'rhpass-icu', type: 'template', title: 'PASS ICU', help: 'ICU acuity and nursing dependency score.', fields: ['Organ support', 'Monitoring needs', 'Interventions', 'Total PASS score', 'Care requirement'] },
-  { id: 'braden', type: 'template', title: 'Braden Pressure Injury Risk Assessment', help: 'Pressure injury risk score and prevention bundle.', fields: ['Sensory perception', 'Moisture', 'Activity', 'Mobility', 'Nutrition', 'Friction and shear', 'Total score', 'Risk category'] },
-  { id: 'restraint', type: 'template', title: 'Restraint Monitoring Form', help: 'Physical or chemical restraint monitoring.', fields: ['Indication', 'Type of restraint', 'Monitoring observations', 'Release checks', 'Review / escalation'] },
-  { id: 'rhpass-ward', type: 'template', title: 'PASS Ward', help: 'Ward acuity and nursing dependency score.', fields: ['Patient dependency cues', 'Interventions', 'Monitoring need', 'Total PASS score', 'Care requirement'] },
-  { id: 'neuro-1', type: 'template', title: 'Adult Neurological Assessment Part 1', help: 'GCS, pupils, limb power, and neurological baseline.', fields: ['Date / time', 'Eye opening', 'Verbal response', 'Motor response', 'GCS total', 'Pupils', 'Limb power'] },
-  { id: 'neuro-2', type: 'template', title: 'Adult Neurological Assessment Part 2', help: 'Neurology trend, devices, feeding, safety, and monitoring.', fields: ['Neurological trend', 'Devices', 'Feeding', 'Safety concerns', 'Monitoring plan'] },
-  { id: 'transfer', type: 'template', title: 'In House Transfer', help: 'Transfer readiness and receiving-unit handover.', fields: ['Reason for transfer', 'Clinical status', 'Lines / tubes / drains', 'Documents', 'Medication / oxygen', 'Receiving unit handover'] },
-  { id: 'movement', type: 'template', title: 'Patient Movement Form', help: 'Movement to investigation, procedure, OT, cath lab, or ward.', fields: ['Destination', 'Reason for movement', 'Escort', 'Safety checklist', 'Return status'] },
-  { id: 'initial-assessment', type: 'template', title: 'Nursing Initial Assessment - Adult', help: 'Admission baseline nursing assessment.', fields: ['Admission details', 'Presenting complaints', 'Vitals', 'Baseline assessment', 'Risk screening', 'Initial nursing plan'] }
+  { id: 'fall-risk', type: 'template', title: 'Hospital Fall Risk Assessment Tool', help: 'Fall-risk score and prevention bundle.', href: 'template-rhfra.html', fields: ['Reason for reassessment', 'High-risk criteria', 'Low-risk criteria', 'Fall-risk score', 'Risk category', 'Prevention measures'] },
+  { id: 'dvt', type: 'template', title: 'Modified DVT Assessment Tool', help: 'Modified Wells-style DVT assessment.', href: 'template-modified-dvt-assessment.html', fields: ['Clinical characteristics', 'Selected score items', 'Total score', 'Criteria of risk', 'Doctor informed if indicated'] },
+  { id: 'rhpass-icu', type: 'template', title: 'PASS ICU', help: 'ICU acuity and nursing dependency score.', href: 'template-rhpass-icu.html', fields: ['Organ support', 'Monitoring needs', 'Interventions', 'Total PASS score', 'Care requirement'] },
+  { id: 'braden', type: 'template', title: 'Braden Pressure Injury Risk Assessment', help: 'Pressure injury risk score and prevention bundle.', href: 'template-braden-score.html', fields: ['Sensory perception', 'Moisture', 'Activity', 'Mobility', 'Nutrition', 'Friction and shear', 'Total score', 'Risk category'] },
+  { id: 'restraint', type: 'template', title: 'Restraint Monitoring Form', help: 'Physical or chemical restraint monitoring.', href: 'template-restraint-monitoring.html', fields: ['Indication', 'Type of restraint', 'Monitoring observations', 'Release checks', 'Review / escalation'] },
+  { id: 'rhpass-ward', type: 'template', title: 'PASS Ward', help: 'Ward acuity and nursing dependency score.', href: 'template-rhpass-ward.html', fields: ['Patient dependency cues', 'Interventions', 'Monitoring need', 'Total PASS score', 'Care requirement'] },
+  { id: 'neuro-1', type: 'template', title: 'Adult Neurological Assessment Part 1', help: 'GCS, pupils, limb power, and neurological baseline.', href: 'template-neuro-assessment-part-1.html', fields: ['Date / time', 'Eye opening', 'Verbal response', 'Motor response', 'GCS total', 'Pupils', 'Limb power'] },
+  { id: 'neuro-2', type: 'template', title: 'Adult Neurological Assessment Part 2', help: 'Neurology trend, devices, feeding, safety, and monitoring.', href: 'template-neuro-assessment-part-2.html', fields: ['Neurological trend', 'Devices', 'Feeding', 'Safety concerns', 'Monitoring plan'] },
+  { id: 'transfer', type: 'template', title: 'In House Transfer', help: 'Transfer readiness and receiving-unit handover.', href: 'template-in-house-transfer.html', fields: ['Reason for transfer', 'Clinical status', 'Lines / tubes / drains', 'Documents', 'Medication / oxygen', 'Receiving unit handover'] },
+  { id: 'movement', type: 'template', title: 'Patient Movement Form', help: 'Movement to investigation, procedure, OT, cath lab, or ward.', href: 'template-patient-movement.html', fields: ['Destination', 'Reason for movement', 'Escort', 'Safety checklist', 'Return status'] },
+  { id: 'initial-assessment', type: 'template', title: 'Nursing Initial Assessment - Adult', help: 'Admission baseline nursing assessment.', href: 'template-nursing-initial-assessment-adult.html', fields: ['Admission details', 'Presenting complaints', 'Vitals', 'Baseline assessment', 'Risk screening', 'Initial nursing plan'] }
 ];
 
 function currentNurseName() {
@@ -1208,6 +1209,14 @@ function renderActiveTemplatePreview() {
     return;
   }
   box.classList.add('show');
+  if (template.href) {
+    box.innerHTML = `
+      <div class="template-preview-title">${escapeHtml(template.title)}</div>
+      <div class="template-preview-help">Keep this template visible while dictating. The dictated details will be converted into a structured note for review.</div>
+      <iframe class="template-preview-frame" title="${escapeHtml(template.title)}" src="${escapeHtml(template.href)}"></iframe>
+    `;
+    return;
+  }
   box.innerHTML = `
     <div class="template-preview-title">${escapeHtml(template.title)}</div>
     <div class="template-preview-help">Use this as a visual checklist while dictating. Only dictated information will be filled; missing details remain for nurse verification.</div>
@@ -1854,7 +1863,7 @@ function drawVoiceEqualizer() {
       total += analyserDataArray[index * bucketSize + offset] || 0;
     }
     const average = total / bucketSize;
-    levels.push(!isRecording || isPaused || average < 8 ? 0 : Math.round(4 + (average / 255) * 26));
+    levels.push(!isRecording || isPaused || average < 8 ? 0 : Math.round(3 + (average / 255) * 15));
   }
   renderVoiceEqualizer(levels);
   equalizerFrame = requestAnimationFrame(drawVoiceEqualizer);
@@ -1870,7 +1879,7 @@ function startSyntheticVoiceEqualizer() {
     const levels = Array.from({ length: 28 }, (_, index) => {
       if (!isRecording || isPaused) return 0;
       const wave = Math.sin(now + index * 0.45) + Math.sin(now * 0.72 + index * 0.28);
-      return Math.max(0, Math.round(6 + wave * 8 + ((index % 5) * 1.4)));
+      return Math.max(0, Math.round(4 + wave * 4 + ((index % 5) * 0.9)));
     });
     renderVoiceEqualizer(levels);
     equalizerFrame = requestAnimationFrame(loop);
