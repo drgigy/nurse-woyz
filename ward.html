@@ -77,18 +77,21 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .mobile-shell-title { text-align: center; }
 .mobile-shell-title strong { display: block; color: #981b2d; font-size: 18px; font-weight: 900; }
 .mobile-shell-title span { display: block; color: #61738a; font-size: 12px; font-weight: 700; margin-top: 2px; }
-.nurse-profile-bar { position: fixed; left: 18px; right: 18px; bottom: 14px; z-index: 45; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; color: #162033; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 11px 14px; box-shadow: 0 14px 36px rgba(20,40,70,0.16); }
+.nurse-profile-bar { position: sticky; bottom: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #fff; color: #162033; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 12px 14px; box-shadow: 0 14px 36px rgba(20,40,70,0.14); cursor: pointer; }
 .nurse-profile-name { font-size: 14px; font-weight: 900; color: #981b2d; }
 .nurse-profile-sub { font-size: 11px; color: #61738a; margin-top: 2px; }
-.nurse-profile-menu { display: none; position: absolute; right: 12px; bottom: 58px; background: #fff; border: 1px solid #d7e1ef; border-radius: 14px; padding: 8px; min-width: 150px; box-shadow: 0 18px 40px rgba(20,40,70,0.18); }
+.nurse-profile-action { color: #981b2d; font-size: 12px; font-weight: 900; }
+.nurse-profile-menu { display: none; position: absolute; right: 10px; bottom: 58px; background: #fff; border: 1px solid #d7e1ef; border-radius: 14px; padding: 8px; min-width: 150px; box-shadow: 0 18px 40px rgba(20,40,70,0.18); }
 .nurse-profile-bar.open .nurse-profile-menu { display: block; }
 .nurse-profile-menu button { width: 100%; border: 0; background: #fff0f2; color: #981b2d; border-radius: 10px; padding: 10px 12px; font: inherit; font-weight: 900; cursor: pointer; text-align: left; }
 .mobile-drawer-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.42); opacity: 0; pointer-events: none; transition: opacity 0.18s; z-index: 90; }
 .mobile-drawer-backdrop.show { opacity: 1; pointer-events: auto; }
 .mobile-drawer { position: fixed; top: 0; bottom: 0; width: min(340px, 86vw); background: #fff; color: #162033; z-index: 95; padding: 18px; box-shadow: 0 0 40px rgba(15,23,42,0.25); transition: transform 0.22s ease; overflow-y: auto; }
+.mobile-drawer.left { display: flex; flex-direction: column; }
 .mobile-drawer.left { left: 0; transform: translateX(-105%); }
 .mobile-drawer.right { right: 0; transform: translateX(105%); }
 .mobile-drawer.show { transform: translateX(0); }
+#drawerNotificationList { flex: 1; padding-bottom: 16px; }
 .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .drawer-title { color: #981b2d; font-size: 22px; font-weight: 950; }
 .drawer-close { width: 38px; height: 38px; border-radius: 12px; border: 1px solid #d7e1ef; background: #fff; color: #52657d; font-size: 22px; cursor: pointer; }
@@ -112,12 +115,9 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .voice-plugin-head { display: flex; align-items: center; gap: 9px; color: #ff5454; font-size: 17px; font-weight: 950; cursor: grab; user-select: none; }
 .voice-plugin-head:active { cursor: grabbing; }
 .record-dot { width: 11px; height: 11px; background: #ff5454; border-radius: 50%; box-shadow: 0 0 0 8px rgba(255,84,84,0.12); }
-.voice-wave { display: flex; justify-content: center; gap: 7px; margin: 24px 0 16px; height: 10px; opacity: 0.38; }
-.voice-wave span { width: 7px; height: 7px; background: #ff5454; border-radius: 50%; }
-.voice-plugin.recording .voice-wave span { animation: voiceDots 0.9s infinite ease-in-out; }
-.voice-plugin.recording .voice-wave span:nth-child(2n) { animation-delay: 0.13s; }
-.voice-plugin.recording .voice-wave span:nth-child(3n) { animation-delay: 0.26s; }
-@keyframes voiceDots { 0%,100%{ transform: translateY(0); opacity:0.35; } 50%{ transform: translateY(-8px); opacity:0.9; } }
+.voice-wave { display: grid; grid-template-columns: repeat(28,1fr); align-items: end; gap: 3px; width: 76%; height: 30px; margin: 24px auto 16px; }
+.voice-wave span { height: 0; min-height: 0; background: #ff5454; border-radius: 999px 999px 3px 3px; opacity: 0; transition: height 0.06s linear, opacity 0.08s linear; }
+.voice-plugin.recording .voice-wave span.active { opacity: 1; }
 .voice-timer { text-align: center; font-size: 48px; line-height: 1; font-weight: 950; letter-spacing: 2px; margin-bottom: 18px; }
 .voice-actions { display: flex; justify-content: center; align-items: center; gap: 14px; }
 .voice-round { width: 78px; height: 78px; border-radius: 50%; border: 0; background: #2e2f34; color: #fff; font-size: 32px; font-weight: 950; cursor: pointer; }
@@ -750,16 +750,6 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="b-st">Vacant</div>
     </div></div>
   </div>
-  <div class="nurse-profile-bar" id="nurseProfileBar" onclick="toggleNurseProfileMenu(event)">
-    <div>
-      <div class="nurse-profile-name" data-current-nurse>Nurse</div>
-      <div class="nurse-profile-sub">On shift</div>
-    </div>
-    <button class="exit-btn" type="button">Account</button>
-    <div class="nurse-profile-menu">
-      <button type="button" onclick="doLogout()">Exit Shift</button>
-    </div>
-  </div>
 </div>
 
 <!-- ══ MIC ══ -->
@@ -815,7 +805,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   <button class="copy-bed-btn copy-bed-bottom" onclick="copyCurrentBedNotes()">Copy Bed Notes</button>
   <div class="voice-plugin" id="voicePlugin" aria-live="polite">
     <div class="voice-plugin-head" id="voicePluginHandle"><span class="record-dot"></span><span id="voicePluginTitle">Voice note draft</span></div>
-    <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="voice-wave" id="voiceEqualizer" aria-label="Voice activity meter"></div>
     <div class="voice-timer" id="voiceTimer">05:00</div>
     <div class="voice-actions">
       <button class="voice-round light" id="voicePauseBtn" type="button" onclick="togglePauseMic()">Ⅱ</button>
@@ -834,6 +824,16 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <button class="drawer-close" onclick="closeMobileDrawers()">×</button>
   </div>
   <div id="drawerNotificationList"></div>
+  <div class="nurse-profile-bar" id="nurseProfileBar" onclick="toggleNurseProfileMenu(event)">
+    <div>
+      <div class="nurse-profile-name" data-current-nurse>Nurse</div>
+      <div class="nurse-profile-sub">On shift</div>
+    </div>
+    <div class="nurse-profile-action">Exit</div>
+    <div class="nurse-profile-menu">
+      <button type="button" onclick="doLogout()">Exit Shift</button>
+    </div>
+  </div>
 </aside>
 <aside class="mobile-drawer right" id="templatesDrawer" aria-hidden="true">
   <div class="drawer-head">
@@ -1128,6 +1128,12 @@ let currentBedMode = 'review';
 let activeTemplateId = 'note';
 let voiceTimerSeconds = 300;
 let voiceTimerInterval = null;
+let audioContext = null;
+let analyserNode = null;
+let analyserDataArray = null;
+let audioSourceNode = null;
+let equalizerFrame = null;
+let equalizerSynthetic = false;
 
 const WARD_TEMPLATE_LIBRARY = [
   { id: 'note', type: 'note', title: 'Bed Note', help: 'Default nursing note when no template is selected.', fields: ['Current observation', 'Intervention done', 'Patient response', 'Pending follow-up'] },
@@ -1293,6 +1299,7 @@ function showScreen(name) {
 
 function closeMobileDrawers() {
   document.getElementById('mobileDrawerBackdrop')?.classList.remove('show');
+  document.getElementById('nurseProfileBar')?.classList.remove('open');
   ['notificationsDrawer', 'templatesDrawer'].forEach(id => {
     const drawer = document.getElementById(id);
     if (drawer) {
@@ -1400,6 +1407,8 @@ function doLogin() {
   }
 }
 function doLogout() {
+  closeMobileDrawers();
+  hideVoicePlugin();
   pinEntry = ''; updateDots();
   activeNurse = null;
   currentBed = null;
@@ -1723,12 +1732,14 @@ function startBedNoteFromRoom() {
 function showVoicePlugin() {
   const plugin = document.getElementById('voicePlugin');
   if (!plugin) return;
+  ensureVoiceEqualizerBars();
   plugin.classList.add('show');
   syncVoicePluginUI('idle');
 }
 
 function hideVoicePlugin() {
   document.getElementById('voicePlugin')?.classList.remove('show', 'recording', 'done');
+  stopVoiceEqualizer();
 }
 
 function startVoiceTimer(seconds = 300) {
@@ -1766,6 +1777,94 @@ function updateVoiceTimer() {
   timer.textContent = mins + ':' + secs;
 }
 
+function ensureVoiceEqualizerBars() {
+  const equalizer = document.getElementById('voiceEqualizer');
+  if (!equalizer || equalizer.children.length) return;
+  equalizer.innerHTML = Array.from({ length: 28 }, () => '<span></span>').join('');
+}
+
+function renderVoiceEqualizer(levels = []) {
+  ensureVoiceEqualizerBars();
+  const bars = [...document.querySelectorAll('#voiceEqualizer span')];
+  bars.forEach((bar, index) => {
+    const level = levels[index] || 0;
+    bar.style.height = level ? level + 'px' : '0px';
+    bar.classList.toggle('active', level > 0);
+  });
+}
+
+function stopVoiceEqualizer(closeContext = true) {
+  if (equalizerFrame) cancelAnimationFrame(equalizerFrame);
+  equalizerFrame = null;
+  equalizerSynthetic = false;
+  if (audioSourceNode) {
+    try { audioSourceNode.disconnect(); } catch(e) {}
+  }
+  audioSourceNode = null;
+  analyserNode = null;
+  analyserDataArray = null;
+  if (closeContext && audioContext) {
+    audioContext.close?.().catch(() => {});
+    audioContext = null;
+  }
+  renderVoiceEqualizer();
+}
+
+function startVoiceEqualizer(stream) {
+  ensureVoiceEqualizerBars();
+  stopVoiceEqualizer(false);
+  try {
+    const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextCtor) return;
+    audioContext = new AudioContextCtor();
+    analyserNode = audioContext.createAnalyser();
+    analyserNode.fftSize = 256;
+    analyserNode.smoothingTimeConstant = 0.68;
+    analyserDataArray = new Uint8Array(analyserNode.frequencyBinCount);
+    audioSourceNode = audioContext.createMediaStreamSource(stream);
+    audioSourceNode.connect(analyserNode);
+    drawVoiceEqualizer();
+  } catch(e) {
+    stopVoiceEqualizer();
+  }
+}
+
+function drawVoiceEqualizer() {
+  if (!analyserNode || !analyserDataArray) return;
+  analyserNode.getByteFrequencyData(analyserDataArray);
+  const barCount = 28;
+  const bucketSize = Math.max(1, Math.floor(analyserDataArray.length / barCount));
+  const levels = [];
+  for (let index = 0; index < barCount; index++) {
+    let total = 0;
+    for (let offset = 0; offset < bucketSize; offset++) {
+      total += analyserDataArray[index * bucketSize + offset] || 0;
+    }
+    const average = total / bucketSize;
+    levels.push(!isRecording || isPaused || average < 8 ? 0 : Math.round(4 + (average / 255) * 26));
+  }
+  renderVoiceEqualizer(levels);
+  equalizerFrame = requestAnimationFrame(drawVoiceEqualizer);
+}
+
+function startSyntheticVoiceEqualizer() {
+  ensureVoiceEqualizerBars();
+  stopVoiceEqualizer(false);
+  equalizerSynthetic = true;
+  const loop = () => {
+    if (!equalizerSynthetic) return;
+    const now = Date.now() / 120;
+    const levels = Array.from({ length: 28 }, (_, index) => {
+      if (!isRecording || isPaused) return 0;
+      const wave = Math.sin(now + index * 0.45) + Math.sin(now * 0.72 + index * 0.28);
+      return Math.max(0, Math.round(6 + wave * 8 + ((index % 5) * 1.4)));
+    });
+    renderVoiceEqualizer(levels);
+    equalizerFrame = requestAnimationFrame(loop);
+  };
+  loop();
+}
+
 function syncVoicePluginUI(state) {
   const plugin = document.getElementById('voicePlugin');
   if (!plugin) return;
@@ -1776,6 +1875,7 @@ function syncVoicePluginUI(state) {
   const record = document.getElementById('voiceRecordBtn');
   plugin.classList.toggle('recording', state === 'recording');
   plugin.classList.toggle('done', state === 'done');
+  if (state !== 'recording') renderVoiceEqualizer();
   if (state === 'idle') {
     status.textContent = template.id === 'note' ? 'Ready to record new voice note' : 'Ready to fill this template by voice';
     pause.textContent = 'Ⅱ';
@@ -1859,6 +1959,7 @@ function resetMicState() {
   currentNoteType = noteTypeForTemplate(activeTemplateId);
   autoSaveAfterTranscription = false;
   stopVoiceTimer();
+  stopVoiceEqualizer();
   setMicUI('idle');
   // raw hidden
   setPreviewText('');
@@ -1932,11 +2033,13 @@ async function startRecording() {
     mediaRecorder.onstop = () => {
       currentAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
       currentDictationTime = getCurrentTime();
+      stopVoiceEqualizer();
       if (audioStream) audioStream.getTracks().forEach(track => track.stop());
       audioStream = null;
       mediaRecorder = null;
       sendAudioToGemini(currentAudioBlob);
     };
+    startVoiceEqualizer(audioStream);
     mediaRecorder.start();
     isRecording = true;
     isPaused = false;
@@ -1944,6 +2047,7 @@ async function startRecording() {
     setMicUI('recording');
     document.getElementById('btnPause').disabled = false;
   } catch(e) {
+    stopVoiceEqualizer();
     document.getElementById('btnHandover').disabled = false;
     document.getElementById('btnCarePlan').disabled = false;
     showToast('Mic blocked — check browser permissions', true);
@@ -1998,6 +2102,7 @@ function stopRecording() {
   document.getElementById('btnCarePlan').disabled = true;
   document.getElementById('micBtn').classList.remove('recording');
   document.getElementById('micBtn').classList.remove('paused');
+  renderVoiceEqualizer();
   if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
   else setMicUI('idle');
 }
@@ -2011,6 +2116,7 @@ function pauseMic() {
   if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
   mediaRecorder.pause();
   isPaused = true;
+  renderVoiceEqualizer();
   setMicUI('paused');
   document.getElementById('btnPause').disabled = false;
 }
@@ -2278,6 +2384,7 @@ function runSimulation() {
   isPaused = false;
   startVoiceTimer();
   setMicUI('recording');
+  startSyntheticVoiceEqualizer();
   document.getElementById('btnPause').disabled = false;
 
   const phrase = SIM_PHRASES[simIdx % SIM_PHRASES.length];
@@ -2295,6 +2402,7 @@ function runSimulation() {
       clearInterval(iv);
       isRecording = false;
       stopVoiceTimer(false);
+      stopVoiceEqualizer(false);
       document.getElementById('micBtn').classList.remove('recording');
       document.getElementById('btnPause').disabled = true;
       // Use pre-built English for simulation
