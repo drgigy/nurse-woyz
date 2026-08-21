@@ -15,8 +15,12 @@ function dateTime() {
   return '<input type="datetime-local">';
 }
 
-function select(options) {
-  return `<select>${options.map(option => `<option>${escapeHtml(option)}</option>`).join('')}</select>`;
+function select(options, attrs = '') {
+  return `<select ${attrs}>${options.map(option => {
+    const label = typeof option === 'object' ? option.label : option;
+    const score = typeof option === 'object' && option.score !== undefined ? ` data-score="${option.score}"` : '';
+    return `<option${score}>${escapeHtml(label)}</option>`;
+  }).join('')}</select>`;
 }
 
 function textarea(rows = 4, placeholder = '') {
@@ -32,7 +36,7 @@ function twoColRow(leftLabel, leftControl, rightLabel, rightControl) {
 }
 
 function scoreRow(label, options = ['Select'], scorePlaceholder = '') {
-  return `<div class="score-row"><label>${escapeHtml(label)}</label><div>${select(options)}</div><div>${input(scorePlaceholder)}</div></div>`;
+  return `<div class="score-row"><label>${escapeHtml(label)}</label><div>${select(options, 'class="score-select"')}</div><div><input class="score-value" type="text" placeholder="${escapeHtml(scorePlaceholder)}" readonly></div></div>`;
 }
 
 function check(text) {
@@ -45,6 +49,18 @@ function bar(text) {
 
 function miniHeader(left, right = 'Score') {
   return `<div class="mini-head"><span>${escapeHtml(left)}</span><span>${escapeHtml(right)}</span></div>`;
+}
+
+function scored(label, score) {
+  return { label, score };
+}
+
+function calculatedResult(categoryLabel = 'Category / Result') {
+  return `
+    <div class="calculation-result">
+      <div><label>Total Score</label><input class="auto-total" type="text" value="0" readonly></div>
+      <div><label>${escapeHtml(categoryLabel)}</label><input class="auto-category" type="text" value="Not assessed" readonly></div>
+    </div>`;
 }
 
 function patientHeader() {
@@ -100,15 +116,15 @@ function fallRiskTemplate() {
     <div class="check-grid">${check('Completely paralyzed or immobilized or comatose')}</div>
     ${bar('FALL RISK SCORE CALCULATION - Select the appropriate option in each category. Add all points to calculate Fall Risk Score.')}
     <div class="score-grid">
-      ${scoreRow('Age', ['Select', 'Below 60', '60 to 69', '70 to 79', '80 and above'])}
-      ${scoreRow('Fall history', ['Select', 'No fall history', 'One fall history', 'More than one fall history'])}
-      ${scoreRow('Elimination, bowel and urine', ['Select', 'No concern', 'Frequency / urgency', 'Incontinence / catheter care'])}
-      ${scoreRow('Medications: PCA, opioids, anticonvulsants, antihypertensives, diuretics, hypnotics, laxatives, sedatives, psychotropics', ['Select', 'None', 'One high fall risk medication', 'Two or more high fall risk medications'])}
-      ${scoreRow('Patient care equipment tethering patient: IV infusion, chest tube, indwelling catheter, SCDs, etc.', ['Select', 'None', 'With one device', 'With more than one device'])}
-      ${scoreRow('Mobility', ['Select', 'Steady gait', 'Unsteady gait', 'Needs assistance'])}
-      ${scoreRow('Cognition', ['Select', 'Oriented', 'Intermittently confused', 'Confused / impulsive', 'N/A'])}
+      ${scoreRow('Age', [scored('Select', 0), scored('Below 60', 0), scored('60 to 69', 1), scored('70 to 79', 2), scored('80 and above', 3)])}
+      ${scoreRow('Fall history', [scored('Select', 0), scored('No fall history', 0), scored('One fall history', 2), scored('More than one fall history', 3)])}
+      ${scoreRow('Elimination, bowel and urine', [scored('Select', 0), scored('No concern', 0), scored('Frequency / urgency', 1), scored('Incontinence / catheter care', 2)])}
+      ${scoreRow('Medications: PCA, opioids, anticonvulsants, antihypertensives, diuretics, hypnotics, laxatives, sedatives, psychotropics', [scored('Select', 0), scored('None', 0), scored('One high fall risk medication', 3), scored('Two or more high fall risk medications', 5)])}
+      ${scoreRow('Patient care equipment tethering patient: IV infusion, chest tube, indwelling catheter, SCDs, etc.', [scored('Select', 0), scored('None', 0), scored('With one device', 1), scored('With more than one device', 2)])}
+      ${scoreRow('Mobility', [scored('Select', 0), scored('Steady gait', 0), scored('Unsteady gait', 2), scored('Needs assistance', 3)])}
+      ${scoreRow('Cognition', [scored('Select', 0), scored('Oriented', 0), scored('Intermittently confused', 1), scored('Confused / impulsive', 2), scored('N/A', 0)])}
     </div>
-    ${twoColRow('Total Score', input('0'), 'Category of risk', select(['Select', 'Low Risk (0-5)', 'Moderate Risk (6-13)', 'High Risk (>13)']))}
+    ${calculatedResult('Category of risk')}
     ${bar('Standard Fall Prevention Measures')}
     <div class="check-grid">${standard.map(check).join('')}</div>
     ${bar('Fall Prevention Measures for Moderate Risk')}
@@ -136,9 +152,11 @@ function dvtTemplate() {
     ${bar('DVT Assessment - Modified WELLS Scoring')}
     ${row('Reason for re-assessment', select(['Select', 'As per Moderate Risk (1 to 2) and High Risk (>=3) DVT Policy']))}
     ${miniHeader('Clinical Characteristics', 'Score')}
-    <div class="score-grid">${rows.map(item => scoreRow(item, ['Select', 'No', 'Yes'])).join('')}</div>
-    ${row('Total Score', input('0'))}
-    ${row('Criteria of risk', select(['Select', '-2 to 0 : Low Risk', '1 to 2 : Moderate Risk', '>=3 : High Risk']))}
+    <div class="score-grid">${rows.map((item, index) => {
+      const yesScore = index === 9 ? -2 : 1;
+      return scoreRow(item, [scored('Select', 0), scored('No', 0), scored('Yes', yesScore)]);
+    }).join('')}</div>
+    ${calculatedResult('Criteria of risk')}
     ${row('If score is >2, informed doctor', select(['Select', 'Yes', 'No', 'Not applicable']))}
     ${row('DVT prophylaxis / monitoring remarks', textarea(4, 'Compression device, anticoagulant status, Doppler pending, bleeding watch, or escalation.'), 'full-row')}`;
 }
@@ -151,14 +169,14 @@ function bradenTemplate() {
     <div class="callout">Braden pressure ulcer risk assessment: Total Score Auto Calculated</div>
     ${miniHeader('Criteria', 'Score')}
     <div class="score-grid">
-      ${scoreRow('Sensory perception', ['Select', 'Completely limited', 'Very limited', 'Slightly limited', 'No impairment'])}
-      ${scoreRow('Moisture', ['Select', 'Constantly moist', 'Very moist', 'Occasionally moist', 'Rarely moist'])}
-      ${scoreRow('Activity', ['Select', 'Bedfast', 'Chairfast', 'Walks occasionally', 'Walks frequently'])}
-      ${scoreRow('Mobility', ['Select', 'Completely immobile', 'Very limited', 'Slightly limited', 'No limitation'])}
-      ${scoreRow('Nutrition', ['Select', 'Very poor', 'Probably inadequate', 'Adequate', 'Excellent'])}
-      ${scoreRow('Friction and shear', ['Select', 'Problem', 'Potential problem', 'No apparent problem'])}
+      ${scoreRow('Sensory perception', [scored('Select', 0), scored('Completely limited', 1), scored('Very limited', 2), scored('Slightly limited', 3), scored('No impairment', 4)])}
+      ${scoreRow('Moisture', [scored('Select', 0), scored('Constantly moist', 1), scored('Very moist', 2), scored('Occasionally moist', 3), scored('Rarely moist', 4)])}
+      ${scoreRow('Activity', [scored('Select', 0), scored('Bedfast', 1), scored('Chairfast', 2), scored('Walks occasionally', 3), scored('Walks frequently', 4)])}
+      ${scoreRow('Mobility', [scored('Select', 0), scored('Completely immobile', 1), scored('Very limited', 2), scored('Slightly limited', 3), scored('No limitation', 4)])}
+      ${scoreRow('Nutrition', [scored('Select', 0), scored('Very poor', 1), scored('Probably inadequate', 2), scored('Adequate', 3), scored('Excellent', 4)])}
+      ${scoreRow('Friction and shear', [scored('Select', 0), scored('Problem', 1), scored('Potential problem', 2), scored('No apparent problem', 3)])}
     </div>
-    ${twoColRow('Total Score', input(''), 'Category of risk', select(['Select', 'None (19-23)', 'Mild risk (15-18)', 'Moderate risk (13-14)', 'High risk (10-12)', 'Severe risk (<=9)']))}
+    ${calculatedResult('Category of risk')}
     ${bar('Follow aSSKINg Care Bundle for risk assessment')}
     <div class="check-grid">
       ${check('a - Assess the risk of patient')}
@@ -178,11 +196,11 @@ function neuroPartOneTemplate() {
     ${bar('NEUROLOGICAL ASSESSMENT CHART PART I')}
     ${bar('1) GCS Score')}
     <div class="score-grid">
-      ${scoreRow('Eye Opening', ['Select', 'No eye opening', 'To pain', 'To speech', 'Open spontaneously'], 'E')}
-      ${scoreRow('Verbal', ['Select', 'No verbal response', 'Incomprehensible sounds', 'Inappropriate words', 'Confused', 'Oriented'], 'V')}
-      ${scoreRow('Motor', ['Select', 'No motor response', 'Extension', 'Flexion', 'Withdraws', 'Localizes pain', 'Obeys commands'], 'M')}
+      ${scoreRow('Eye Opening', [scored('Select', 0), scored('No eye opening', 1), scored('To pain', 2), scored('To speech', 3), scored('Open spontaneously', 4)], 'E')}
+      ${scoreRow('Verbal', [scored('Select', 0), scored('No verbal response', 1), scored('Incomprehensible sounds', 2), scored('Inappropriate words', 3), scored('Confused', 4), scored('Oriented', 5)], 'V')}
+      ${scoreRow('Motor', [scored('Select', 0), scored('No motor response', 1), scored('Extension', 2), scored('Flexion', 3), scored('Withdraws', 4), scored('Localizes pain', 5), scored('Obeys commands', 6)], 'M')}
     </div>
-    ${row('Total GCS Score', input(''))}
+    ${calculatedResult('GCS interpretation')}
     ${bar('Pupils')}
     <div class="pupil-panel">
       <div class="pupil-ref">${[1,2,3,4,5,6,7].map(size => `<span><i style="width:${size * 7}px;height:${size * 7}px"></i>${size} mm</span>`).join('')}</div>
@@ -228,40 +246,62 @@ function neuroPartTwoTemplate() {
 
 function rhpassWardTemplate() {
   const rows = [
+    ['Cognition', ['Alert / cooperative / complete sedation', 'Anxious / confused / light sedation / slightly agitated', 'Delirium / partial restraint / moderate sedation / moderately agitated', 'Severely agitated / combative / pulls out lines and tubes / complete restraint']],
     ['Mobility / Fall Risk', ['Independent / ambulant', 'Supervised mobility / low fall risk', 'Partially dependent / moderate fall risk', 'Completely dependent / high fall risk']],
-    ['Elimination', ['Independent', 'Needs assistance', 'Catheter / bowel support', 'Complete assistance / close monitoring']],
-    ['Nutrition / Feeding', ['Self-feeding', 'Needs supervision', 'Assisted feeding / Ryle tube', 'Complex feeding / aspiration watch']],
-    ['Medication / Infusion Complexity', ['Routine oral medication', 'Scheduled injections', 'IV infusion / antibiotics', 'Multiple infusions / high alert monitoring']],
-    ['Monitoring Requirement', ['Routine vitals', '4 hourly vitals', 'Frequent vitals / intake output', 'Close monitoring / unstable']],
-    ['Skin Integrity', ['Braden 16-19', 'Braden 14-15', 'Braden 12-13', 'Braden less than 12 / frequent position change']],
-    ['Admission Status / Education', ['Standard education', 'Transfer education', 'Discharge education', 'New admission / isolation / immediate post-op']]
+    ['Medication', ['<5 medications', '5-10 medications', '10-15 medications', '>16 medications / any emergency medication']],
+    ['IV Infusions', ['No IV medication or infusion', 'IV medications (1-2) / IV infusion (1)', 'IV medications (3-4) and IV infusions (2-3)', 'More than 4 IV medications and infusions / replacement of large fluid losses']],
+    ['Personal Care', ['Independent', 'Supervised care', 'One-person assistance', 'Two-person assistance / specialised care / log-roll positioning']],
+    ['Dressing', ['No dressing', 'Dressing daily once', 'Dressing twice a day', 'Dressing more than twice / multiple dressings']],
+    ['Vital Signs', ['Routine monitoring every 4 hours', '2-hourly monitoring', 'Hourly monitoring', 'Continuous / frequent monitoring less than 1 hour']],
+    ['Skin Integrity', ['Braden score 16-19', 'Braden score 14-15', 'Braden score 12-13', 'Braden score less than 12 / frequent position change']],
+    ['Elimination', ['Independent', 'Incontinence / stoma with minimum assistance', '>3 times emptying stoma bag with full assistance', '>5 times complex stoma needs / continuous loose stools / melena']],
+    ['Additional Procedures', ['No procedures', '1-3 procedures in the unit', '1-3 procedures outside the unit', 'Multiple procedures >3 inside and outside department / multiple specific interventions']],
+    ['Hydration / Nutrition', ['Independent / oral intake', 'Feeding under supervision', 'Continuous NG / PEG / JJ feed', 'Frequent NG feed']],
+    ['Airway Support', ['Spontaneous breathing', 'O2 <=5 L/min', 'O2 >5 L/min', 'Continuous or intermittent BiPAP / CPAP']],
+    ['Admission Status / Education', ['Admission with standard education', 'Transfer in/out / specific transfer education', 'Discharge / education regarding discharge', 'New ward admission / isolation / immediate post-op']],
+    ['Pain Management', ['Pain scale <3 with pain management', 'Pain scale 3-4 / medication with non-pharmacological management', 'Pain scale 5-6 with pain medication', 'Pain scale >6 with multiple pain medications (IV / IM / PO)']],
+    ['Number of Lines & Tubes', ['No lines/tubes or any non-critical lines/tubes', '2-3 non-critical lines/tubes or 1 critical line', '2-3 critical lines', '>4 critical lines']]
   ];
   return `
     ${patientHeader()}
     ${bar('RHPASS WARD')}
-    <div class="score-grid">${rows.map(([label, options]) => scoreRow(label, ['Select', ...options])).join('')}</div>
-    ${twoColRow('Total Score', input(''), 'Recommended nursing care requirement', select(['Select', 'Low dependency', 'Moderate dependency', 'High dependency', 'Very high dependency']))}
+    <div class="score-grid">${rows.map(([label, options]) => scoreRow(label, [scored('Select', 0), ...options.map((option, index) => scored(option, index + 1))])).join('')}</div>
+    ${calculatedResult('Acuity / Recommended N:P')}
     ${row('Supervisor verification / remarks', textarea(4), 'full-row')}`;
 }
 
 function rhpassIcuTemplate() {
   const rows = [
-    'Mechanical ventilation / advanced respiratory support',
-    'High-flow oxygen / NIV / frequent suctioning',
-    'Vasoactive drug / hemodynamic support',
-    'Invasive arterial / central venous monitoring',
-    'Hourly neurological or hemodynamic observation',
-    'Renal replacement therapy / strict urine output monitoring',
-    'Multiple drains / tubes / post-operative ICU care',
-    'Isolation / infection control / complex wound care',
-    'Frequent blood sampling / glucose monitoring',
-    'High-alert medication or titratable infusion'
+    ['Immunocompromised / infectious / condition requiring 1:1 care', 0],
+    ['Standard monitoring (hourly vital signs and IV fluid balance)', 5],
+    ['Multiple vasoactive medication', 5],
+    ['Multiple specific interventions in the ICU', 5],
+    ['Mechanical ventilation', 5],
+    ['IV replacement of large fluid losses (>3 litres/day)', 4],
+    ['Central venous line', 4],
+    ['Multiple intravenous medication', 3],
+    ['Care of drains except nasogastric tube', 3],
+    ['Specific interventions outside ICU', 3],
+    ['Supplementary ventilator support: O2, CPAP, NIV, HFNC, BiPAP', 3],
+    ['Care of artificial airways', 3],
+    ['Hemofiltration / dialytic techniques', 3],
+    ['Measurement of ICP / EVD', 3],
+    ['Treatment of complicated metabolic acidosis / alkalosis', 3],
+    ['Intravenous hyperalimentation (TPN)', 3],
+    ['Laboratory investigations', 2],
+    ['Dressing changes', 2],
+    ['Arterial line / epidural', 2],
+    ['Quantitative urine output measurement', 2],
+    ['Active diuresis', 2],
+    ['GRBS monitoring with insulin infusion', 2],
+    ['Enteral feeding through tube / GI route', 2],
+    ['Treatment to improve lung function', 1]
   ];
   return `
     ${patientHeader()}
     ${bar('RHPASS ICU')}
-    <div class="score-grid">${rows.map(item => scoreRow(item, ['Select', 'No', 'Yes'])).join('')}</div>
-    ${twoColRow('Total Score', input(''), 'ICU Acuity Category', select(['Select', 'Low ICU dependency', 'Moderate ICU dependency', 'High ICU dependency', 'Very high ICU dependency']))}
+    <div class="score-grid">${rows.map(([item, points]) => scoreRow(item, [scored('Select', 0), scored('No', 0), scored('Yes', points)])).join('')}</div>
+    ${calculatedResult('ICU acuity / ratio')}
     ${row('Recommended nurse ratio / supervisor verification', textarea(4), 'full-row')}`;
 }
 
@@ -436,6 +476,70 @@ function renderTemplate() {
     <div class="summary-card"><strong>Voice Rule</strong><span class="muted">Capture only what the nurse dictates. Do not fill normal findings automatically.</span></div>
   `;
   document.getElementById('formSections').innerHTML = `<section class="emr-form">${template.html()}</section>`;
+  attachScoring();
+}
+
+function categoryForTemplate(templateId, total) {
+  if (!total && templateId !== 'dvt') return 'Not assessed';
+  if (templateId === 'rhfra') {
+    if (total <= 5) return 'Low Risk (0-5)';
+    if (total <= 13) return 'Moderate Risk (6-13)';
+    return 'High Risk (>13)';
+  }
+  if (templateId === 'dvt') {
+    if (total <= 0) return '-2 to 0 : Low Risk';
+    if (total <= 2) return '1 to 2 : Moderate Risk';
+    return '>=3 : High Risk - inform doctor';
+  }
+  if (templateId === 'braden') {
+    if (total >= 19) return 'None (19-23)';
+    if (total >= 15) return 'Mild risk (15-18)';
+    if (total >= 13) return 'Moderate risk (13-14)';
+    if (total >= 10) return 'High risk (10-12)';
+    return 'Severe risk (<=9)';
+  }
+  if (templateId === 'neuro1') {
+    if (total >= 13) return 'GCS 13-15: mild / near normal';
+    if (total >= 9) return 'GCS 9-12: moderate impairment';
+    if (total >= 3) return 'GCS 3-8: severe impairment';
+    return 'Not assessed';
+  }
+  if (templateId === 'rhpassWard') {
+    if (total <= 15) return 'Acuity 1 - Recommended N:P 1:6';
+    if (total <= 29) return 'Acuity 2 - Recommended N:P 1:5';
+    if (total <= 44) return 'Acuity 3 - Recommended N:P 1:3';
+    return 'Acuity 4 - Recommended N:P 1:2';
+  }
+  if (templateId === 'rhpassIcu') {
+    const firstSelect = document.querySelector('.score-row .score-select');
+    if (firstSelect && firstSelect.selectedIndex === 2) return '1:1 care required';
+    return total >= 22 ? 'High acuity (score >=22)' : 'Low acuity (score <22)';
+  }
+  return 'Calculated';
+}
+
+function updateScores() {
+  const templateId = getTemplateId();
+  let total = 0;
+  document.querySelectorAll('.score-row').forEach(rowElement => {
+    const selectElement = rowElement.querySelector('.score-select');
+    const scoreElement = rowElement.querySelector('.score-value');
+    const selected = selectElement.options[selectElement.selectedIndex];
+    const score = Number(selected.dataset.score || 0);
+    total += score;
+    scoreElement.value = selectElement.selectedIndex === 0 ? '' : score;
+  });
+  const totalElement = document.querySelector('.auto-total');
+  const categoryElement = document.querySelector('.auto-category');
+  if (totalElement) totalElement.value = total;
+  if (categoryElement) categoryElement.value = categoryForTemplate(templateId, total);
+}
+
+function attachScoring() {
+  document.querySelectorAll('.score-select').forEach(selectElement => {
+    selectElement.addEventListener('change', updateScores);
+  });
+  updateScores();
 }
 
 function showToast(message) {

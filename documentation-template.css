@@ -128,6 +128,35 @@ main {
   padding: 10px 12px;
   margin: 10px 0 4px;
 }
+.calculation-result {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: end;
+  border: 2px solid #a6192e;
+  border-radius: 12px;
+  background: #fff7f8;
+  padding: 12px;
+  margin: 12px 0;
+}
+.calculation-result label {
+  display: block;
+  color: #a6192e;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.calculation-result input {
+  color: #a6192e;
+  font-weight: 900;
+  background: #fff;
+}
+.calculation-result .auto-total {
+  font-size: 30px;
+  min-height: 50px;
+}
 .patient-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -267,7 +296,8 @@ button.secondary {
   .topbar { align-items: flex-start; flex-direction: column; }
   .summary-grid,
   .patient-grid,
-  .check-grid { grid-template-columns: 1fr; }
+  .check-grid,
+  .calculation-result { grid-template-columns: 1fr; }
   .score-row,
   .emr-row,
   .emr-row.full-row,
