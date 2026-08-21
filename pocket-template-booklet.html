@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a6192e">
+  <title>Nurse WOYZ Pocket Dictation Booklet</title>
+  <script src="./access-control.js"></script>
+  <style>
+    :root {
+      --red: #a6192e;
+      --deep: #111827;
+      --muted: #5b6b82;
+      --line: #e7c0c6;
+      --soft: #fff7f8;
+      --paper: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg,#fff7f8 0,#fff 28%,#f7f9fc 100%);
+      color: var(--deep);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px;
+      border-bottom: 1px solid #f1d3d8;
+      background: rgba(255,255,255,.82);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      font-size: 22px;
+      letter-spacing: .5px;
+    }
+    h1 { margin: 0; color: var(--red); font-size: clamp(26px,4vw,44px); line-height: 1; }
+    .subtitle { margin: 5px 0 0; color: var(--muted); font-size: 15px; font-weight: 650; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    button, a.button {
+      border: 1.5px solid #efb7c0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: #fff;
+      color: var(--red);
+      font: inherit;
+      font-weight: 900;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button.primary { background: var(--red); color: #fff; border-color: var(--red); }
+    main { width: min(1220px, calc(100% - 32px)); margin: 24px auto 48px; }
+    .note {
+      border: 1.5px dashed #efb7c0;
+      border-radius: 18px;
+      background: #fff;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+    .booklet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+    .pocket-page {
+      width: 100%;
+      min-height: 410px;
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(166,25,46,.08);
+      display: flex;
+      flex-direction: column;
+      page-break-inside: avoid;
+    }
+    .cover {
+      background:
+        radial-gradient(circle at top right, rgba(166,25,46,.16), transparent 38%),
+        linear-gradient(135deg,#fff,#fff7f8);
+      justify-content: center;
+      text-align: center;
+      min-height: 410px;
+    }
+    .cover .small-mark {
+      width: 74px;
+      height: 74px;
+      border-radius: 24px;
+      margin: 0 auto 18px;
+      background: var(--red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      font-weight: 950;
+    }
+    .cover h2 { margin: 0; color: var(--red); font-size: 34px; line-height: 1.05; }
+    .cover p { color: var(--muted); font-size: 16px; line-height: 1.45; font-weight: 700; }
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 2px solid #f5d7dc;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .page-title { color: var(--red); font-size: 22px; font-weight: 950; line-height: 1.1; }
+    .page-no {
+      flex: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: #fff;
+      font-weight: 950;
+    }
+    .cue-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .cue-list li {
+      border: 1px solid #f2d4d9;
+      background: var(--soft);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+    .footer {
+      margin-top: auto;
+      padding-top: 12px;
+      color: #8794a8;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .mini { color: var(--muted); font-size: 12px; line-height: 1.35; font-weight: 750; margin: 0 0 12px; }
+    @media print {
+      @page { size: A4 portrait; margin: 8mm; }
+      body { background: #fff; }
+      .top, .note { display: none; }
+      main { width: 100%; margin: 0; }
+      .booklet-grid { grid-template-columns: repeat(2, 1fr); gap: 6mm; }
+      .pocket-page {
+        min-height: 132mm;
+        border-radius: 10mm;
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="mark">NW</div>
+      <div>
+        <h1>Pocket Dictation Booklet</h1>
+        <p class="subtitle">Demo version: compact template cues for nurses to glance at while dictating into the ward device.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="button" href="./index.html">Back to Home</a>
+      <button class="primary" onclick="window.print()">Print Booklet</button>
+    </div>
+  </header>
+  <main>
+    <div class="note">
+      Design idea: this booklet is not the EMR form. It is a pocket-sized reminder card set. The nurse can look at the cue headings, dictate naturally, and Nurse WOYZ can map the spoken details into the structured digital template.
+    </div>
+    <section class="booklet-grid" aria-label="Pocket template booklet preview">
+      <article class="pocket-page cover">
+        <div class="small-mark">NW</div>
+        <h2>Nurse WOYZ<br>Dictation Guide</h2>
+        <p>Carry-size reference for bedside documentation, template dictation, care plans, handover, acuity, and risk assessment.</p>
+        <div class="footer"><span>Demo version</span><span>Use with ward device</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">How To Dictate</div><div class="page-no">01</div></div>
+        <p class="mini">Speak naturally. Mention only what is present. The system must not add normal findings unless dictated.</p>
+        <ul class="cue-list">
+          <li>Start with patient context: problem, current status, important changes.</li>
+          <li>Say the template area aloud if needed: "fall risk", "PASS ICU", "handover".</li>
+          <li>Use short findings: oxygen, lines, drains, mobility, feeding, urine, risk.</li>
+          <li>For unknown details say: "not checked" or "to verify".</li>
+          <li>Review the generated text before saving.</li>
+        </ul>
+        <div class="footer"><span>Nurse WOYZ</span><span>Dictation rules</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">PASS ICU</div><div class="page-no">02</div></div>
+        <ul class="cue-list">
+          <li>1:1 care indication or isolation requirement.</li>
+          <li>Monitoring frequency and vital signs.</li>
+          <li>Ventilator, NIV, HFNC, BiPAP, oxygen support.</li>
+          <li>Vasoactive drugs or hemodynamic support.</li>
+          <li>Central line, arterial line, epidural, EVD, drains.</li>
+          <li>Dialysis, ICP monitoring, TPN, labs, dressings.</li>
+          <li>Urine output, diuresis, GRBS or insulin infusion.</li>
+          <li>Feeding route and lung therapy.</li>
+        </ul>
+        <div class="footer"><span>Auto score after mapping</span><span>Supervisor verifies</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">PASS Ward</div><div class="page-no">03</div></div>
+        <ul class="cue-list">
+          <li>Cognition: alert, confused, agitated, restrained.</li>
+          <li>Mobility and fall risk.</li>
+          <li>Medication load and IV infusions.</li>
+          <li>Personal care dependency.</li>
+          <li>Dressing frequency.</li>
+          <li>Vital monitoring frequency.</li>
+          <li>Skin integrity and elimination.</li>
+          <li>Procedures, nutrition, oxygen, pain, lines and tubes.</li>
+        </ul>
+        <div class="footer"><span>Ward acuity</span><span>Nurse ratio support</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Fall Risk</div><div class="page-no">04</div></div>
+        <ul class="cue-list">
+          <li>Reason for reassessment.</li>
+          <li>Falls within 6 months or during admission.</li>
+          <li>Post sedation, seizures, agitation, Parkinsonism, amputation.</li>
+          <li>Age, elimination, high-risk medicines.</li>
+          <li>Patient care equipment tethering.</li>
+          <li>Mobility and cognition.</li>
+          <li>Fall prevention bundle already applied.</li>
+          <li>Education and supervisor escalation.</li>
+        </ul>
+        <div class="footer"><span>Auto risk category</span><span>Document actions</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Braden Score</div><div class="page-no">05</div></div>
+        <ul class="cue-list">
+          <li>Sensory perception.</li>
+          <li>Moisture.</li>
+          <li>Activity.</li>
+          <li>Mobility.</li>
+          <li>Nutrition.</li>
+          <li>Friction and shear.</li>
+          <li>aSSKINg bundle: assess, surface, skin, keep moving.</li>
+          <li>Incontinence, nutrition, hydration, education.</li>
+        </ul>
+        <div class="footer"><span>Auto total score</span><span>Skin care plan</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">DVT Assessment</div><div class="page-no">06</div></div>
+        <ul class="cue-list">
+          <li>Active cancer or palliative treatment.</li>
+          <li>Paralysis, paresis, plaster immobilization.</li>
+          <li>Bedridden or major surgery.</li>
+          <li>Deep vein tenderness.</li>
+          <li>Entire leg swelling.</li>
+          <li>Calf swelling, pitting edema, collateral veins.</li>
+          <li>Previous DVT.</li>
+          <li>Alternative diagnosis and doctor informed.</li>
+        </ul>
+        <div class="footer"><span>Modified Wells</span><span>Risk mapped</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Neurology Part 1</div><div class="page-no">07</div></div>
+        <ul class="cue-list">
+          <li>Date and time.</li>
+          <li>Eye opening.</li>
+          <li>Verbal response.</li>
+          <li>Motor response.</li>
+          <li>GCS trend.</li>
+          <li>Right and left pupil size / reaction.</li>
+          <li>Pupil asymmetry.</li>
+          <li>Limb power, speech, swallow and observation frequency.</li>
+        </ul>
+        <div class="footer"><span>GCS auto total</span><span>Neuro baseline</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Neurology Part 2</div><div class="page-no">08</div></div>
+        <ul class="cue-list">
+          <li>Neuro trend compared with previous shift.</li>
+          <li>Headache, vomiting, seizure activity.</li>
+          <li>Sensorium and behavior.</li>
+          <li>Pain score.</li>
+          <li>Feeding route and aspiration precautions.</li>
+          <li>IV line, catheter, drain, tube.</li>
+          <li>Restraint, fall risk, pressure prevention.</li>
+          <li>Pending CT, MRI or review.</li>
+        </ul>
+        <div class="footer"><span>Trend focused</span><span>Escalation cues</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Restraint Monitoring</div><div class="page-no">09</div></div>
+        <ul class="cue-list">
+          <li>Physical, chemical, or both.</li>
+          <li>Indication and safety reason.</li>
+          <li>Doctor order / authorization.</li>
+          <li>Family or bystander informed.</li>
+          <li>Alternatives attempted.</li>
+          <li>Circulation and skin check.</li>
+          <li>Release, range-of-motion, food, fluid, toileting.</li>
+          <li>Need for continuation reviewed.</li>
+        </ul>
+        <div class="footer"><span>Safety monitoring</span><span>Review need</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Transfer / Movement</div><div class="page-no">10</div></div>
+        <ul class="cue-list">
+          <li>From unit / bed and to unit / bed.</li>
+          <li>Reason for transfer or movement.</li>
+          <li>Time and escort.</li>
+          <li>Vitals, oxygen, monitor, IV fluids.</li>
+          <li>Lines, tubes, drains and infusions.</li>
+          <li>Documents, consent, case sheet, reports.</li>
+          <li>Belongings and handover.</li>
+          <li>Return status if temporary movement.</li>
+        </ul>
+        <div class="footer"><span>In-house transfer</span><span>Patient movement</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Initial Assessment</div><div class="page-no">11</div></div>
+        <ul class="cue-list">
+          <li>Source of admission.</li>
+          <li>Presenting complaint and diagnosis.</li>
+          <li>Allergy status.</li>
+          <li>Vitals and pain score.</li>
+          <li>Sensorium.</li>
+          <li>Mobility and fall risk.</li>
+          <li>Skin, nutrition, urine, bowel.</li>
+          <li>Lines, tubes, drains, immediate plan, education.</li>
+        </ul>
+        <div class="footer"><span>Admission baseline</span><span>Nursing plan</span></div>
+      </article>
+
+      <article class="pocket-page">
+        <div class="page-head"><div class="page-title">Care Plan / Handover</div><div class="page-no">12</div></div>
+        <ul class="cue-list">
+          <li>Care plan: assessment cues and active problem.</li>
+          <li>Care plan: related factors and evidence.</li>
+          <li>Care plan: expected outcome and interventions.</li>
+          <li>Care plan: education, referral and evaluation.</li>
+          <li>Handover: patient status.</li>
+          <li>Handover: treatment, devices, investigations.</li>
+          <li>Handover: pending tasks and safety watch.</li>
+          <li>Handover: escalation plan for next shift.</li>
+        </ul>
+        <div class="footer"><span>Structured note</span><span>End shift support</span></div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

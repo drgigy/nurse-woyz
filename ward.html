@@ -113,10 +113,20 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .room-template-preview.show { display: block; }
 .template-preview-title { color: #981b2d; font-size: 18px; font-weight: 950; margin-bottom: 6px; }
 .template-preview-help { color: #61738a; font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
+.template-guide-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+.template-guide-card { background: #fff7f8; border: 1px solid #f1c3ca; border-radius: 12px; padding: 8px 9px; color: #172033; font-size: 11px; font-weight: 850; line-height: 1.3; }
+.template-guide-card strong { display: block; color: #981b2d; font-size: 11px; font-weight: 950; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .3px; }
 .template-preview-fields { display: grid; grid-template-columns: 1fr; gap: 6px; }
 .template-preview-fields div { background: #f7f9fc; border: 1px solid #dce5f2; border-radius: 10px; padding: 8px 10px; color: #24364d; font-size: 12px; font-weight: 750; }
 .template-preview-frame { width: 100%; height: 420px; border: 1px solid #d7e1ef; border-radius: 14px; background: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8); }
 .room-dictate-launch { width: auto; }
+.room-voice-btn.recording { background: linear-gradient(135deg,#b80f21,#e63946); border-color: #ff7a86; animation: voicePillPulse 1.2s infinite; }
+.room-voice-btn.recording::before { background: #fff; box-shadow: 0 0 0 12px rgba(255,255,255,0.16); }
+.room-voice-btn.processing { opacity: .75; pointer-events: none; }
+@keyframes voicePillPulse {
+  0%,100% { box-shadow: 0 14px 28px rgba(255,79,94,0.18); }
+  50% { box-shadow: 0 14px 38px rgba(255,79,94,0.42); }
+}
 .voice-plugin { display: none; position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); width: min(190px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 16px; padding: 10px 12px 12px; z-index: 120; box-shadow: 0 18px 42px rgba(0,0,0,0.34); touch-action: none; }
 .voice-plugin.show { display: block; }
 .voice-plugin-head { display: flex; align-items: center; gap: 6px; color: #ff5454; font-size: 11px; font-weight: 950; cursor: grab; user-select: none; }
@@ -1153,17 +1163,17 @@ const WARD_TEMPLATE_LIBRARY = [
   { id: 'note', type: 'note', title: 'Bed Note', help: 'Default nursing note when no template is selected.', fields: ['Current observation', 'Intervention done', 'Patient response', 'Pending follow-up'] },
   { id: 'careplan', type: 'careplan', title: 'Care Plan', help: 'Structured care plan draft using approved nursing care-plan headings.', fields: ['Patient assessment cues', 'Applicable care-plan templates', 'Active problem', 'Goal', 'Nursing actions', 'Evaluation'] },
   { id: 'handover', type: 'handover', title: 'Handover Note', help: 'Shift handover for the next nurse.', fields: ['Identification', 'Current status', 'Relevant assessment', 'Events this shift', 'Watch', 'Next shift / pending'] },
-  { id: 'fall-risk', type: 'template', title: 'Hospital Fall Risk Assessment Tool', help: 'Fall-risk score and prevention bundle.', href: 'template-rhfra.html', fields: ['Reason for reassessment', 'High-risk criteria', 'Low-risk criteria', 'Fall-risk score', 'Risk category', 'Prevention measures'] },
-  { id: 'dvt', type: 'template', title: 'Modified DVT Assessment Tool', help: 'Modified Wells-style DVT assessment.', href: 'template-modified-dvt-assessment.html', fields: ['Clinical characteristics', 'Selected score items', 'Total score', 'Criteria of risk', 'Doctor informed if indicated'] },
-  { id: 'rhpass-icu', type: 'template', title: 'PASS ICU', help: 'ICU acuity and nursing dependency score.', href: 'template-rhpass-icu.html', fields: ['Organ support', 'Monitoring needs', 'Interventions', 'Total PASS score', 'Care requirement'] },
-  { id: 'braden', type: 'template', title: 'Braden Pressure Injury Risk Assessment', help: 'Pressure injury risk score and prevention bundle.', href: 'template-braden-score.html', fields: ['Sensory perception', 'Moisture', 'Activity', 'Mobility', 'Nutrition', 'Friction and shear', 'Total score', 'Risk category'] },
-  { id: 'restraint', type: 'template', title: 'Restraint Monitoring Form', help: 'Physical or chemical restraint monitoring.', href: 'template-restraint-monitoring.html', fields: ['Indication', 'Type of restraint', 'Monitoring observations', 'Release checks', 'Review / escalation'] },
-  { id: 'rhpass-ward', type: 'template', title: 'PASS Ward', help: 'Ward acuity and nursing dependency score.', href: 'template-rhpass-ward.html', fields: ['Patient dependency cues', 'Interventions', 'Monitoring need', 'Total PASS score', 'Care requirement'] },
-  { id: 'neuro-1', type: 'template', title: 'Adult Neurological Assessment Part 1', help: 'GCS, pupils, limb power, and neurological baseline.', href: 'template-neuro-assessment-part-1.html', fields: ['Date / time', 'Eye opening', 'Verbal response', 'Motor response', 'GCS total', 'Pupils', 'Limb power'] },
-  { id: 'neuro-2', type: 'template', title: 'Adult Neurological Assessment Part 2', help: 'Neurology trend, devices, feeding, safety, and monitoring.', href: 'template-neuro-assessment-part-2.html', fields: ['Neurological trend', 'Devices', 'Feeding', 'Safety concerns', 'Monitoring plan'] },
-  { id: 'transfer', type: 'template', title: 'In House Transfer', help: 'Transfer readiness and receiving-unit handover.', href: 'template-in-house-transfer.html', fields: ['Reason for transfer', 'Clinical status', 'Lines / tubes / drains', 'Documents', 'Medication / oxygen', 'Receiving unit handover'] },
-  { id: 'movement', type: 'template', title: 'Patient Movement Form', help: 'Movement to investigation, procedure, OT, cath lab, or ward.', href: 'template-patient-movement.html', fields: ['Destination', 'Reason for movement', 'Escort', 'Safety checklist', 'Return status'] },
-  { id: 'initial-assessment', type: 'template', title: 'Nursing Initial Assessment - Adult', help: 'Admission baseline nursing assessment.', href: 'template-nursing-initial-assessment-adult.html', fields: ['Admission details', 'Presenting complaints', 'Vitals', 'Baseline assessment', 'Risk screening', 'Initial nursing plan'] }
+  { id: 'fall-risk', type: 'template', title: 'Hospital Fall Risk Assessment Tool', help: 'Fall-risk score and prevention bundle.', fields: ['Reassessment reason', 'High-risk triggers', 'Low-risk trigger', 'Age / fall history', 'Elimination / medication', 'Equipment / mobility / cognition', 'Prevention bundle', 'Remarks'] },
+  { id: 'dvt', type: 'template', title: 'Modified DVT Assessment Tool', help: 'Modified Wells-style DVT assessment.', fields: ['Cancer / paralysis', 'Bedridden or recent surgery', 'Tenderness / swelling', 'Calf swelling / pitting edema', 'Collateral veins / previous DVT', 'Alternative diagnosis', 'Doctor informed', 'Prophylaxis remarks'] },
+  { id: 'rhpass-icu', type: 'template', title: 'PASS ICU', help: 'ICU acuity and nursing dependency score.', fields: ['1:1 care indication', 'Standard hourly monitoring', 'Vasoactive support', 'Ventilation / oxygen support', 'Large fluid loss / replacement', 'Central / arterial / epidural line', 'Drains / artificial airway', 'Dialysis / ICP / EVD', 'TPN / labs / dressings', 'Urine / diuresis / GRBS', 'Tube feeding / lung therapy', 'Supervisor verification'] },
+  { id: 'braden', type: 'template', title: 'Braden Pressure Injury Risk Assessment', help: 'Pressure injury risk score and prevention bundle.', fields: ['Sensory perception', 'Moisture', 'Activity', 'Mobility', 'Nutrition', 'Friction and shear', 'aSSKINg bundle', 'Bed / surface plan'] },
+  { id: 'restraint', type: 'template', title: 'Restraint Monitoring Form', help: 'Physical or chemical restraint monitoring.', fields: ['Restraint type', 'Indication / reason', 'Doctor authorization', 'Family informed', 'Alternatives attempted', 'Circulation / skin check', 'Release / comfort needs', 'Continuation review'] },
+  { id: 'rhpass-ward', type: 'template', title: 'PASS Ward', help: 'Ward acuity and nursing dependency score.', fields: ['Cognition', 'Mobility / fall risk', 'Medication load', 'IV infusions', 'Personal care', 'Dressing', 'Vital monitoring', 'Skin integrity', 'Elimination', 'Procedures', 'Nutrition / hydration', 'Airway support', 'Admission / education', 'Pain', 'Lines and tubes'] },
+  { id: 'neuro-1', type: 'template', title: 'Adult Neurological Assessment Part 1', help: 'GCS, pupils, limb power, and neurological baseline.', fields: ['Date / time', 'Eye opening', 'Verbal response', 'Motor response', 'GCS trend', 'Right / left pupils', 'Pupil asymmetry', 'Doctor informed', 'Limb power', 'Speech / swallow', 'Observation frequency'] },
+  { id: 'neuro-2', type: 'template', title: 'Adult Neurological Assessment Part 2', help: 'Neurology trend, devices, feeding, safety, and monitoring.', fields: ['Neuro trend', 'Headache / vomiting / seizure', 'Sensorium / behavior', 'Pain score', 'Feeding route', 'Aspiration precautions', 'Lines / catheter / drain', 'Restraint / fall risk', 'Pressure prevention', 'Pending CT / MRI / review'] },
+  { id: 'transfer', type: 'template', title: 'In House Transfer', help: 'Transfer readiness and receiving-unit handover.', fields: ['From unit / bed', 'To unit / bed', 'Reason and time', 'Vitals / oxygen', 'Lines / tubes / drains', 'Medication / infusions', 'Documents and consent', 'Belongings', 'Receiving handover'] },
+  { id: 'movement', type: 'template', title: 'Patient Movement Form', help: 'Movement to investigation, procedure, OT, cath lab, or ward.', fields: ['Destination', 'Reason for movement', 'Escort', 'Oxygen / IV / monitor', 'Documents / consent', 'Safety checklist', 'Return status', 'Handover to receiving area'] },
+  { id: 'initial-assessment', type: 'template', title: 'Nursing Initial Assessment - Adult', help: 'Admission baseline nursing assessment.', fields: ['Source of admission', 'Presenting complaint', 'Diagnosis / allergy', 'Vitals / pain', 'Sensorium', 'Mobility / fall risk', 'Skin / pressure areas', 'Nutrition / feeding', 'Urine / bowel', 'Lines / drains', 'Immediate concerns', 'Patient education'] }
 ];
 
 function currentNurseName() {
@@ -1195,7 +1205,7 @@ function setActiveTemplate(templateId, { silent = false, showRecorder = false } 
   currentNoteType = template.type || 'note';
   renderTemplateDrawer();
   renderActiveTemplatePreview();
-  if (showRecorder) showVoicePlugin();
+  if (showRecorder && !isRecording && !isPaused) startRecording();
   if (!silent) showToast(template.title + ' selected');
 }
 
@@ -1209,19 +1219,11 @@ function renderActiveTemplatePreview() {
     return;
   }
   box.classList.add('show');
-  if (template.href) {
-    box.innerHTML = `
-      <div class="template-preview-title">${escapeHtml(template.title)}</div>
-      <div class="template-preview-help">Keep this template visible while dictating. The dictated details will be converted into a structured note for review.</div>
-      <iframe class="template-preview-frame" title="${escapeHtml(template.title)}" src="${escapeHtml(template.href)}"></iframe>
-    `;
-    return;
-  }
   box.innerHTML = `
     <div class="template-preview-title">${escapeHtml(template.title)}</div>
-    <div class="template-preview-help">Use this as a visual checklist while dictating. Only dictated information will be filled; missing details remain for nurse verification.</div>
-    <div class="template-preview-fields">
-      ${template.fields.map(field => `<div>${escapeHtml(field)}</div>`).join('')}
+    <div class="template-preview-help">Compact dictation guide. Speak only the relevant findings; missing details remain for nurse verification and scores are calculated from mapped entries.</div>
+    <div class="template-guide-grid">
+      ${template.fields.map((field, index) => `<div class="template-guide-card"><strong>${String(index + 1).padStart(2, '0')}</strong>${escapeHtml(field)}</div>`).join('')}
     </div>
   `;
 }
@@ -1363,7 +1365,7 @@ function renderDrawerNotifications(roomOnly = false) {
 }
 
 function selectWardTemplate(templateId) {
-  setActiveTemplate(templateId, { showRecorder: true });
+  setActiveTemplate(templateId);
   closeMobileDrawers();
 }
 
@@ -1746,9 +1748,7 @@ function goBackToBeds() {
 // MIC
 // ══════════════════════════════════════════
 function startBedNoteFromRoom() {
-  setActiveTemplate('note', { silent: true });
-  showVoicePlugin();
-  if (!isRecording && !isPaused) startRecording();
+  toggleMic();
 }
 
 function showVoicePlugin() {
@@ -1989,7 +1989,19 @@ function resetMicState() {
   document.getElementById('btnHandover').disabled = false;
   document.getElementById('btnCarePlan').disabled = false;
   document.getElementById('btnSave').disabled = true;
+  syncRoomVoiceButtonUI('idle');
   syncVoicePluginUI('idle');
+}
+
+function syncRoomVoiceButtonUI(state) {
+  const button = document.getElementById('roomDictateLaunch');
+  if (!button) return;
+  button.classList.toggle('recording', state === 'recording' || state === 'paused');
+  button.classList.toggle('processing', state === 'processing');
+  button.disabled = state === 'processing';
+  if (state === 'recording' || state === 'paused') button.textContent = 'Stop & Transcribe';
+  else if (state === 'processing') button.textContent = 'Transcribing';
+  else button.textContent = 'WOYZ';
 }
 
 function setMicUI(state) {
@@ -2008,6 +2020,7 @@ function setMicUI(state) {
   if (state === 'paused') { status.textContent = 'Paused'; status.className = 'mic-status'; label.textContent = 'STOP & TRANSCRIBE'; sub.textContent = 'Tap to stop and transcribe'; wave.classList.add('hidden'); document.getElementById('btnPause').textContent = 'Resume'; }
   if (state === 'processing') { status.textContent = currentNoteType === 'careplan' ? 'Matching approved care-plan templates...' : currentNoteType === 'template' ? 'Filling selected template...' : 'Structuring note...'; status.className = 'mic-status processing'; label.textContent = 'TRANSCRIBING...'; sub.textContent = 'Please wait'; wave.classList.add('hidden'); }
   if (state === 'done') { status.textContent = currentNoteType === 'handover' ? 'Handover ready to save' : currentNoteType === 'careplan' ? 'Care plan ready to review' : currentNoteType === 'template' ? 'Template ready to review' : 'Note ready to save'; status.className = 'mic-status done'; label.textContent = 'TAP TO DICTATE'; sub.textContent = 'Record another note'; wave.classList.add('hidden'); }
+  syncRoomVoiceButtonUI(state);
   syncVoicePluginUI(state);
 }
 
@@ -2019,7 +2032,6 @@ function toggleMic() {
   if (isRecording || isPaused) { stopRecording(); }
   else {
     currentNoteType = noteTypeForTemplate(activeTemplateId);
-    showVoicePlugin();
     startRecording();
   }
 }
@@ -2035,7 +2047,6 @@ async function startRecording() {
   currentDictationTime = '';
   isPaused = false;
   setPreviewText('');
-  showVoicePlugin();
   document.getElementById('btnSave').disabled = true;
   document.getElementById('btnHandover').disabled = true;
   document.getElementById('btnCarePlan').disabled = true;
