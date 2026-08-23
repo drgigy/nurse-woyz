@@ -529,9 +529,9 @@
 
     function buildPrompt(template) {
       return [
-        'Translate Malayalam bedside assessment into English and generate a concise nurse-reviewable care plan.',
+        'Translate Malayalam bedside assessment into English and generate a short actionable shift care plan.',
         '',
-        'Use only hospital-approved templates. Do not invent findings. If the nurse does not dictate meaningful clinical information, return an empty care plan.',
+        'Use only hospital-approved template areas. Do not invent findings. If the nurse does not dictate meaningful clinical information, return an empty care plan.',
         '',
         'Selected template: ' + template.title,
         'Assessment cues supported by this template:',
@@ -540,17 +540,16 @@
         'EMR fields to capture if dictated:',
         ...(template.fields || []).map(item => '- ' + item),
         '',
-        'Output headings:',
-        'NURSING CARE PLAN - SHIFT',
-        'Patient assessment cues',
-        'Applicable approved care-plan templates',
-        'Care plan item',
-        'Active Problem / Nursing Concern',
-        'Goal for This Shift',
-        'Nursing Actions / Monitoring',
-        'Escalation / Referral',
-        'Patient / Family Education',
-        'Evaluation'
+        'Output format:',
+        'CARE PLAN',
+        'Assessment:',
+        '- Maximum 3 key assessment cues',
+        'Actions:',
+        '- Maximum 5 practical nursing actions',
+        'Escalate: One clear escalation line if required',
+        'Review: One short review line',
+        '',
+        'Do not use care-plan essay headings such as related to, as evidenced by, expected outcome, nursing interventions, or nurse to verify.'
       ].join('\n');
     }
 

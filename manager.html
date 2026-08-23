@@ -1471,9 +1471,109 @@ function noteTypeCopyLabel(type) {
   return 'NURSING NOTE';
 }
 
+function compactCarePlanText(text) {
+  const raw = String(text || '').replace(/\r/g, '').trim();
+  if (!raw) return '';
+  const lines = raw
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .filter(line => !/^[-•]?\s*Nurse to verify\.?$/i.test(line))
+    .filter(line => !/^(Related to|Expected outcome\/goal|Objective\/expected outcome|Patient\/family education|Evaluation|Referral):\s*Nurse to verify\.?$/i.test(line));
+  const verbose = /CARE PLAN DRAFT|Care plan item|Nursing diagnosis\/problem|Applicable approved care-plan templates|Patient assessment cues/i.test(raw);
+  if (!verbose) {
+    return lines.join('\n').replace(/^NURSING CARE PLAN - SHIFT/i, 'CARE PLAN').replace(/\n{2,}/g, '\n').trim();
+  }
+
+  const assessment = [];
+  const problems = [];
+  let currentProblem = null;
+  let captureAssessment = false;
+  lines.forEach(line => {
+    if (/^Patient assessment cues:/i.test(line)) {
+      captureAssessment = true;
+      return;
+    }
+    if (/^(Applicable approved care-plan templates|Suggested approved templates|Care plan item)/i.test(line)) captureAssessment = false;
+    if (captureAssessment && /^[-•]\s*/.test(line) && assessment.length < 4) {
+      assessment.push(line.replace(/^[-•]\s*/, ''));
+      return;
+    }
+    const problemMatch = line.match(/^Nursing diagnosis\/problem:\s*(.+)$/i);
+    if (problemMatch) {
+      currentProblem = { problem: problemMatch[1].trim(), evidence: '', monitor: '', escalation: '' };
+      problems.push(currentProblem);
+      return;
+    }
+    if (!currentProblem) return;
+    const evidenceMatch = line.match(/^As evidenced by:\s*(.+)$/i);
+    if (evidenceMatch && !/Nurse to verify/i.test(evidenceMatch[1])) currentProblem.evidence = evidenceMatch[1].trim();
+    const monitorMatch = line.match(/^(Monitoring\/evaluation|Nursing interventions):\s*(.+)$/i);
+    if (monitorMatch && !/Nurse to verify/i.test(monitorMatch[2])) currentProblem.monitor = monitorMatch[2].trim();
+    if (/^[-•]\s*/.test(line) && !/Nurse to verify/i.test(line) && !currentProblem.monitor) currentProblem.monitor = line.replace(/^[-•]\s*/, '').trim();
+    const escalationMatch = line.match(/^Escalation\/referral:\s*(.+)$/i);
+    if (escalationMatch && !/Nurse to verify/i.test(escalationMatch[1])) currentProblem.escalation = escalationMatch[1].trim();
+  });
+
+  const actionForProblem = (problem, evidence, monitor) => {
+    const key = `${problem} ${evidence} ${monitor}`.toLowerCase();
+    const actions = [];
+    if (/pain|headache/.test(key)) actions.push('Monitor headache/pain and response to ordered treatment.');
+    if (/fever|hyperthermia|temperature/.test(key)) actions.push('Monitor temperature and response to ordered treatment.');
+    if (/fall|mobility|weakness|walking/.test(key)) actions.push('Maintain fall precautions and assisted mobilization.');
+    if (/sensorium|seizure|pupil|protection|drowsy/.test(key)) actions.push('Monitor sensorium, pupils, seizures, and neurological change.');
+    if (/catheter|ryle|tube|iv line|line/.test(key)) actions.push('Maintain tube, catheter, and IV line care.');
+    if (monitor && !actions.some(action => action.toLowerCase() === monitor.toLowerCase())) actions.push(monitor.replace(/\.$/, '') + '.');
+    if (!actions.length) actions.push('Continue ordered nursing care and document response.');
+    return actions.slice(0, 3);
+  };
+
+  const clinicalText = [raw, ...assessment, ...problems.map(item => `${item.problem} ${item.evidence} ${item.monitor} ${item.escalation}`)].join(' ').toLowerCase();
+  const actions = [];
+  const addAction = action => {
+    if (!actions.includes(action)) actions.push(action);
+  };
+  if (/sensorium|seizure|pupil|drowsy|neurology|neuro|protection/.test(clinicalText)) {
+    addAction('Monitor sensorium, pupils, seizures, headache/vomiting, and neurological change.');
+  }
+  if (/fall|mobility|weakness|walking/.test(clinicalText)) {
+    addAction('Maintain fall precautions and assisted mobilization.');
+  }
+  if (/fever|hyperthermia|temperature|meropenem|antibiotic/.test(clinicalText)) {
+    addAction('Monitor temperature and response to ordered treatment.');
+  }
+  if (/catheter|ryle|tube|iv line|line/.test(clinicalText)) {
+    addAction('Maintain Ryle tube, urinary catheter, and IV line care.');
+  }
+  if (/pain|headache/.test(clinicalText) && !actions.some(action => /headache/.test(action.toLowerCase()))) {
+    addAction('Monitor headache/pain and response to ordered treatment.');
+  }
+  problems.forEach(item => {
+    actionForProblem(item.problem, item.evidence, item.monitor).forEach(addAction);
+  });
+  if (!actions.length) addAction('Continue ordered nursing care and document response.');
+
+  const escalation = problems.map(item => item.escalation).find(Boolean)
+    || (/sensorium|seizure|pupil|headache|neurology|neuro/.test(clinicalText)
+      ? 'Report worsening sensorium, seizure, headache, vomiting, or pupillary asymmetry immediately.'
+      : 'Report clinical deterioration promptly.');
+
+  const output = ['CARE PLAN'];
+  if (assessment.length) {
+    output.push('Assessment:');
+    assessment.slice(0, 3).forEach(item => output.push('- ' + item.replace(/\.$/, '') + '.'));
+  }
+  output.push('Actions:');
+  actions.slice(0, 5).forEach(action => output.push('- ' + action));
+  output.push('Escalate: ' + escalation);
+  output.push('Review: Document response and update if condition changes.');
+  return output.join('\n');
+}
+
 function formatStructuredNoteText(note) {
   let text = String(note?.text || '').trim();
   if (!text) return '';
+  if (note?.type === 'careplan') return compactCarePlanText(text);
   if (text.includes('\n')) return text;
   if (note?.type === 'handover') {
     return [
@@ -1488,27 +1588,6 @@ function formatStructuredNoteText(note) {
       'Escalation / follow-up:',
       'Nurse to verify.'
     ].join('\n');
-  }
-  if (note?.type === 'careplan') {
-    const labels = [
-      'Assessment cues:',
-      'Suggested approved templates:',
-      'Nursing diagnosis/problem:',
-      'Related to:',
-      'As evidenced by:',
-      'Objective/expected outcome:',
-      'Expected outcome/goal:',
-      'Nursing interventions:',
-      'Referral:',
-      'Escalation/referral:',
-      'Patient/family education:',
-      'Evaluation:',
-      'Monitoring/evaluation:'
-    ];
-    labels.forEach(label => {
-      text = text.replaceAll(label, '\n\n' + label);
-    });
-    return text.replace(/^CARE PLAN DRAFT\s*/, 'CARE PLAN DRAFT\n\n').trim();
   }
   return text;
 }
