@@ -2,7 +2,7 @@
 <!-- saved from url=(0117)file:///Users/gigy/Documents/Codex/2026-06-08/hello-i-will-upload-an-html/outputs/nursebuddy_demo_7_gemini_audio.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nurse WOYZ Ward Device</title>
 <meta name="theme-color" content="#a6192e">
 <meta name="mobile-web-app-capable" content="yes">
@@ -72,8 +72,11 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .ward-entry-card.primary .ward-entry-sub { color: rgba(255,255,255,0.78); }
 .rooms-panel { display: none; }
 .rooms-panel.show { display: block; }
-.mobile-shell-top { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 10px; margin-bottom: 14px; }
-.mobile-icon-btn { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 20px rgba(20,40,70,0.08); }
+.mobile-shell-top { display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; gap: 10px; margin-bottom: 14px; }
+.mobile-icon-btn { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; font-size: 0; font-weight: 900; cursor: pointer; box-shadow: 0 8px 20px rgba(20,40,70,0.08); position: relative; }
+.mobile-icon-btn::before { font-size: 18px; line-height: 1; }
+.mobile-icon-btn.templates-icon::before { content: "TPL"; font-size: 11px; letter-spacing: .5px; }
+.mobile-icon-btn.alerts-icon::before { content: "ALR"; font-size: 11px; letter-spacing: .5px; }
 .mobile-shell-title { text-align: center; }
 .mobile-shell-title strong { display: block; color: #981b2d; font-size: 18px; font-weight: 900; }
 .mobile-shell-title span { display: block; color: #61738a; font-size: 12px; font-weight: 700; margin-top: 2px; }
@@ -100,19 +103,19 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .template-pick.active { border-color: #c1121f; background: #fff7f8; }
 .template-pick strong { display: block; color: #981b2d; font-size: 14px; font-weight: 900; }
 .template-pick span { display: block; color: #61738a; font-size: 11px; line-height: 1.35; margin-top: 3px; }
-.room-nav { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 10px; margin-bottom: 12px; }
-.room-back-btn { border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; border-radius: 14px; padding: 10px 12px; font: inherit; font-weight: 900; cursor: pointer; }
-.room-head-card { background: #fff; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 10px 12px; margin-bottom: 10px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; }
+.room-nav { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 10px; margin-bottom: 10px; }
+.room-back-btn { border: 1.5px solid #d7e1ef; background: #fff; color: #981b2d; border-radius: 16px; padding: 12px; font: inherit; font-weight: 900; cursor: pointer; }
+.room-head-card { background: #fff; border: 1.5px solid #d7e1ef; border-radius: 18px; padding: 8px 10px; margin-bottom: 10px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 10px; }
 .room-head-info { min-width: 0; }
-.room-head-card .bed-heading { font-size: 22px; line-height: 1.05; }
-.room-head-card .patient-bed-details { font-size: 12px; line-height: 1.25; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.room-voice-btn { border: 4px solid #ff4f5e; background: #15161e; color: #fff; border-radius: 999px; padding: 8px 18px 8px 10px; display: inline-flex; align-items: center; gap: 10px; font: inherit; font-size: 15px; font-weight: 950; letter-spacing: 0.6px; cursor: pointer; box-shadow: 0 14px 28px rgba(255,79,94,0.18); }
-.room-voice-btn::before { content: ""; width: 28px; height: 28px; border-radius: 999px; background: #ff565b; box-shadow: 0 0 0 12px rgba(255,86,91,0.16); }
+.room-head-card .bed-heading { font-size: 20px; line-height: 1.05; }
+.room-head-card .patient-bed-details { font-size: 12px; line-height: 1.25; margin-top: 3px; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.room-voice-btn { border: 4px solid #ff4f5e; background: #15161e; color: #fff; border-radius: 999px; min-width: 118px; min-height: 56px; padding: 9px 18px 9px 12px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; font: inherit; font-size: 17px; font-weight: 950; letter-spacing: 1px; cursor: pointer; box-shadow: 0 14px 28px rgba(255,79,94,0.18); }
+.room-voice-btn::before { content: ""; width: 30px; height: 30px; border-radius: 999px; background: #ff565b; box-shadow: 0 0 0 12px rgba(255,86,91,0.16); flex: 0 0 auto; }
 .room-voice-btn:active { transform: scale(0.97); }
-.room-template-preview { display: none; background: #fff; border: 1.5px dashed #e6a9b3; border-radius: 18px; padding: 14px; margin: 8px 0 14px; color: #162033; }
+.room-template-preview { display: none; background: #fff; border: 1.5px dashed #e6a9b3; border-radius: 18px; padding: 12px; margin: 8px 0 12px; color: #162033; }
 .room-template-preview.show { display: block; }
-.template-preview-title { color: #981b2d; font-size: 18px; font-weight: 950; margin-bottom: 6px; }
-.template-preview-help { color: #61738a; font-size: 12px; line-height: 1.45; margin-bottom: 10px; }
+.template-preview-title { color: #981b2d; font-size: 16px; font-weight: 950; margin-bottom: 6px; }
+.template-preview-help { color: #61738a; font-size: 11px; line-height: 1.35; margin-bottom: 9px; }
 .template-guide-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
 .template-guide-card { background: #fff7f8; border: 1px solid #f1c3ca; border-radius: 12px; padding: 8px 9px; color: #172033; font-size: 11px; font-weight: 850; line-height: 1.3; }
 .template-guide-card strong { display: block; color: #981b2d; font-size: 11px; font-weight: 950; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .3px; }
@@ -127,8 +130,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
   0%,100% { box-shadow: 0 14px 28px rgba(255,79,94,0.18); }
   50% { box-shadow: 0 14px 38px rgba(255,79,94,0.42); }
 }
-.voice-plugin { display: none; position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); width: min(190px, calc(100vw - 28px)); background: #1b1b1e; color: #f8fafc; border-radius: 16px; padding: 10px 12px 12px; z-index: 120; box-shadow: 0 18px 42px rgba(0,0,0,0.34); touch-action: none; }
-.voice-plugin.show { display: block; }
+.voice-plugin, .voice-plugin.show { display: none !important; }
 .voice-plugin-head { display: flex; align-items: center; gap: 6px; color: #ff5454; font-size: 11px; font-weight: 950; cursor: grab; user-select: none; }
 .voice-plugin-head:active { cursor: grabbing; }
 .record-dot { width: 7px; height: 7px; background: #ff5454; border-radius: 50%; box-shadow: 0 0 0 5px rgba(255,84,84,0.12); }
@@ -253,13 +255,20 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .notes-list { display: flex; flex-direction: column; gap: 8px; max-height: none; overflow-y: visible; }
-.note-card { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 11px 14px; }
-.nc-time { font-size: 10px; color: #e63946; margin-bottom: 4px; }
+.note-card { background: #12141e; border: 1.5px solid #2a2d3a; border-radius: 11px; padding: 10px 12px; }
+.nc-topline { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.nc-time { font-size: 11px; color: #e63946; margin-bottom: 0; font-weight: 800; }
 .nc-kind { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #c1121f; background: #fff0f2; border: 1px solid #f3b3bb; border-radius: 999px; padding: 3px 7px; margin-bottom: 6px; }
 .nc-kind.handover { color: #8a4b00; background: #fff7e8; border-color: #f3d59b; }
 .nc-kind.careplan { color: #075a35; background: #e8f5ef; border-color: #b7e1ca; }
 .nc-raw { font-size: 10px; color: #555; margin-bottom: 4px; font-style: italic; }
 .nc-text { font-size: 12px; color: #ccc; line-height: 1.5; white-space: pre-wrap; }
+.note-summary { color: #24364d; font-size: 13px; line-height: 1.35; font-weight: 650; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.note-details { margin-top: 6px; }
+.note-details summary { color: #981b2d; font-size: 12px; font-weight: 900; cursor: pointer; list-style: none; }
+.note-details summary::-webkit-details-marker { display: none; }
+.note-details[open] .note-summary { display: none; }
+.note-details .nc-text { margin-top: 8px; }
 .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; font-size: 1.03em; margin: 14px 0 5px; }
 .note-card.handover { padding: 8px 10px; }
 .note-card.handover .nc-kind { margin-bottom: 4px; }
@@ -542,11 +551,11 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .back-chip { font-size: 16px; padding: 9px 15px; }
   .bed-heading { font-size: 28px; }
   .patient-bed-details { font-size: 16px; line-height: 1.45; margin-top: 5px; }
-  .room-head-card { padding: 9px 10px; border-radius: 16px; margin-bottom: 10px; }
-  .room-head-card .bed-heading { font-size: 22px; }
+  .room-head-card { padding: 8px 9px; border-radius: 16px; margin-bottom: 10px; }
+  .room-head-card .bed-heading { font-size: 19px; }
   .room-head-card .patient-bed-details { font-size: 13px; line-height: 1.25; margin-top: 3px; }
-  .room-voice-btn { padding: 7px 14px 7px 9px; font-size: 13px; gap: 9px; border-width: 3px; }
-  .room-voice-btn::before { width: 24px; height: 24px; box-shadow: 0 0 0 10px rgba(255,86,91,0.16); }
+  .room-voice-btn { min-width: 112px; min-height: 54px; padding: 8px 15px 8px 10px; font-size: 15px; gap: 10px; border-width: 3px; }
+  .room-voice-btn::before { width: 26px; height: 26px; box-shadow: 0 0 0 10px rgba(255,86,91,0.16); }
   .mic-btn { width: 100%; min-height: 46px; border-radius: 11px; }
   .mic-tap-label { font-size: 15px; }
   .mic-status { font-size: 14px; }
@@ -555,11 +564,12 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
   .section-lbl { font-size: 14px; letter-spacing: 0.7px; }
   .copy-bed-btn { font-size: 15px; padding: 11px 13px; }
   .notes-list { gap: 10px; max-height: none; }
-  .note-card { padding: 13px 14px; }
+  .note-card { padding: 10px 11px; }
   .nc-time { font-size: 13px; }
   .nc-kind { font-size: 12px; }
   .nc-raw { font-size: 13px; }
-  .nc-text { font-size: 17px; line-height: 1.55; }
+  .nc-text { font-size: 15px; line-height: 1.42; }
+  .note-summary { font-size: 15px; line-height: 1.35; }
   .note-card.handover { padding: 10px 11px; }
   .note-card.handover .nc-text { font-size: 15px; line-height: 1.32; }
   .note-card.handover .structured-note-heading { display: inline; margin: 0 4px 0 0; }
@@ -713,18 +723,19 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
       <div class="num-btn empty"></div><div class="num-btn" onclick="pinTap(&#39;0&#39;)">0</div><div class="num-btn del" onclick="pinDel()">⌫</div>
     </div>
     <button class="enter-btn" onclick="doLogin()">→ Start Shift</button>
+    <div class="demo-note">Demo: press Start Shift directly, or enter nurse PIN.</div>
   </div>
 </div>
 
 <!-- ══ BEDS ══ -->
 <div class="screen" id="screen-beds" style="padding-bottom:60px;">
   <div class="mobile-shell-top">
-    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Open templates">□</button>
+    <button class="mobile-icon-btn templates-icon" onclick="openTemplatesDrawer()" aria-label="Open templates">Templates</button>
     <div class="mobile-shell-title">
       <strong>Nurse WOYZ</strong>
       <span data-current-nurse>Nurse</span>
     </div>
-    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(false)" aria-label="Open notifications">≡</button>
+    <button class="mobile-icon-btn alerts-icon" onclick="openNotificationsDrawer(false)" aria-label="Open notifications">Alerts</button>
   </div>
   <div class="nurse-alerts" id="nurseNotificationList" style="display:none;"><div class="nurse-alert"><div class="nurse-alert-title">No active transfer requests</div><div class="nurse-alert-text">Cath Lab and OT notifications will appear here during the demo.</div></div></div>
   <div class="ward-entry-actions">
@@ -786,9 +797,9 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 <!-- ══ MIC ══ -->
 <div class="screen" id="screen-mic" style="padding-bottom:60px;">
   <div class="room-nav">
-    <button class="mobile-icon-btn" onclick="openTemplatesDrawer()" aria-label="Room templates">□</button>
+    <button class="mobile-icon-btn templates-icon" onclick="openTemplatesDrawer()" aria-label="Room templates">Templates</button>
     <button class="room-back-btn" onclick="goBackToBeds()">Back</button>
-    <button class="mobile-icon-btn" onclick="openNotificationsDrawer(true)" aria-label="Room notifications">≡</button>
+    <button class="mobile-icon-btn alerts-icon" onclick="openNotificationsDrawer(true)" aria-label="Room notifications">Alerts</button>
   </div>
   <div class="room-head-card">
     <div class="room-head-info">
@@ -1167,6 +1178,7 @@ let analyserDataArray = null;
 let audioSourceNode = null;
 let equalizerFrame = null;
 let equalizerSynthetic = false;
+let hoverDrawerCloseTimer = null;
 
 const WARD_TEMPLATE_LIBRARY = [
   { id: 'note', type: 'note', title: 'Bed Note', help: 'Default nursing note when no template is selected.', fields: ['Current observation', 'Intervention done', 'Patient response', 'Pending follow-up'] },
@@ -1331,6 +1343,10 @@ function showScreen(name) {
 }
 
 function closeMobileDrawers() {
+  if (hoverDrawerCloseTimer) {
+    clearTimeout(hoverDrawerCloseTimer);
+    hoverDrawerCloseTimer = null;
+  }
   document.getElementById('mobileDrawerBackdrop')?.classList.remove('show');
   document.getElementById('nurseProfileBar')?.classList.remove('open');
   ['notificationsDrawer', 'templatesDrawer'].forEach(id => {
@@ -1343,6 +1359,10 @@ function closeMobileDrawers() {
 }
 
 function openNotificationsDrawer(roomOnly = false) {
+  if (hoverDrawerCloseTimer) {
+    clearTimeout(hoverDrawerCloseTimer);
+    hoverDrawerCloseTimer = null;
+  }
   renderDrawerNotifications(roomOnly);
   document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
   const drawer = document.getElementById('notificationsDrawer');
@@ -1353,6 +1373,10 @@ function openNotificationsDrawer(roomOnly = false) {
 }
 
 function openTemplatesDrawer() {
+  if (hoverDrawerCloseTimer) {
+    clearTimeout(hoverDrawerCloseTimer);
+    hoverDrawerCloseTimer = null;
+  }
   renderTemplateDrawer();
   document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
   const drawer = document.getElementById('templatesDrawer');
@@ -1360,6 +1384,37 @@ function openTemplatesDrawer() {
     drawer.classList.add('show');
     drawer.setAttribute('aria-hidden', 'false');
   }
+}
+
+function scheduleHoverDrawerClose() {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (hoverDrawerCloseTimer) clearTimeout(hoverDrawerCloseTimer);
+  hoverDrawerCloseTimer = setTimeout(() => closeMobileDrawers(), 260);
+}
+
+function cancelHoverDrawerClose() {
+  if (hoverDrawerCloseTimer) {
+    clearTimeout(hoverDrawerCloseTimer);
+    hoverDrawerCloseTimer = null;
+  }
+}
+
+function initHoverDrawers() {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  document.querySelectorAll('.templates-icon').forEach(button => {
+    button.addEventListener('mouseenter', () => openTemplatesDrawer());
+    button.addEventListener('mouseleave', scheduleHoverDrawerClose);
+  });
+  document.querySelectorAll('.alerts-icon').forEach(button => {
+    button.addEventListener('mouseenter', () => openNotificationsDrawer(document.getElementById('screen-mic')?.classList.contains('active')));
+    button.addEventListener('mouseleave', scheduleHoverDrawerClose);
+  });
+  ['templatesDrawer', 'notificationsDrawer'].forEach(id => {
+    const drawer = document.getElementById(id);
+    if (!drawer) return;
+    drawer.addEventListener('mouseenter', cancelHoverDrawerClose);
+    drawer.addEventListener('mouseleave', scheduleHoverDrawerClose);
+  });
 }
 
 function renderDrawerNotifications(roomOnly = false) {
@@ -1414,8 +1469,29 @@ function pinDel() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
 function updateDots() {
   for (let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled', i < pinEntry.length);
 }
+function initPinKeyboardSupport() {
+  document.addEventListener('keydown', event => {
+    if (!document.getElementById('screen-login')?.classList.contains('active')) return;
+    if (event.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+    if (/^\d$/.test(event.key)) {
+      event.preventDefault();
+      pinTap(event.key);
+      return;
+    }
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      event.preventDefault();
+      pinDel();
+      return;
+    }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      doLogin();
+    }
+  });
+}
 function doLogin() {
-  const nurse = nurses.find(item => item.active !== false && item.pin === pinEntry);
+  const loginPin = pinEntry || '2222';
+  const nurse = nurses.find(item => item.active !== false && item.pin === loginPin);
   if (!nurse) {
     pinEntry = '';
     updateDots();
@@ -2219,10 +2295,10 @@ function formatStructuredNoteText(note) {
   if (note?.type === 'handover') {
     if (text.includes('\n')) return compactHandoverText(text);
     return [
-      'NURSING SHIFT HANDOVER - SHIFT',
-      `Current Status: ${text}`,
-      'WATCH: Nurse to verify.',
-      'NEXT SHIFT / PENDING: Nurse to verify.'
+      'HANDOVER NOTE',
+      `Status:\n- ${text}`,
+      'Watch:\n- Nurse to verify.',
+      'Pending:\n- Nurse to verify.'
     ].join('\n');
   }
   if (text.includes('\n')) return text;
@@ -2272,9 +2348,19 @@ function compactHandoverText(text) {
 function formatStructuredNoteHtml(note) {
   const headings = [
     'CARE PLAN DRAFT',
+    'CARE PLAN',
     'NURSING CARE PLAN - SHIFT',
     'NURSING SHIFT HANDOVER - SHIFT',
     'HANDOVER NOTE',
+    'Status:',
+    'Watch:',
+    'Pending:',
+    'Assessment:',
+    'Problem 1:',
+    'Problem 2:',
+    'Goal:',
+    'Actions:',
+    'Review:',
     'Active Problem / Nursing Concern:',
     'Goal for This Shift:',
     'Nursing Actions / Monitoring:',
@@ -2322,12 +2408,74 @@ function formatStructuredNoteHtml(note) {
   return html;
 }
 
+function formatPrintStructuredNoteHtml(note) {
+  const headings = [
+    'NURSING CARE PLAN - SHIFT',
+    'NURSING SHIFT HANDOVER - SHIFT',
+    'HANDOVER NOTE',
+    'CARE PLAN',
+    'Status:',
+    'Watch:',
+    'Pending:',
+    'Assessment:',
+    'Problem 1:',
+    'Problem 2:',
+    'Goal:',
+    'Actions:',
+    'Review:',
+    'Patient assessment cues:',
+    'Priority care actions:',
+    'Active Problem / Nursing Concern:',
+    'Goal for This Shift:',
+    'Nursing Actions / Monitoring:',
+    'Current Status:',
+    'Identification:',
+    'Relevant Assessment:',
+    'Events/Changes This Shift:',
+    'WATCH:',
+    'NEXT SHIFT / PENDING:',
+    'Applicable approved care-plan templates:',
+    'Care plan item 1:',
+    'Care plan item 2:',
+    'Care plan item 3:'
+  ];
+  let text = formatStructuredNoteText(note)
+    .replace(/\r/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+  if (note?.type === 'careplan' || note?.type === 'handover') {
+    text = text
+      .replace(/\n{2,}/g, '\n')
+      .replace(/\n-\s+/g, '\n- ');
+  }
+  let html = escapeHtml(text);
+  headings
+    .sort((a, b) => b.length - a.length)
+    .forEach((heading) => {
+      const escapedHeading = escapeHtml(heading);
+      html = html.replaceAll(escapedHeading, `<strong class="structured-note-heading">${escapedHeading}</strong>`);
+    });
+  return html;
+}
+
+function noteSummaryText(note) {
+  const text = formatStructuredNoteText(note)
+    .replace(/\r/g, '')
+    .split('\n')
+    .map(line => line.replace(/^[-•]\s*/, '').trim())
+    .filter(Boolean)
+    .filter(line => !/^(NURSING CARE PLAN|NURSING SHIFT HANDOVER|CARE PLAN DRAFT|HANDOVER NOTE)/i.test(line))
+    .find(line => !line.endsWith(':')) || String(note?.text || '').trim();
+  return text.length > 140 ? text.slice(0, 137).trim() + '...' : text;
+}
+
 function getDictationSystemInstruction() {
   if (currentNoteType === 'handover') {
-    return 'You are an AI Nursing Documentation Assistant for shift handover. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into concise professional English nursing handover documentation for continuity of care. Use only information stated by the nurse or already available in the current patient context. Never assume, infer, fabricate, or convert unassessed items into normal findings. Prioritize active problems, changes during the shift, nursing interventions, patient response, current risks, pending actions, and what the next nurse must watch. Do not create medical orders, treatment recommendations, or textbook explanations. Make deterioration, abnormal findings, escalation, and unresolved concerns prominent. If there is no meaningful dictated clinical information, return an empty nursingNote. Do not add timestamps inside the note. Return JSON only.';
+    return 'You are an AI Nursing Documentation Assistant for shift handover. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into a very brief structured English handover. Use only stated facts. Never assume, infer, fabricate, or write normal findings for unmentioned items. Use short bullet points only. No textbook explanations, no medical orders, no recommendations beyond what was dictated. Maximum 3 headings: Status, Watch, Pending. If there is no meaningful dictated clinical information, return an empty nursingNote. Return JSON only.';
   }
   if (currentNoteType === 'careplan') {
-    return 'You are an AI Nursing Documentation Assistant for shift nursing care plans. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into a short problem-oriented English nursing care plan for this shift. Use only information stated by the nurse or already available in the current patient context. Never assume, infer, fabricate, or convert unassessed items into normal findings. Use hospital-approved template areas only when supported by the dictation. Do not generate elaborate textbook nursing diagnoses, generic interventions, medical orders, or unnecessary explanations. Include only active or relevant problems for this shift. If there is no meaningful dictated clinical information, return an empty nursingNote. Return JSON only.';
+    return 'You are an AI Nursing Documentation Assistant for shift nursing care plans. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms. Convert the dictation into a very short actionable English care plan. Use only stated facts and supported template areas. Never assume, infer, fabricate, or write normal findings for unmentioned items. Do not generate textbook nursing diagnoses, generic interventions, medical orders, or long explanations. Include maximum 2 active problems. Each problem must have one short goal and 2 or 3 practical nursing actions. If there is no meaningful dictated clinical information, return an empty nursingNote. Return JSON only.';
   }
   if (currentNoteType === 'template') {
     return 'You are an AI Nursing Documentation Assistant. A nurse speaks naturally in Malayalam, sometimes mixed with English medical terms, while viewing a hospital documentation template. Convert the dictation into a concise English filled-template draft. Use only dictated facts. Do not invent normal findings, scores, dates, times, vitals, or signatures. If a template field is not clearly dictated, write "Nurse to verify". If there is no meaningful dictated information, return an empty nursingNote. Return JSON only.';
@@ -2337,10 +2485,10 @@ function getDictationSystemInstruction() {
 
 function getDictationUserPrompt() {
   if (currentNoteType === 'handover') {
-    return 'Translate this nurse-dictated Malayalam handover into concise English. Return JSON with this exact compact shape: {"nursingNote":"NURSING SHIFT HANDOVER - SHIFT\\nIdentification: ...\\nCurrent Status: ...\\nRelevant Assessment: ...\\nEvents/Changes This Shift: ...\\nWATCH: ...\\nNEXT SHIFT / PENDING: ..."}. Include only sections supported by the dictation; keep WATCH and NEXT SHIFT / PENDING as headings even if the nurse only states \"Nurse to verify\". Do not insert blank lines. Use short phrases or single-line bullets only when needed. Do not write normal findings for parameters not mentioned. Do not add details, diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
+    return 'Translate this nurse-dictated Malayalam handover into concise English. Return JSON with this exact compact shape: {"nursingNote":"HANDOVER NOTE\\nStatus:\\n- ...\\nWatch:\\n- ...\\nPending:\\n- ..."}. Use only dictated facts. Keep each bullet short. Omit a heading if there is no relevant dictated content. Do not insert blank lines. Do not write normal findings for parameters not mentioned. Do not add diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
   }
   if (currentNoteType === 'careplan') {
-    return `Translate this Malayalam bedside assessment into English and generate a concise, professional, nurse-reviewable shift care plan. Use only these approved template areas when applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact shape: {"nursingNote":"NURSING CARE PLAN - SHIFT\\n\\nPatient assessment cues:\\n- ...\\n\\nApplicable approved care-plan templates:\\n- ...\\n\\nCare plan item 1:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated\\n\\nCare plan item 2:\\nActive Problem / Nursing Concern: ...\\nGoal for This Shift: ...\\nNursing Actions / Monitoring:\\n- ...\\nCurrent Status: New / Ongoing / Improving / Stable / Resolved / Escalated"}. Create only the care plan items clearly supported by the nurse dictation or patient context. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a required detail is missing, omit it or write "Nurse to verify".`;
+    return `Translate this Malayalam bedside assessment into English and generate a short nurse-reviewable shift care plan. Use only these approved template areas when clearly applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact compact shape: {"nursingNote":"CARE PLAN\\nAssessment:\\n- ...\\nProblem 1: ...\\nGoal: ...\\nActions:\\n- ...\\n- ...\\nReview: Ongoing / Improving / Escalated"}. Create maximum 2 problems. Use 2 or 3 short action bullets per problem. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a detail is missing, omit it.`;
   }
   if (currentNoteType === 'template') {
     const template = activeTemplate();
@@ -2479,34 +2627,30 @@ function buildDemoCarePlan(assessmentText) {
   if (lower.includes('chest pain') || lower.includes('pain')) matched.push('Acute pain');
   if (lower.includes('dry') || lower.includes('infection')) matched.push('Ineffective protection');
   if (!matched.length) matched.push('Deficient knowledge');
+  const primary = matched.slice(0, 3);
   return [
-    'NURSING CARE PLAN - SHIFT',
-    '',
-    'Patient assessment cues:',
+    'CARE PLAN',
+    'Assessment:',
     '- ' + assessmentText,
-    '',
-    'Applicable approved care-plan templates:',
-    ...matched.map(item => '- ' + item),
-    '',
-    'Care plan item 1:',
-    'Active Problem / Nursing Concern: Nurse to verify the applicable problem from the suggested template.',
-    'Goal for This Shift: Patient remains stable and identified nursing risks are reduced.',
-    'Nursing Actions / Monitoring:',
-    '- Apply the selected hospital-approved care-plan interventions.',
-    '- Document observations and report deterioration promptly.',
-    'Current Status: Ongoing'
+    'Problem 1: ' + primary[0],
+    'Goal: Maintain stability and reduce identified risk.',
+    'Actions:',
+    '- Monitor relevant symptoms and vital changes.',
+    '- Continue ordered care and nursing precautions.',
+    '- Escalate deterioration promptly.',
+    'Review: Ongoing'
   ].join('\n');
 }
 
 function buildDemoHandover(handoverText) {
   return [
-    'NURSING SHIFT HANDOVER - SHIFT',
-    'Identification: Nurse to verify patient identifiers and diagnosis.',
-    'Current Status: ' + handoverText,
-    'Relevant Assessment: Nurse to verify.',
-    'Events/Changes This Shift: Document significant events if dictated.',
-    'WATCH: Continue monitoring as dictated and verify pending tasks.',
-    'NEXT SHIFT / PENDING: Nurse to verify pending investigations, medications, monitoring, or reviews.'
+    'HANDOVER NOTE',
+    'Status:',
+    '- ' + handoverText,
+    'Watch:',
+    '- Monitor active concerns.',
+    'Pending:',
+    '- Verify pending investigations, medicines, or reviews.'
   ].join('\n');
 }
 
@@ -2575,8 +2719,10 @@ function renderNotesList() {
     const isEditing = editingNoteId === noteId;
     return `
     <div class="note-card ${noteTypeClass(n.type)}">
-      <div class="nc-time">${escapeHtml(n.time)}</div>
-      <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
+      <div class="nc-topline">
+        <div class="nc-time">${escapeHtml(n.time)}</div>
+        <div class="nc-kind ${noteTypeClass(n.type)}">${noteTypeLabel(n.type, n)}</div>
+      </div>
       ${isEditing ? `
         <textarea class="note-edit-box" id="editNoteText_${index}">${escapeHtml(n.text)}</textarea>
         <div class="note-edit-actions">
@@ -2584,10 +2730,14 @@ function renderNotesList() {
           <button class="note-edit-btn cancel-edit" onclick="cancelEditNote()">Cancel</button>
         </div>
       ` : `
-        <div class="nc-text">✦ ${formatStructuredNoteHtml(n)}</div>
-        <div class="note-edit-actions">
-          <button class="note-edit-btn" onclick="startEditNote('${escapeJsArg(noteId)}')">Edit</button>
-        </div>
+        <div class="note-summary">${escapeHtml(noteSummaryText(n))}</div>
+        <details class="note-details">
+          <summary>View / Edit</summary>
+          <div class="nc-text">${formatStructuredNoteHtml(n)}</div>
+          <div class="note-edit-actions">
+            <button class="note-edit-btn" onclick="startEditNote('${escapeJsArg(noteId)}')">Edit</button>
+          </div>
+        </details>
       `}
     </div>
   `;
@@ -2662,7 +2812,7 @@ function printCurrentBedNotes() {
         <strong>${escapeHtml(note.time)}</strong>
         <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
       </div>
-      <div class="note-text">${formatStructuredNoteHtml(note)}</div>
+      <div class="note-text">${formatPrintStructuredNoteHtml(note)}</div>
     </article>
   `).join('');
   const win = window.open('', '_blank', 'width=900,height=700');
@@ -2677,34 +2827,35 @@ function printCurrentBedNotes() {
   <title>${escapeHtml(details.roomLabel)} Nursing Record</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #f7f9fc; }
-    .page { width: min(1120px, 100%); margin: 0 auto; padding: 12px; background: #fff; }
-    .top { border-bottom: 2px solid #a6192e; padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; }
-    h1 { margin: 0; color: #a6192e; font-size: 19px; }
-    .subtitle { color: #61738a; margin-top: 2px; font-size: 10px; }
-    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 6px 0; }
-    .meta-card { border: 1px solid #d7e1ef; border-radius: 7px; padding: 4px 6px; }
-    .label { color: #61738a; font-size: 8px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
-    .value { margin-top: 1px; font-size: 10px; font-weight: 800; }
-    .bed-section { border: 1px solid #d7e1ef; border-radius: 9px; overflow: hidden; margin: 6px 0; break-inside: avoid; }
-    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 5px 8px; }
-    h2 { margin: 0 0 1px; color: #8f0f1f; font-size: 13px; }
-    .bed-head div { color: #4d6078; font-size: 9px; font-weight: 700; }
-    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; }
-    .note-row { border: 1px solid #edf2f7; border-radius: 8px; padding: 5px 6px; break-inside: avoid; }
+    body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #fff; }
+    .page { width: 100%; margin: 0 auto; padding: 6mm; background: #fff; }
+    .top { border-bottom: 2px solid #a6192e; padding-bottom: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 10px; }
+    h1 { margin: 0; color: #a6192e; font-size: 17px; }
+    .subtitle { color: #61738a; margin-top: 1px; font-size: 8.5px; }
+    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+    .meta-card { border: 1px solid #d7e1ef; border-radius: 6px; padding: 3px 5px; }
+    .label { color: #61738a; font-size: 7px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+    .value { margin-top: 1px; font-size: 8.5px; font-weight: 800; }
+    .bed-section { border: 1px solid #d7e1ef; border-radius: 8px; overflow: visible; margin: 4px 0; }
+    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 4px 6px; }
+    h2 { margin: 0; color: #8f0f1f; font-size: 12px; }
+    .bed-head div { color: #4d6078; font-size: 8px; font-weight: 700; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; align-items: start; }
+    .note-row { border: 1px solid #edf2f7; border-radius: 6px; padding: 4px 5px; break-inside: avoid; page-break-inside: avoid; }
     .note-row:last-child { border-bottom: 1px solid #edf2f7; }
-    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 10px; margin-right: 5px; }
-    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 5px; font-size: 7px; font-weight: 900; letter-spacing: 0.04em; }
-    .note-text { white-space: pre-wrap; line-height: 1.18; font-size: 9.5px; margin-top: 4px; }
-    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 4px 0 1px; }
-    .note-row.handover .note-text { line-height: 1.12; font-size: 9px; }
-    .note-row.handover .structured-note-heading { display: inline; margin: 0 3px 0 0; }
-    .sign { margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-    .sign div { border-top: 1px solid #9aa8ba; padding-top: 4px; color: #61738a; font-size: 9px; }
-    @page { size: A4 landscape; margin: 5mm; }
+    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 8.5px; margin-right: 4px; }
+    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 4px; font-size: 6.5px; font-weight: 900; letter-spacing: 0.03em; }
+    .note-text { white-space: pre-wrap; line-height: 1.08; font-size: 8px; margin-top: 2px; }
+    .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+    .note-text .structured-note-heading { display: inline; margin: 0 3px 0 0; }
+    .note-row.careplan .note-text,
+    .note-row.handover .note-text { line-height: 1.05; font-size: 7.8px; }
+    .sign { margin-top: 6px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .sign div { border-top: 1px solid #9aa8ba; padding-top: 3px; color: #61738a; font-size: 8px; }
+    @page { size: A4 landscape; margin: 4mm; }
     @media print {
       body { background: #fff; }
-      .page { width: 100%; padding: 5mm; }
+      .page { padding: 0; }
       .no-print { display: none; }
     }
   </style>
@@ -2823,7 +2974,7 @@ function printShiftNotes() {
               <strong>${escapeHtml(note.time)}</strong>
               <span>${escapeHtml(noteTypeCopyLabel(note.type, note))}</span>
             </div>
-            <div class="note-text">${formatStructuredNoteHtml(note)}</div>
+            <div class="note-text">${formatPrintStructuredNoteHtml(note)}</div>
           </article>
         `).join('')}
         </div>
@@ -2842,34 +2993,35 @@ function printShiftNotes() {
   <title>Nursing Shift Record</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #f7f9fc; }
-    .page { width: min(1120px, 100%); margin: 0 auto; padding: 12px; background: #fff; }
-    .top { border-bottom: 2px solid #a6192e; padding-bottom: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; }
-    h1 { margin: 0; color: #a6192e; font-size: 19px; }
-    .subtitle { color: #61738a; margin-top: 2px; font-size: 10px; }
-    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin: 6px 0; }
-    .meta-card { border: 1px solid #d7e1ef; border-radius: 7px; padding: 4px 6px; }
-    .label { color: #61738a; font-size: 8px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
-    .value { margin-top: 1px; font-size: 10px; font-weight: 800; }
-    .bed-section { border: 1px solid #d7e1ef; border-radius: 9px; overflow: hidden; margin: 6px 0; break-inside: avoid; }
-    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 5px 8px; }
-    h2 { margin: 0 0 1px; color: #8f0f1f; font-size: 13px; }
-    .bed-head div { color: #4d6078; font-size: 9px; font-weight: 700; }
-    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; }
-    .note-row { border: 1px solid #edf2f7; border-radius: 8px; padding: 5px 6px; break-inside: avoid; }
+    body { margin: 0; color: #162033; font-family: Arial, sans-serif; background: #fff; }
+    .page { width: 100%; margin: 0 auto; padding: 6mm; background: #fff; }
+    .top { border-bottom: 2px solid #a6192e; padding-bottom: 4px; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 10px; }
+    h1 { margin: 0; color: #a6192e; font-size: 17px; }
+    .subtitle { color: #61738a; margin-top: 1px; font-size: 8.5px; }
+    .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+    .meta-card { border: 1px solid #d7e1ef; border-radius: 6px; padding: 3px 5px; }
+    .label { color: #61738a; font-size: 7px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+    .value { margin-top: 1px; font-size: 8.5px; font-weight: 800; }
+    .bed-section { border: 1px solid #d7e1ef; border-radius: 8px; overflow: visible; margin: 4px 0; }
+    .bed-head { background: #fff4f5; border-bottom: 1px solid #ead1d6; padding: 4px 6px; }
+    h2 { margin: 0; color: #8f0f1f; font-size: 12px; }
+    .bed-head div { color: #4d6078; font-size: 8px; font-weight: 700; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; align-items: start; }
+    .note-row { border: 1px solid #edf2f7; border-radius: 6px; padding: 4px 5px; break-inside: avoid; page-break-inside: avoid; }
     .note-row:last-child { border-bottom: 1px solid #edf2f7; }
-    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 10px; margin-right: 5px; }
-    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 5px; font-size: 7px; font-weight: 900; letter-spacing: 0.04em; }
-    .note-text { white-space: pre-wrap; line-height: 1.18; font-size: 9.5px; margin-top: 4px; }
-    .structured-note-heading { display: block; color: #8f0f1f; font-weight: 900; margin: 4px 0 1px; }
-    .note-row.handover .note-text { line-height: 1.12; font-size: 9px; }
-    .note-row.handover .structured-note-heading { display: inline; margin: 0 3px 0 0; }
-    .sign { margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-    .sign div { border-top: 1px solid #9aa8ba; padding-top: 4px; color: #61738a; font-size: 9px; }
-    @page { size: A4 landscape; margin: 5mm; }
+    .note-meta strong { color: #8f0f1f; display: inline-block; font-size: 8.5px; margin-right: 4px; }
+    .note-meta span { display: inline-block; border: 1px solid #e5b7be; background: #fff7f8; color: #8f0f1f; border-radius: 999px; padding: 1px 4px; font-size: 6.5px; font-weight: 900; letter-spacing: 0.03em; }
+    .note-text { white-space: pre-wrap; line-height: 1.08; font-size: 8px; margin-top: 2px; }
+    .structured-note-heading { color: #8f0f1f; font-weight: 900; }
+    .note-text .structured-note-heading { display: inline; margin: 0 3px 0 0; }
+    .note-row.careplan .note-text,
+    .note-row.handover .note-text { line-height: 1.05; font-size: 7.8px; }
+    .sign { margin-top: 6px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .sign div { border-top: 1px solid #9aa8ba; padding-top: 3px; color: #61738a; font-size: 8px; }
+    @page { size: A4 landscape; margin: 4mm; }
     @media print {
       body { background: #fff; }
-      .page { width: 100%; padding: 5mm; }
+      .page { padding: 0; }
       .no-print { display: none; }
     }
   </style>
@@ -3427,6 +3579,8 @@ function initApp() {
   renderNurseNotifications();
   renderCommand();
   setupDepartmentPage();
+  initHoverDrawers();
+  initPinKeyboardSupport();
   refreshDashboard();
   initFirebaseSync();
   if (PAGE_KIND === 'ward') showScreen('login');
