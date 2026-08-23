@@ -1260,6 +1260,82 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const SHIFT_ID = 'ward-3-night-demo';
 
+const CLEAN_DEMO_NOTES = [
+  {
+    id: 'clean-demo-104-note-1',
+    time: '15:10',
+    raw: '',
+    text: 'Patient Abdul Rahman reported sudden onset and worsening of severe headache. Ward Medical Officer informed and assessment repeated. Injection Kabimol administered as advised.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-note-2',
+    time: '16:20',
+    raw: '',
+    text: 'Patient remains drowsy but arousable. Ryle tube, urinary catheter, and IV line are in situ. No redness or swelling noted at IV site.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-note-3',
+    time: '17:05',
+    raw: '',
+    text: 'Fall precautions continued. Patient mobilized only with assistance. Injection Meropenem administered as ordered and response monitored.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-care-plan',
+    time: '17:20',
+    raw: '',
+    text: 'CARE PLAN\nPriority actions:\n- Monitor headache, vomiting, sensorium, and pupil changes.\n- Maintain fall precautions and assisted mobilization.\n- Continue Ryle tube, urinary catheter, and IV line care.\n- Monitor temperature and response to ordered treatment.\n- Administer medicines as ordered and document response.\nEscalation: Inform doctor immediately if sensorium worsens, seizure occurs, headache/vomiting increases, or pupil asymmetry is noted.\nReview: Reassess every shift and update plan if condition changes.',
+    type: 'careplan',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-handover',
+    time: '17:45',
+    raw: '',
+    text: 'HANDOVER NOTE\nCurrent Status: Drowsy but arousable; severe headache improved after medication.\nWATCH: Sensorium, pupils, seizure activity, headache, vomiting, temperature, and IV site.\nNEXT SHIFT / PENDING: Follow CT report, continue Meropenem as ordered, maintain fall precautions, and inform doctor if neurological status worsens.',
+    type: 'handover',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-pass-ward',
+    time: '18:05',
+    raw: '',
+    text: 'PASS WARD\nMobility: Assisted; high fall precaution required.\nFeeding: Ryle tube in situ.\nDevices: IV line and urinary catheter in situ.\nDependency: Moderate to high nursing support required this shift.',
+    type: 'template',
+    templateId: 'pass-ward',
+    templateTitle: 'PASS Ward',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-dvt',
+    time: '18:15',
+    raw: '',
+    text: 'MODIFIED DVT ASSESSMENT\nMobility reduced due to drowsiness and weakness.\nCalf swelling/tenderness: Not documented.\nAction: Encourage limb movement as tolerated and escalate if swelling, pain, or redness appears.',
+    type: 'template',
+    templateId: 'modified-dvt-assessment',
+    templateTitle: 'Modified DVT Assessment Tool',
+    nurse: 'Jewel'
+  }
+];
+
+function isVerboseCarePlanText(text) {
+  return /CARE PLAN DRAFT|Care plan item|Nursing diagnosis\/problem|Applicable approved care-plan templates|Patient assessment cues|NURSING CARE PLAN - SHIFT/i.test(String(text || ''));
+}
+
+function withCleanDemoTimeline(syncedNotes) {
+  const cleaned = {};
+  Object.entries(syncedNotes || {}).forEach(([bedId, list]) => {
+    cleaned[bedId] = (list || []).filter(note => !(note.type === 'careplan' && isVerboseCarePlanText(note.text)));
+  });
+  cleaned['104'] = CLEAN_DEMO_NOTES.map(note => ({ ...note, bed: '104' }));
+  return cleaned;
+}
+
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
@@ -1558,14 +1634,9 @@ function compactCarePlanText(text) {
       ? 'Report worsening sensorium, seizure, headache, vomiting, or pupillary asymmetry immediately.'
       : 'Report clinical deterioration promptly.');
 
-  const output = ['CARE PLAN'];
-  if (assessment.length) {
-    output.push('Assessment:');
-    assessment.slice(0, 3).forEach(item => output.push('- ' + item.replace(/\.$/, '') + '.'));
-  }
-  output.push('Actions:');
+  const output = ['CARE PLAN', 'Priority actions:'];
   actions.slice(0, 5).forEach(action => output.push('- ' + action));
-  output.push('Escalate: ' + escalation);
+  output.push('Escalation: ' + escalation);
   output.push('Review: Document response and update if condition changes.');
   return output.join('\n');
 }
@@ -3011,7 +3082,7 @@ function listenToNotes() {
         editedAt: data.editedAt || ''
       });
     });
-    notes = syncedNotes;
+    notes = withCleanDemoTimeline(syncedNotes);
     renderSyncedViews();
   }, () => {
     firebaseReady = false;

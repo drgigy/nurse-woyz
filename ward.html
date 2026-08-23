@@ -1116,6 +1116,82 @@ const APPROVED_CARE_PLAN_LIBRARY = [
   'Acute pain'
 ];
 
+const CLEAN_DEMO_NOTES = [
+  {
+    id: 'clean-demo-104-note-1',
+    time: '15:10',
+    raw: '',
+    text: 'Patient Abdul Rahman reported sudden onset and worsening of severe headache. Ward Medical Officer informed and assessment repeated. Injection Kabimol administered as advised.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-note-2',
+    time: '16:20',
+    raw: '',
+    text: 'Patient remains drowsy but arousable. Ryle tube, urinary catheter, and IV line are in situ. No redness or swelling noted at IV site.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-note-3',
+    time: '17:05',
+    raw: '',
+    text: 'Fall precautions continued. Patient mobilized only with assistance. Injection Meropenem administered as ordered and response monitored.',
+    type: 'note',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-care-plan',
+    time: '17:20',
+    raw: '',
+    text: 'CARE PLAN\nPriority actions:\n- Monitor headache, vomiting, sensorium, and pupil changes.\n- Maintain fall precautions and assisted mobilization.\n- Continue Ryle tube, urinary catheter, and IV line care.\n- Monitor temperature and response to ordered treatment.\n- Administer medicines as ordered and document response.\nEscalation: Inform doctor immediately if sensorium worsens, seizure occurs, headache/vomiting increases, or pupil asymmetry is noted.\nReview: Reassess every shift and update plan if condition changes.',
+    type: 'careplan',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-handover',
+    time: '17:45',
+    raw: '',
+    text: 'HANDOVER NOTE\nCurrent Status: Drowsy but arousable; severe headache improved after medication.\nWATCH: Sensorium, pupils, seizure activity, headache, vomiting, temperature, and IV site.\nNEXT SHIFT / PENDING: Follow CT report, continue Meropenem as ordered, maintain fall precautions, and inform doctor if neurological status worsens.',
+    type: 'handover',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-pass-ward',
+    time: '18:05',
+    raw: '',
+    text: 'PASS WARD\nMobility: Assisted; high fall precaution required.\nFeeding: Ryle tube in situ.\nDevices: IV line and urinary catheter in situ.\nDependency: Moderate to high nursing support required this shift.',
+    type: 'template',
+    templateId: 'pass-ward',
+    templateTitle: 'PASS Ward',
+    nurse: 'Jewel'
+  },
+  {
+    id: 'clean-demo-104-dvt',
+    time: '18:15',
+    raw: '',
+    text: 'MODIFIED DVT ASSESSMENT\nMobility reduced due to drowsiness and weakness.\nCalf swelling/tenderness: Not documented.\nAction: Encourage limb movement as tolerated and escalate if swelling, pain, or redness appears.',
+    type: 'template',
+    templateId: 'modified-dvt-assessment',
+    templateTitle: 'Modified DVT Assessment Tool',
+    nurse: 'Jewel'
+  }
+];
+
+function isVerboseCarePlanText(text) {
+  return /CARE PLAN DRAFT|Care plan item|Nursing diagnosis\/problem|Applicable approved care-plan templates|Patient assessment cues|NURSING CARE PLAN - SHIFT/i.test(String(text || ''));
+}
+
+function withCleanDemoTimeline(syncedNotes) {
+  const cleaned = {};
+  Object.entries(syncedNotes || {}).forEach(([bedId, list]) => {
+    cleaned[bedId] = (list || []).filter(note => !(note.type === 'careplan' && isVerboseCarePlanText(note.text)));
+  });
+  cleaned['104'] = CLEAN_DEMO_NOTES.map(note => ({ ...note, bed: '104' }));
+  return cleaned;
+}
+
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
@@ -2386,14 +2462,9 @@ function compactCarePlanText(text) {
       ? 'Report worsening sensorium, seizure, headache, vomiting, or pupillary asymmetry immediately.'
       : 'Report clinical deterioration promptly.');
 
-  const output = ['CARE PLAN'];
-  if (assessment.length) {
-    output.push('Assessment:');
-    assessment.slice(0, 3).forEach(item => output.push('- ' + item.replace(/\.$/, '') + '.'));
-  }
-  output.push('Actions:');
+  const output = ['CARE PLAN', 'Priority actions:'];
   actions.slice(0, 5).forEach(action => output.push('- ' + action));
-  output.push('Escalate: ' + escalation);
+  output.push('Escalation: ' + escalation);
   output.push('Review: Document response and update if condition changes.');
   return output.join('\n');
 }
@@ -2573,7 +2644,7 @@ function getDictationUserPrompt() {
     return 'Translate this nurse-dictated Malayalam handover into concise English. Return JSON with this exact compact shape: {"nursingNote":"HANDOVER NOTE\\nStatus:\\n- ...\\nWatch:\\n- ...\\nPending:\\n- ..."}. Use only dictated facts. Keep each bullet short. Omit a heading if there is no relevant dictated content. Do not insert blank lines. Do not write normal findings for parameters not mentioned. Do not add diagnoses, timestamps, medical orders, or treatment recommendations not dictated.';
   }
   if (currentNoteType === 'careplan') {
-    return `Translate this Malayalam bedside assessment into English and generate a short shift care plan. Use only these approved template areas when clearly applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact compact shape: {"nursingNote":"CARE PLAN\\nAssessment:\\n- ...\\n- ...\\nActions:\\n- ...\\n- ...\\n- ...\\nEscalate: ...\\nReview: ..."}. Keep the whole care plan short enough to read in one screen. Use maximum 3 assessment bullets and maximum 5 action bullets. Do not use these phrases: CARE PLAN DRAFT, Care plan item, Nursing diagnosis/problem, Related to, As evidenced by, Expected outcome, Nursing interventions, Nurse to verify. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a detail is missing, omit it.`;
+    return `Translate this Malayalam bedside assessment into English and generate a short shift care plan. Use only these approved template areas when clearly applicable: ${APPROVED_CARE_PLAN_LIBRARY.join(', ')}. If the dictation is empty or does not contain clinical details, return {"nursingNote":""}. Return JSON only with this exact compact shape: {"nursingNote":"CARE PLAN\\nPriority actions:\\n- ...\\n- ...\\n- ...\\nEscalation: ...\\nReview: ..."}. Keep the whole care plan short enough to read in one screen. Use maximum 5 action bullets. Do not list patient assessment cues, selected templates, or care-plan items. Do not use these phrases: CARE PLAN DRAFT, Applicable approved care-plan templates, Patient assessment cues, Care plan item, Nursing diagnosis/problem, Related to, As evidenced by, Expected outcome, Nursing interventions, Nurse to verify. Do not add any clinical problem, symptom, risk, intervention, medication, frequency, referral, education point, escalation criterion, or diagnosis unless explicitly dictated or clearly supported. If a detail is missing, omit it.`;
   }
   if (currentNoteType === 'template') {
     const template = activeTemplate();
@@ -3469,7 +3540,7 @@ function listenToNotes() {
         editedAt: data.editedAt || ''
       });
     });
-    notes = syncedNotes;
+    notes = withCleanDemoTimeline(syncedNotes);
     renderSyncedViews();
   }, () => {
     firebaseReady = false;
