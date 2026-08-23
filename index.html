@@ -63,13 +63,25 @@
       white-space: nowrap;
     }
     .section-title {
-      color: #111827;
-      font-size: 20px;
+      color: #a6192e;
+      font-size: clamp(30px, 3vw, 44px);
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      margin: 14px 0 10px;
-      padding: 0;
+      line-height: 0.95;
+      margin: 34px 0 18px;
+      padding: 0 0 12px;
+      position: relative;
+    }
+    .section-title::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: min(220px, 35%);
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #a6192e 0%, #f0b6bf 70%, rgba(240, 182, 191, 0) 100%);
     }
     .section-note {
       color: #61738a;
