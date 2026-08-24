@@ -821,16 +821,23 @@
         .trim();
     }
 
-    function parsePatientOcr(text) {
-      const normalized = normalizeCapturedText(text);
-      const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
-      const firstLine = lines[0] || '';
-      const name = titleCaseName(
-        firstLine
+    function extractPatientName(lines, normalized) {
+      const honorificLine = lines.find(line => /\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/i.test(line)) || lines[0] || '';
+      const beforeIdentifiers = honorificLine
+        .split(/\b(?:RAJH|UHID|MRD|MRN|IPNO|ERNO|DOA|DOB|AGE|SEX|GENDER|Dr\.?)\b/i)[0];
+      return titleCaseName(
+        beforeIdentifiers
           .replace(/\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/ig, '')
+          .replace(/^[^A-Za-z]+/, '')
           .replace(/[^a-zA-Z .'-]/g, ' ')
           .replace(/\s+/g, ' ')
       );
+    }
+
+    function parsePatientOcr(text) {
+      const normalized = normalizeCapturedText(text);
+      const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
+      const name = extractPatientName(lines, normalized);
       const uhidMatch = normalized.match(/\b(RAJH)\s*\.?\s*(\d{5,})\b/i)
         || normalized.match(/\b(UHID|MRD|MRN)\s*[:.\-]?\s*([A-Z]*\d{5,})\b/i);
       const uhid = uhidMatch
