@@ -822,9 +822,17 @@
     }
 
     function extractPatientName(lines, normalized) {
-      const honorificLine = lines.find(line => /\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/i.test(line)) || lines[0] || '';
+      const honorificLine = lines.find(line => /\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/i.test(line));
+      const firstNameLikeLine = lines.find(line =>
+        /[A-Za-z]{2,}/.test(line)
+        && !/\d{4,}/.test(line)
+        && !/\b(?:RAJH|AJH|JH|UHID|MRD|MRN|IPNO|ERNO|DOA|DOB|AGE|SEX|GENDER)\b/i.test(line)
+        && !/^\s*(?:Dr|r)\.?\s+/i.test(line)
+      );
+      const sourceLine = honorificLine || firstNameLikeLine || lines[0] || '';
       const beforeIdentifiers = honorificLine
-        .split(/\b(?:RAJH|UHID|MRD|MRN|IPNO|ERNO|DOA|DOB|AGE|SEX|GENDER|Dr\.?)\b/i)[0];
+        ? sourceLine.split(/\b(?:RAJH|AJH|JH|UHID|MRD|MRN|IPNO|ERNO|DOA|DOB|AGE|SEX|GENDER|Dr\.?)\b/i)[0]
+        : sourceLine;
       return titleCaseName(
         beforeIdentifiers
           .replace(/\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/ig, '')
@@ -834,24 +842,39 @@
       );
     }
 
+    function extractUhid(lines, normalized) {
+      const labelled = normalized.match(/\b(RAJH|AJH|JH|H)\s*\.?\s*(\d{7,})\b/i)
+        || normalized.match(/\b(UHID|MRD|MRN)\s*[:.\-]?\s*(?:RAJH|AJH|JH|H)?\.?\s*(\d{7,})\b/i);
+      if (labelled) return `RAJH.${labelled[2]}`;
+      const likelyIdLine = lines.find(line => /\b(?:RAJH|AJH|JH|H|UHID|MRD|MRN)\b/i.test(line)) || lines[1] || '';
+      const numberFromLikelyLine = likelyIdLine.match(/\b(\d{7,})\b/);
+      if (numberFromLikelyLine) return `RAJH.${numberFromLikelyLine[1]}`;
+      const firstLongNumber = normalized.match(/\b(\d{7,})\b/);
+      return firstLongNumber ? `RAJH.${firstLongNumber[1]}` : '';
+    }
+
+    function extractDoctor(lines, normalized) {
+      const doctorMatch = normalized.match(/\b(?:Dr|r)\.?\s*([A-Za-z][A-Za-z .'-]{2,60})(?:\n|$)/i);
+      if (doctorMatch) return 'Dr. ' + titleCaseName(doctorMatch[1].replace(/\s+/g, ' '));
+      const lastNameLikeLine = [...lines].reverse().find(line =>
+        /[A-Za-z]{3,}/.test(line)
+        && !/\d{3,}/.test(line)
+        && !/\b(?:RAJH|AJH|JH|UHID|MRD|MRN|IPNO|ERNO|DOA|DOB|AGE|SEX|GENDER)\b/i.test(line)
+      );
+      return lastNameLikeLine ? 'Dr. ' + titleCaseName(lastNameLikeLine.replace(/^[^A-Za-z]+/, '')) : '';
+    }
+
     function parsePatientOcr(text) {
       const normalized = normalizeCapturedText(text);
       const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
       const name = extractPatientName(lines, normalized);
-      const uhidMatch = normalized.match(/\b(RAJH)\s*\.?\s*(\d{5,})\b/i)
-        || normalized.match(/\b(UHID|MRD|MRN)\s*[:.\-]?\s*([A-Z]*\d{5,})\b/i);
-      const uhid = uhidMatch
-        ? (uhidMatch[1].toUpperCase() === 'RAJH'
-          ? `RAJH.${uhidMatch[2]}`
-          : uhidMatch[2].toUpperCase())
-        : '';
+      const uhid = extractUhid(lines, normalized);
       const ageGenderMatch = normalized.match(/\(?\s*(\d{1,3})\s*Y\s*\)?\s*\/\s*([MFO])\b/i)
         || normalized.match(/\b(?:AGE|Age)\s*[:.\-]?\s*(\d{1,3}).{0,12}\b(?:SEX|GENDER)?\s*[:.\-]?\s*([MFO])\b/i);
       const age = ageGenderMatch ? ageGenderMatch[1] : '';
       const gender = ageGenderMatch ? ageGenderMatch[2].toUpperCase() : '';
       const dobMatch = normalized.match(/\bDOB\s*[:.\-]?\s*([0-9]{1,2}[-/ ][A-Za-z]{3}[-/ ][0-9]{4}|[0-9]{1,2}[-/ ][0-9]{1,2}[-/ ][0-9]{4})/i);
-      const doctorMatch = normalized.match(/\bDr\.?\s*([A-Za-z][A-Za-z .'-]{2,60})(?:\n|$)/i);
-      const doctor = doctorMatch ? 'Dr. ' + titleCaseName(doctorMatch[1].replace(/\s+/g, ' ')) : '';
+      const doctor = extractDoctor(lines, normalized);
       return {
         name,
         uhid,
