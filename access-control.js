@@ -6,6 +6,10 @@
   ];
   const SESSION_HOURS = 12;
 
+  function isWardDevicePage() {
+    return /\/ward\.html$/i.test(window.location.pathname);
+  }
+
   function isFilePreview() {
     return window.location.protocol === 'file:';
   }
@@ -201,6 +205,7 @@
   }
 
   function init() {
+    if (isWardDevicePage()) return;
     injectStyles();
     if (isFilePreview()) {
       addLockButton();
