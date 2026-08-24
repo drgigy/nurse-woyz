@@ -6,8 +6,8 @@
   ];
   const SESSION_HOURS = 12;
 
-  function isWardDevicePage() {
-    return /\/ward\.html$/i.test(window.location.pathname);
+  function isDirectMobileWorkflowPage() {
+    return /\/(ward|nursewoyzadmin)\.html$/i.test(window.location.pathname);
   }
 
   function isFilePreview() {
@@ -205,7 +205,7 @@
   }
 
   function init() {
-    if (isWardDevicePage()) return;
+    if (isDirectMobileWorkflowPage()) return;
     injectStyles();
     if (isFilePreview()) {
       addLockButton();

@@ -372,6 +372,73 @@
     .toast.show {
       display: block;
     }
+    .ocr-panel {
+      display: grid;
+      gap: 16px;
+    }
+    .ocr-capture-wrap {
+      align-items: center;
+      background: #fff7f8;
+      border: 1.5px dashed #e8aab4;
+      border-radius: 18px;
+      cursor: text;
+      display: flex;
+      gap: 12px;
+      min-height: 64px;
+      padding: 14px;
+    }
+    .ocr-capture-dot {
+      background: var(--red);
+      border-radius: 999px;
+      box-shadow: 0 0 0 8px rgba(166, 25, 46, 0.12);
+      flex: 0 0 auto;
+      height: 14px;
+      width: 14px;
+    }
+    .ocr-capture-label {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 900;
+    }
+    .ocr-capture-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .ocr-hidden-input {
+      background: transparent;
+      border: 0;
+      color: transparent;
+      caret-color: transparent;
+      font-size: 1px;
+      height: 1px;
+      min-height: 1px;
+      opacity: 0.01;
+      outline: 0;
+      padding: 0;
+      position: absolute;
+      resize: none;
+      width: 1px;
+    }
+    .ocr-ready {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      min-height: 18px;
+    }
+    .btn.blink-ready {
+      animation: scanReadyPulse 0.9s ease-in-out infinite;
+    }
+    @keyframes scanReadyPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(166, 25, 46, 0.34);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(166, 25, 46, 0.08);
+        transform: scale(1.015);
+      }
+    }
     @media (max-width: 560px) {
       .grid { grid-template-columns: 1fr; }
       .screen { padding: 14px; }
@@ -638,7 +705,8 @@
 
     function renderCurrent() {
       if (!$('appScreen').classList.contains('active')) return;
-      if (currentView === 'patients') renderPatients();
+      if (currentView === 'scan-patient') renderScanPatient();
+      else if (currentView === 'patients') renderPatients();
       else if (currentView === 'nurses') renderNurses();
       else if (currentView === 'rooms') renderRooms();
       else renderHome();
@@ -652,6 +720,11 @@
             <div class="nav-icon">QR</div>
             <div class="nav-title">Scan QR Code</div>
             <div class="nav-desc">Scan patient wristband QR and add patient to the list.</div>
+          </div>
+          <div class="nav-card" onclick="setView('scan-patient')">
+            <div class="nav-icon">OCR</div>
+            <div class="nav-title">Scan Patient</div>
+            <div class="nav-desc">Capture patient sticker text and add patient credentials.</div>
           </div>
           <div class="nav-card" onclick="setView('patients')">
             <div class="nav-icon">${patients.length}</div>
@@ -673,6 +746,146 @@
           <button class="btn danger" onclick="resetDemoData()">Reset patients, nurses and rooms</button>
         </div>
       `;
+    }
+
+    function renderScanPatient() {
+      $('content').innerHTML = `
+        <div class="section-head">
+          <button class="back" onclick="setView('home')">Back</button>
+          <h2>Scan Patient</h2>
+          <span></span>
+        </div>
+        <div class="panel ocr-panel">
+          <div class="ocr-capture-wrap ocr-auto-ready">
+            <div class="ocr-capture-dot"></div>
+            <div>
+              <div class="ocr-capture-label">Ready for patient label OCR</div>
+              <div class="ocr-capture-sub">Use the device OCR button. Raw scan text stays hidden.</div>
+            </div>
+            <textarea class="ocr-hidden-input" id="ocrPatientText" autocomplete="off" autocapitalize="characters" spellcheck="false" autofocus onblur="refocusOcrCapture()" oninput="handleOcrInput()" onpaste="setTimeout(handleOcrInput, 50)"></textarea>
+          </div>
+          <div class="ocr-ready" id="ocrReadyState"></div>
+          <button class="btn primary" id="ocrAddPatientBtn" onclick="addOcrPatient()" disabled>Add Patient</button>
+          <button class="btn secondary" onclick="clearOcrCapture()">Clear Scan</button>
+        </div>
+      `;
+      focusOcrCapture();
+      setTimeout(focusOcrCapture, 80);
+      setTimeout(focusOcrCapture, 300);
+    }
+
+    function focusOcrCapture() {
+      const field = $('ocrPatientText');
+      if (!field) return;
+      field.focus({ preventScroll: true });
+    }
+
+    function refocusOcrCapture() {
+      if (currentView !== 'scan-patient') return;
+      setTimeout(focusOcrCapture, 60);
+    }
+
+    function handleOcrInput() {
+      const value = $('ocrPatientText')?.value || '';
+      const hasText = value.trim().length > 8;
+      const button = $('ocrAddPatientBtn');
+      const state = $('ocrReadyState');
+      if (button) {
+        button.disabled = !hasText;
+        button.classList.toggle('blink-ready', hasText);
+      }
+      if (state) state.textContent = hasText ? 'Patient sticker captured. Tap Add Patient.' : '';
+    }
+
+    function clearOcrCapture() {
+      const field = $('ocrPatientText');
+      if (field) field.value = '';
+      handleOcrInput();
+      focusOcrCapture();
+    }
+
+    function normalizeCapturedText(text) {
+      return String(text || '')
+        .replace(/\r/g, '\n')
+        .replace(/[|[\]{}]/g, ' ')
+        .replace(/[•·]/g, '.')
+        .replace(/[ \t]+/g, ' ')
+        .trim();
+    }
+
+    function titleCaseName(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/\b[a-z]/g, char => char.toUpperCase())
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function parsePatientOcr(text) {
+      const normalized = normalizeCapturedText(text);
+      const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
+      const firstLine = lines[0] || '';
+      const name = titleCaseName(
+        firstLine
+          .replace(/\b(Mr|Mrs|Ms|Miss|Master|Baby)\.?\b/ig, '')
+          .replace(/[^a-zA-Z .'-]/g, ' ')
+          .replace(/\s+/g, ' ')
+      );
+      const uhidMatch = normalized.match(/\b(RAJH)\s*\.?\s*(\d{5,})\b/i)
+        || normalized.match(/\b(UHID|MRD|MRN)\s*[:.\-]?\s*([A-Z]*\d{5,})\b/i);
+      const uhid = uhidMatch
+        ? (uhidMatch[1].toUpperCase() === 'RAJH'
+          ? `RAJH.${uhidMatch[2]}`
+          : uhidMatch[2].toUpperCase())
+        : '';
+      const ageGenderMatch = normalized.match(/\(?\s*(\d{1,3})\s*Y\s*\)?\s*\/\s*([MFO])\b/i)
+        || normalized.match(/\b(?:AGE|Age)\s*[:.\-]?\s*(\d{1,3}).{0,12}\b(?:SEX|GENDER)?\s*[:.\-]?\s*([MFO])\b/i);
+      const age = ageGenderMatch ? ageGenderMatch[1] : '';
+      const gender = ageGenderMatch ? ageGenderMatch[2].toUpperCase() : '';
+      const dobMatch = normalized.match(/\bDOB\s*[:.\-]?\s*([0-9]{1,2}[-/ ][A-Za-z]{3}[-/ ][0-9]{4}|[0-9]{1,2}[-/ ][0-9]{1,2}[-/ ][0-9]{4})/i);
+      const doctorMatch = normalized.match(/\bDr\.?\s*([A-Za-z][A-Za-z .'-]{2,60})(?:\n|$)/i);
+      const doctor = doctorMatch ? 'Dr. ' + titleCaseName(doctorMatch[1].replace(/\s+/g, ' ')) : '';
+      return {
+        name,
+        uhid,
+        dob: dobMatch ? dobMatch[1].trim() : '',
+        age,
+        gender,
+        doctor
+      };
+    }
+
+    async function addPatientRecord(patientData) {
+      const patient = {
+        ...patientData,
+        assignedNurseId: '',
+        assignedNurseName: '',
+        assignedRoomId: '',
+        assignedRoomName: '',
+        createdAtMs: Date.now()
+      };
+      const id = slug(patient.uhid || patient.name);
+      if (firebaseReady) {
+        await patientsCollection.doc(id).set(patient, { merge: true });
+      } else {
+        patients = patients.filter(item => item.id !== id);
+        patients.push({ id, ...patient });
+        saveLocal();
+      }
+    }
+
+    async function addOcrPatient() {
+      const raw = $('ocrPatientText')?.value || '';
+      const patient = parsePatientOcr(raw);
+      if (!patient.name || !patient.uhid || !patient.age || !patient.gender) {
+        showToast('Could not read name, UHID, age and gender. Scan again.');
+        focusOcrCapture();
+        return;
+      }
+      await addPatientRecord(patient);
+      clearOcrCapture();
+      setView('patients');
+      showToast('Patient added from OCR');
     }
 
     function parsePatientQr(text) {
@@ -748,22 +961,7 @@
 
     async function confirmAddPatient() {
       if (!pendingPatient) return;
-      const patient = {
-        ...pendingPatient,
-        assignedNurseId: '',
-        assignedNurseName: '',
-        assignedRoomId: '',
-        assignedRoomName: '',
-        createdAtMs: Date.now()
-      };
-      const id = slug(patient.uhid || patient.name);
-      if (firebaseReady) {
-        await patientsCollection.doc(id).set(patient, { merge: true });
-      } else {
-        patients = patients.filter(item => item.id !== id);
-        patients.push({ id, ...patient });
-        saveLocal();
-      }
+      await addPatientRecord(pendingPatient);
       hideConfirm();
       setView('patients');
       showToast('Patient added');
