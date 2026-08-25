@@ -6,6 +6,49 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    match /noteTransfers/{sessionId} {
+      function isOwner() {
+        return isDemoSignedIn() && request.auth.uid == resource.data.ownerUid;
+      }
+
+      allow create: if isDemoSignedIn()
+        && request.resource.data.keys().hasOnly([
+          'ownerUid', 'claimSecret', 'status', 'createdAt', 'expiresAt'
+        ])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.claimSecret is string
+        && request.resource.data.claimSecret.size() >= 32
+        && request.resource.data.status == 'waiting'
+        && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt < request.time + duration.value(3, 'm');
+
+      allow get: if isOwner();
+      allow list: if false;
+
+      allow update: if isDemoSignedIn() && (
+        (isOwner()
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.claimSecret == resource.data.claimSecret)
+        || (
+          request.time < resource.data.expiresAt
+          && resource.data.status == 'waiting'
+          && request.resource.data.status == 'received'
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.claimSecret == resource.data.claimSecret
+          && request.resource.data.note is string
+          && request.resource.data.note.size() > 0
+          && request.resource.data.note.size() <= 100000
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.receivedAt == request.time
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'claimSecret', 'note', 'status', 'senderUid', 'receivedAt'
+          ])
+        )
+      );
+
+      allow delete: if isOwner();
+    }
+
     match /demoShifts/{shiftId} {
       allow read, write: if isDemoSignedIn();
 

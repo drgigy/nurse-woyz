@@ -302,7 +302,7 @@ body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Seg
 .qr-card { width: min(430px, 100%); background: #fff; border-radius: 22px; padding: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
 .qr-title { color: #8f1729; font-size: 22px; font-weight: 900; margin-bottom: 4px; }
 .qr-help { color: #61738a; font-size: 14px; line-height: 1.45; margin-bottom: 14px; }
-#qrReader { overflow: hidden; border: 1px solid #d9e2ef; border-radius: 16px; min-height: 260px; }
+#qrReader, #noteTransferQrReader { overflow: hidden; border: 1px solid #d9e2ef; border-radius: 16px; min-height: 260px; }
 .qr-actions { display: flex; gap: 10px; margin-top: 14px; }
 .qr-close { flex: 1; background: #fff; border: 1.5px solid #f0c6c6; border-radius: 12px; color: #c0392b; font: inherit; font-weight: 800; padding: 12px; }
 .sum-note { font-size: 10px; color: #444; text-align: center; margin-bottom: 16px; }
@@ -847,6 +847,7 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div style="font-size:12px;color:#3a3d4a;padding:8px 0;">No notes saved yet for this bed.</div>
   </div>
   <button class="copy-bed-btn copy-bed-bottom" onclick="copyCurrentBedNotes()">Copy Bed Notes</button>
+  <button class="copy-bed-btn copy-bed-bottom" onclick="transferCurrentBedNotes()">Transfer Note</button>
   <div class="voice-plugin" id="voicePlugin" aria-live="polite">
     <div class="voice-plugin-head" id="voicePluginHandle"><span class="record-dot"></span><span id="voicePluginTitle">Voice note draft</span></div>
     <div class="voice-wave" id="voiceEqualizer" aria-label="Voice activity meter"></div>
@@ -894,6 +895,17 @@ body { background: #f5f8fc; color: #162033; font-family: "Segoe UI", Arial, -app
     <div id="qrReader"></div>
     <div class="qr-actions">
       <button class="qr-close" onclick="closeQrScanner()">Close Scanner</button>
+    </div>
+  </div>
+</div>
+
+<div class="qr-modal" id="noteTransferQrModal" aria-hidden="true">
+  <div class="qr-card">
+    <div class="qr-title">Transfer Note to EMR</div>
+    <div class="qr-help">Scan the temporary QR shown by the Nurse Voice Chrome extension.</div>
+    <div id="noteTransferQrReader"></div>
+    <div class="qr-actions">
+      <button class="qr-close" onclick="closeNoteTransferScanner()">Close Scanner</button>
     </div>
   </div>
 </div>
@@ -1237,6 +1249,8 @@ let patientsUnsubscribe = null;
 let localSaveIds = new Set();
 let editingNoteId = null;
 let qrScanner = null;
+let noteTransferQrScanner = null;
+let noteTransferScanBusy = false;
 let qrScanBusy = false;
 let pendingUrlBedId = new URLSearchParams(window.location.search).get('bed') || '';
 let nurses = [];
@@ -2938,18 +2952,103 @@ async function saveEditedNote(noteId, index) {
   }
 }
 
-function copyCurrentBedNotes() {
+function buildCurrentBedNotesText() {
   const bedNotes = notes[currentBed] || [];
-  if (!bedNotes.length) {
+  if (!bedNotes.length) return '';
+  return `BED ${currentBed} — NURSING RECORD\n\n` + bedNotes
+    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`)
+    .join('\n\n');
+}
+
+function copyCurrentBedNotes() {
+  const text = buildCurrentBedNotesText();
+  if (!text) {
     showToast('No notes saved for this bed');
     return;
   }
-  const text = `BED ${currentBed} — NURSING RECORD\n\n` + bedNotes
-    .map(n => `${n.time} | ${noteTypeCopyLabel(n.type, n)}\n${n.text}`)
-    .join('\n\n');
   navigator.clipboard.writeText(text)
     .then(() => showToast('All Bed ' + currentBed + ' notes copied ✓'))
     .catch(() => showToast('Unable to copy notes', true));
+}
+
+function parseNoteTransferQr(decodedText) {
+  const url = new URL(decodedText);
+  if (url.protocol !== 'https:' || url.hostname !== 'transfer.nurse.woyz.in') {
+    throw new Error('This is not a Nurse Woyz transfer QR code');
+  }
+  const sessionId = url.searchParams.get('session') || '';
+  const secret = url.searchParams.get('secret') || '';
+  if (!/^[A-Za-z0-9_-]{20,}$/.test(sessionId) || secret.length < 32) {
+    throw new Error('The transfer QR code is invalid');
+  }
+  return { sessionId, secret };
+}
+
+async function transferCurrentBedNotes() {
+  const text = buildCurrentBedNotesText();
+  if (!text) {
+    showToast('No notes saved for this bed');
+    return;
+  }
+  if (!firebaseReady || !db || !auth?.currentUser) {
+    showToast('Firebase must be connected before transferring a note', true);
+    return;
+  }
+  if (!window.isSecureContext && location.protocol !== 'file:') {
+    showToast('Camera scanning requires HTTPS', true);
+    return;
+  }
+  if (!window.Html5Qrcode) {
+    showToast('QR scanner is still loading. Try again.', true);
+    return;
+  }
+
+  const modal = document.getElementById('noteTransferQrModal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  noteTransferScanBusy = false;
+
+  try {
+    noteTransferQrScanner = noteTransferQrScanner || new Html5Qrcode('noteTransferQrReader');
+    await noteTransferQrScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 230, height: 230 } },
+      async decodedText => {
+        if (noteTransferScanBusy) return;
+        noteTransferScanBusy = true;
+        try {
+          const transfer = parseNoteTransferQr(decodedText);
+          await db.collection('noteTransfers').doc(transfer.sessionId).update({
+            claimSecret: transfer.secret,
+            note: text,
+            status: 'received',
+            senderUid: auth.currentUser.uid,
+            receivedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          await closeNoteTransferScanner(false);
+          showToast('Note sent to the selected EMR field ✓');
+        } catch (error) {
+          noteTransferScanBusy = false;
+          showToast(error.message || 'Transfer failed or the QR expired', true);
+        }
+      }
+    );
+  } catch (error) {
+    await closeNoteTransferScanner(false);
+    showToast('Camera could not open. Check camera permission.', true);
+  }
+}
+
+async function closeNoteTransferScanner(showMessage = true) {
+  const modal = document.getElementById('noteTransferQrModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  if (noteTransferQrScanner) {
+    try { await noteTransferQrScanner.stop(); } catch (error) {}
+    try { await noteTransferQrScanner.clear(); } catch (error) {}
+  }
+  noteTransferScanBusy = false;
+  if (showMessage) showToast('Note transfer scanner closed');
 }
 
 function printCurrentBedNotes() {

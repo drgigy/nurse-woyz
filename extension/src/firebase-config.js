@@ -1,6 +1,4 @@
-// Firebase web configuration for the Transfer Extension project.
-// Keep the variable name exactly as NURSE_WOYZ_FIREBASE_CONFIG.
-window.NURSE_WOYZ_FIREBASE_CONFIG = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCuFA7wegr5nl-pdZaE3XbazuMZIb-xPLY",
   authDomain: "stroke-code-demo-1.firebaseapp.com",
   projectId: "stroke-code-demo-1",

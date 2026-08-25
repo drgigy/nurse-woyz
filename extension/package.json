@@ -1,0 +1,17 @@
+{
+  "name": "nurse-voice-emr-transfer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "firebase": "^12.2.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "vite": "^7.1.3"
+  }
+}

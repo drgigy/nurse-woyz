@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener(()=>{chrome.contextMenus.create({id:"nurse-voice-transfer",title:"Transfer Note",contexts:["editable"]})});chrome.contextMenus.onClicked.addListener((e,r)=>{e.menuItemId!=="nurse-voice-transfer"||!r?.id||chrome.tabs.sendMessage(r.id,{type:"START_NOTE_TRANSFER"},{frameId:e.frameId})});
