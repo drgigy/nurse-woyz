@@ -39,7 +39,7 @@ service cloud.firestore {
           && request.resource.data.note.size() > 0
           && request.resource.data.note.size() <= 100000
           && request.resource.data.senderUid == request.auth.uid
-          && request.resource.data.receivedAt == request.time
+          && request.resource.data.receivedAt is timestamp
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
             'claimSecret', 'note', 'status', 'senderUid', 'receivedAt'
           ])
