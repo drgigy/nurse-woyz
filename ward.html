@@ -1455,6 +1455,11 @@ function openNotificationsDrawer(roomOnly = false) {
   }
   renderDrawerNotifications(roomOnly);
   document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
+  const templatesDrawer = document.getElementById('templatesDrawer');
+  if (templatesDrawer) {
+    templatesDrawer.classList.remove('show');
+    templatesDrawer.setAttribute('aria-hidden', 'true');
+  }
   const drawer = document.getElementById('notificationsDrawer');
   if (drawer) {
     drawer.classList.add('show');
@@ -1469,6 +1474,11 @@ function openTemplatesDrawer() {
   }
   renderTemplateDrawer();
   document.getElementById('mobileDrawerBackdrop')?.classList.add('show');
+  const notificationsDrawer = document.getElementById('notificationsDrawer');
+  if (notificationsDrawer) {
+    notificationsDrawer.classList.remove('show');
+    notificationsDrawer.setAttribute('aria-hidden', 'true');
+  }
   const drawer = document.getElementById('templatesDrawer');
   if (drawer) {
     drawer.classList.add('show');
@@ -1490,21 +1500,8 @@ function cancelHoverDrawerClose() {
 }
 
 function initHoverDrawers() {
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  document.querySelectorAll('.templates-icon').forEach(button => {
-    button.addEventListener('mouseenter', () => openTemplatesDrawer());
-    button.addEventListener('mouseleave', scheduleHoverDrawerClose);
-  });
-  document.querySelectorAll('.alerts-icon').forEach(button => {
-    button.addEventListener('mouseenter', () => openNotificationsDrawer(document.getElementById('screen-mic')?.classList.contains('active')));
-    button.addEventListener('mouseleave', scheduleHoverDrawerClose);
-  });
-  ['templatesDrawer', 'notificationsDrawer'].forEach(id => {
-    const drawer = document.getElementById(id);
-    if (!drawer) return;
-    drawer.addEventListener('mouseenter', cancelHoverDrawerClose);
-    drawer.addEventListener('mouseleave', scheduleHoverDrawerClose);
-  });
+  // Desktop users need stable click-open drawers for demos.
+  // Hover drawers were too easy to dismiss while moving the cursor.
 }
 
 function renderDrawerNotifications(roomOnly = false) {
