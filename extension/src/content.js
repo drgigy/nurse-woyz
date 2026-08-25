@@ -32,10 +32,26 @@ function randomSecret() {
     .replaceAll("=", "");
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function noteToContentEditableHtml(note) {
+  return escapeHtml(note)
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{2,}/g, match => "<br>".repeat(match.length))
+    .replace(/\n/g, "<br>");
+}
+
 function insertNote(field, note) {
   if (!field?.isConnected) throw new Error("The original EMR field is no longer available.");
   if (field.isContentEditable) {
-    field.textContent = note;
+    field.innerHTML = noteToContentEditableHtml(note);
   } else {
     const proto = field instanceof HTMLTextAreaElement
       ? HTMLTextAreaElement.prototype
